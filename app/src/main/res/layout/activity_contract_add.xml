@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.ContractAddActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/colorPrimary"
+        android:layout_marginBottom="@dimen/d_1">
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="@dimen/d_50"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/d_15"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="手机通讯录" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/none"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/d_5"
+        android:gravity="center"
+        android:text="未找到飞讯用户" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/contract_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

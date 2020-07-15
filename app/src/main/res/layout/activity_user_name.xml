@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.activity.UserNameActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="@dimen/d_50"
+            android:padding="@dimen/d_15"
+            app:srcCompat="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="我的飞讯名" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/d_5"
+        android:layout_marginHorizontal="@dimen/d_15"
+        android:text="我的飞讯名" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_40"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <TextView
+            android:id="@+id/old_u_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="@dimen/d_15" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/d_15"
+        android:layout_marginVertical="@dimen/d_5"
+        android:text="新的飞讯名" />
+
+    <TextView
+        android:id="@+id/u_name_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/d_15"
+        android:layout_marginBottom="@dimen/d_5"
+        android:text="飞讯名输入信息有误"
+        android:textColor="@color/red"
+        android:visibility="gone" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_40"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <EditText
+            android:id="@+id/new_u_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:maxLength="20"
+            android:textSize="@dimen/d_15" />
+
+        <ImageView
+            android:id="@+id/cancel"
+            android:layout_width="@dimen/d_20"
+            android:layout_height="@dimen/d_20"
+            android:layout_marginRight="@dimen/d_10"
+            android:src="@drawable/cancel"
+            android:visibility="gone" />
+        <TextView
+            android:id="@+id/change_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@drawable/login_text_touch"
+            android:text="修改飞讯名" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/d_15"
+        android:text="请注意：请输入6-20位新飞讯名，不可直接使用电话号码作为新飞讯名，飞讯名不能重复" />
+</LinearLayout>

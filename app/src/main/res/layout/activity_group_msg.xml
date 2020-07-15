@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical"
+    tools:context=".ui.activity.GroupMsgActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:layout_marginBottom="@dimen/d_1"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="群聊资料" />
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="@dimen/d_50"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/d_15"
+            android:src="@mipmap/back" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/d_80"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/d_10">
+
+                    <ImageView
+                        android:id="@+id/head_img"
+                        android:layout_width="@dimen/d_60"
+                        android:layout_height="@dimen/d_60"
+                        android:layout_marginHorizontal="@dimen/d_10"
+                        app:srcCompat="@drawable/icon" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/group_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="@dimen/d_3"
+                            android:singleLine="true"
+                            android:text="群聊名称"
+                            android:textColor="@color/black_2"
+                            android:textSize="@dimen/d_15" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/group_num"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:singleLine="true"
+                                android:text="群号" />
+
+                            <ImageView
+                                android:id="@+id/group_qr_code"
+                                android:layout_width="@dimen/d_18"
+                                android:layout_height="@dimen/d_18"
+                                android:layout_marginHorizontal="@dimen/d_10"
+                                app:srcCompat="@mipmap/qr_code" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/group_create_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/d_10"
+                    android:text="创建时间" />
+
+                <TextView
+                    android:id="@+id/group_introduce"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="@dimen/d_10"
+                    android:layout_marginBottom="@dimen/d_10"
+                    android:gravity="center_vertical"
+                    android:maxLines="3"
+                    android:text="群聊简介" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/group_creator"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_60"
+                android:layout_marginTop="@dimen/d_16"
+                android:background="@drawable/item_press"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/d_16">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="创建者"
+                    android:textColor="@color/black_2"
+                    android:textSize="@dimen/d_15" />
+
+                <com.example.flymessagedome.view.CircleImageView
+                    android:id="@+id/group_creator_head"
+                    android:layout_width="@dimen/d_45"
+                    android:layout_height="@dimen/d_45"
+                    android:layout_marginHorizontal="@dimen/d_5"
+                    app:srcCompat="@mipmap/ic_launcher_round" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_20"
+                    android:layout_height="@dimen/d_20"
+                    app:srcCompat="@mipmap/right1" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/add_group_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:visibility="gone">
+
+        <Button
+            android:id="@+id/add_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/d_10"
+            android:layout_weight="1"
+            android:background="@drawable/select_btn_bg"
+            android:text="加入群聊" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/group_chat_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:visibility="visible">
+
+        <Button
+            android:id="@+id/share_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/d_10"
+            android:layout_weight="1"
+            android:background="@drawable/hint_btn_press_bg"
+            android:text="分享群聊" />
+
+        <Button
+            android:id="@+id/group_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/d_10"
+            android:layout_weight="1"
+            android:background="@drawable/select_btn_bg"
+            android:text="发消息" />
+    </LinearLayout>
+</LinearLayout>

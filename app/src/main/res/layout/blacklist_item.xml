@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/d_60"
+    android:paddingVertical="@dimen/d_16"
+    android:background="@drawable/item_press"
+    android:orientation="vertical">
+
+    <com.example.flymessagedome.view.CircleImageView
+        android:id="@+id/head_img"
+        android:layout_width="@dimen/d_40"
+        android:layout_height="@dimen/d_40"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/d_16"
+        android:src="@mipmap/ic_launcher_round" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/d_60"
+        android:layout_marginRight="@dimen/d_80">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="@dimen/d_40"
+            android:text="用户名"
+            android:textColor="@color/black"
+            android:textSize="@dimen/d_16" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="@dimen/d_40"
+            android:orientation="horizontal"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="@dimen/d_80"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/dine_btn"
+            android:layout_width="@dimen/d_60"
+            android:layout_height="26dp"
+            android:layout_marginHorizontal="@dimen/d_10"
+            android:layout_marginTop="@dimen/d_4"
+            android:layout_marginBottom="@dimen/d_10"
+            android:background="@drawable/welcome_btn_press_bg"
+            android:text="移出" />
+    </LinearLayout>
+    >
+
+
+</RelativeLayout>

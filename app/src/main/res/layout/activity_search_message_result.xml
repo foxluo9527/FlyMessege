@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.SearchMessageResultActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="@dimen/d_50"
+            android:padding="@dimen/d_15"
+            app:srcCompat="@mipmap/back" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="名称" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/record_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/d_3"
+        android:paddingHorizontal="@dimen/d_15"
+        android:text="共 条关于' '的聊天记录" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/record_message_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark"/>
+
+</LinearLayout>

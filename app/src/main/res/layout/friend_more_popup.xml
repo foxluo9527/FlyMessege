@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/d_10"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/change_rmk"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_45"
+            android:layout_marginTop="@dimen/d_1"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/item_press"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/d_16">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="修改备注" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/black_list"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_45"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/item_press"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/d_16">
+
+            <TextView
+                android:id="@+id/blacklist_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="加入黑名单" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/add_fri"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_45"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/item_press"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/d_16">
+
+            <TextView
+                android:id="@+id/fri_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="删除好友" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_45"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/item_press"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_16">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="取消" />
+    </LinearLayout>
+</LinearLayout>

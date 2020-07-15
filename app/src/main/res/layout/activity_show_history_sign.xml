@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.activity.ShowLoginHeadActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="@dimen/d_50"
+            android:padding="@dimen/d_15"
+            app:srcCompat="@mipmap/back" />
+
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="历史签名" />
+
+        <TextView
+            android:id="@+id/sign_manager"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="管理" />
+    </RelativeLayout>
+    <cn.bingoogolapple.refreshlayout.BGARefreshLayout
+        android:id="@+id/sign_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <!-- 内容控件 -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/sign_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/del_sign_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_60"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/del_sign_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginHorizontal="@dimen/d_20"
+            android:layout_weight="1"
+            android:background="@drawable/dine_fri_rq_selecter"
+            android:text="删除所选签名" />
+    </LinearLayout>
+</LinearLayout>

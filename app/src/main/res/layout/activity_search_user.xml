@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.activity.SearchUserActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_60"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_16">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_weight="1"
+            android:background="@drawable/search_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/d_8">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="@dimen/d_20"
+                android:maxWidth="@dimen/d_20"
+                android:maxHeight="@dimen/d_20"
+                android:layout_marginHorizontal="@dimen/d_5"
+                android:src="@mipmap/search1"/>
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:layout_marginRight="@dimen/d_5"
+                android:maxLength="40" />
+
+            <ImageView
+                android:id="@+id/cancel"
+                android:layout_width="@dimen/d_20"
+                android:layout_height="@dimen/d_20"
+                android:src="@drawable/cancel"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/cancel_btn"
+            android:layout_marginLeft="@dimen/d_5"
+            android:layout_width="@dimen/d_60"
+            android:layout_height="@dimen/d_40"
+            android:gravity="center"
+            android:text="取消" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_person"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_45"
+        android:layout_marginTop="@dimen/d_1"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/item_press"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_16"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="@dimen/d_30"
+            android:layout_height="@dimen/d_30"
+            android:layout_marginRight="5dp"
+            android:src="@mipmap/person" />
+
+        <TextView
+            android:id="@+id/search_person_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="找人" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_group"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_45"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/item_press"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_16"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="@dimen/d_25"
+            android:layout_height="@dimen/d_25"
+            android:layout_marginLeft="2.5dp"
+            android:layout_marginRight="7.5dp"
+            android:src="@mipmap/persons" />
+
+        <TextView
+            android:id="@+id/search_group_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="找群" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,162 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao' // apply plugin
+apply plugin: 'com.mob.sdk'
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "com.example.flymessagedome"
+        minSdkVersion 16
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.01"
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:multidex:1.0.3'
+    //语音录制
+    implementation 'com.github.lewis-v:AudioH:1.0.0'
+    //获取语音时长
+    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-core:1.0.15'
+    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-native:1.0.15'
+    //emoji组件
+    implementation 'io.github.rockerhieu:emojicon:1.4.1'
+    //权限申请
+    implementation 'pub.devrel:easypermissions:2.0.0'
+    //相册选取照片
+    implementation 'cn.bingoogolapple:bga-photopicker:2.0.2@aar'
+    implementation 'cn.bingoogolapple:bga-baseadapter:2.0.0@aar'
+    //二维码扫描与生成
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+    //地区选择
+    implementation 'com.github.duanhong169:picker-view:1.0.1'
+    //上拉加载更多
+    implementation 'cn.bingoogolapple:bga-refreshlayout-androidx:2.0.0@aar'
+    //bga_banner
+    implementation 'cn.bingoogolapple:bga-banner:3.0.0@aar'
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.preference:preference:1.1.0-rc01'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'cn.bingoogolapple:bga-refreshlayout-androidx:2.0.0@aar'
+
+    //loading dialog
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+
+    //注解
+    implementation 'com.jakewharton:butterknife:10.0.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+
+    //glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+
+    // Rx
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'io.reactivex:rxjava:1.2.0'
+
+    // retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+    // okhttp
+    implementation 'com.squareup.okhttp3:okhttp:3.6.0'
+
+    // dagger
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.7'
+    implementation 'com.google.dagger:dagger:2.7'
+
+    //缓存框架
+    implementation 'com.danikula:videocache:2.7.0'
+
+    //greendao arm数据库
+    implementation 'org.greenrobot:greendao:3.2.2'
+
+    //aria  下载框架
+    implementation 'com.arialyy.aria:core:3.8.6'
+    annotationProcessor 'com.arialyy.aria:compiler:3.8.6'
+
+    //图片裁剪框架ucrop
+    implementation 'com.github.yalantis:ucrop:2.2.4'
+
+    //WebSocket
+    implementation "org.java-websocket:Java-WebSocket:1.4.0"
+
+    //fastJson
+    implementation 'com.alibaba:fastjson:1.2.60'
+    implementation 'com.google.android.material:material:1.1.0'
+}
+MobSDK {
+    appKey "替换为mob官方申请的appkey"
+    appSecret "替换为mob官方申请的appkey对应的appSecret"
+    ShareSDK {
+        loopShare true
+        devInfo {
+            SinaWeibo {
+                appKey "568898243"
+                appSecret "38a4f8204cc784f81f9f0daaf31e02e3"
+                callbackUri "http://www.sharesdk.cn"
+            }
+            Wechat {
+                appId "wx4868b35061f87885"
+                appSecret "64020361b8ec4c99936c0e3999a9f249"
+                userName "gh_afb25ac019c9"
+                path "pages/index/index.html?id=1"
+                withShareTicket true
+                miniprogramType 2
+            }
+            QQ {
+                appId "100371282"
+                appKey "aed9b0303e3ed1e27bae87c33761161d"
+            }
+            ShortMessage {}
+            WhatsApp {}
+            FacebookMessenger {
+                appId "107704292745179"
+            }
+            Douyin {
+                appKey "aw9ivykfjvi4hpwo"
+                appSecret "42b4caa6bda60bd49f05f06d0a4956e1"
+            }
+            WechatMoments {
+                appId "wx4868b35061f87885"
+                appSecret "64020361b8ec4c99936c0e3999a9f249"
+            }
+            WechatFavorite {
+                appId "wx4868b35061f87885"
+                appSecret "64020361b8ec4c99936c0e3999a9f249"
+            }
+            QZone {
+                appId "100371282"
+                appKey "aed9b0303e3ed1e27bae87c33761161d"
+            }
+        }
+    }
+}

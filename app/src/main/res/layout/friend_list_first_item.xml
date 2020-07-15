@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/d_110"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/f_group"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_30"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/d_20"
+        android:text="A"
+        android:textColor="@color/black_2"
+        android:textSize="@dimen/d_12" />
+
+    <RelativeLayout
+        android:id="@+id/main_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical"
+        android:paddingRight="@dimen/d_16">
+
+        <com.example.flymessagedome.view.CircleImageView
+            android:id="@+id/f_head"
+            android:layout_width="@dimen/d_40"
+            android:layout_height="@dimen/d_40"
+            android:layout_centerVertical="true"
+            android:layout_marginHorizontal="@dimen/d_16"
+            android:src="@drawable/mine" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/f_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginTop="18dp"
+                android:text="昵称"
+                android:textColor="@color/black"
+                android:textSize="@dimen/d_14" />
+
+            <TextView
+                android:id="@+id/f_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginBottom="18dp"
+                android:singleLine="true"
+                android:text="状态"
+                android:textColor="@color/black_7d"
+                android:textSize="@dimen/d_10" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</LinearLayout>

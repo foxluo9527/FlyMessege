@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.MessageRecordActivity"
+    android:background="@color/light_white">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="50dp"
+            android:padding="@dimen/d_15"
+            app:srcCompat="@mipmap/back" />
+
+        <TextView
+            android:id="@+id/edit_message"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_50"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="@dimen/d_15"
+            android:text="编辑" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="消息漫游" />
+    </RelativeLayout>
+    <cn.bingoogolapple.refreshlayout.BGARefreshLayout
+        android:id="@+id/message_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/d_15"
+        android:layout_weight="1">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/record_msg_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/del_messages"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_40"
+        android:layout_margin="@dimen/d_15"
+        android:background="@drawable/delete_bg_selector"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="@dimen/d_20"
+            android:layout_height="@dimen/d_20"
+            app:srcCompat="@mipmap/delete" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/d_5"
+            android:text="删除聊天记录" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:ignore="MissingDefaultResource">
+    <item android:drawable="@drawable/expanded_icon" android:state_expanded="true"></item>
+    <item android:drawable="@drawable/unexpand_icon" android:state_expanded="false"></item>
+    <item android:drawable="@drawable/unexpand_icon"></item>
+</selector>

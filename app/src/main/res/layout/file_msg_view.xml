@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/d_60"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_file_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/d_5"
+            android:singleLine="true"
+            android:text="文件名"
+            android:textColor="@color/black_2"
+            android:textSize="@dimen/d_13" />
+
+        <TextView
+            android:id="@+id/tv_file_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black_7d"
+            android:textSize="@dimen/d_9"
+            android:singleLine="true"
+            android:text="文件信息" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/file_type_img"
+        android:layout_width="@dimen/d_50"
+        android:layout_height="@dimen/d_50"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+</LinearLayout>

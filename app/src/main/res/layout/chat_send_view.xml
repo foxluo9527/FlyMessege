@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimaryDark"
+    android:paddingTop="@dimen/d_5"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/d_10"
+        android:orientation="horizontal">
+
+        <io.github.rockerhieu.emojicon.EmojiconMultiAutoCompleteTextView
+            android:id="@+id/msg_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/msg_send_et_bg"
+            android:paddingHorizontal="@dimen/d_15"
+            android:maxLines="6"
+            android:minHeight="@dimen/d_35"
+            android:maxLength="200"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/send_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_35"
+            android:background="@drawable/msg_send_btn_bg"
+            android:layout_margin="@dimen/d_5"
+            android:enabled="false"
+            android:text="发送" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_45"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.example.flymessagedome.ui.ImageViewCheckBox
+                android:id="@+id/send_voice"
+                android:layout_width="@dimen/d_25"
+                android:layout_height="@dimen/d_25"
+                app:checked_bkg="@drawable/voice_select"
+                app:unchecked_bkg="@drawable/voice"
+                app:checked_disabled="@drawable/voice" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.example.flymessagedome.ui.ImageViewCheckBox
+                android:id="@+id/send_pic"
+                android:layout_width="@dimen/d_25"
+                android:layout_height="@dimen/d_25"
+                app:checked_bkg="@drawable/picture_select"
+                app:unchecked_bkg="@drawable/picture"
+                app:checked_disabled="@drawable/picture" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.example.flymessagedome.ui.ImageViewCheckBox
+                android:id="@+id/take_photo"
+                android:layout_width="@dimen/d_25"
+                android:layout_height="@dimen/d_25"
+                app:checked_bkg="@drawable/emoji_select"
+                app:unchecked_bkg="@drawable/emoji"
+                app:checked_disabled="@drawable/emoji" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.example.flymessagedome.ui.ImageViewCheckBox
+                android:id="@+id/send_file"
+                android:layout_width="@dimen/d_25"
+                android:layout_height="@dimen/d_25"
+                app:checked_disabled="@drawable/file"
+                app:checked_bkg="@drawable/file_select"
+                app:unchecked_bkg="@drawable/file" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/voice_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_200"
+        android:background="@color/colorPrimary"
+        android:visibility="gone">
+
+        <com.example.flymessagedome.ui.ImageViewCheckBox
+            android:id="@+id/send_voice_control"
+            android:layout_width="@dimen/d_80"
+            android:layout_height="@dimen/d_80"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            app:checked_disabled="@drawable/sound"
+            app:checked_bkg="@drawable/pause"
+            app:unchecked_bkg="@drawable/sound" />
+
+        <TextView
+            android:id="@+id/send_voice_state_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/send_voice_control"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/d_10"
+            android:text="点击开始录音" />
+
+        <ImageView
+            android:id="@+id/send_voice_cancel"
+            android:layout_width="@dimen/d_40"
+            android:layout_height="@dimen/d_40"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_40"
+            android:layout_toEndOf="@+id/send_voice_control"
+            android:layout_toRightOf="@+id/send_voice_control"
+            android:src="@drawable/cancel"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_toStartOf="@+id/send_voice_control"
+            android:layout_toLeftOf="@+id/send_voice_control"
+            android:text="0/120s" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/photo_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_200"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/photos_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_50"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/d_10">
+
+            <TextView
+                android:id="@+id/get_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="相册选取" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/cancel_choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="取消选中(0)" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/send_img_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/d_35"
+                android:layout_margin="@dimen/d_5"
+                android:background="@drawable/msg_send_btn_bg"
+                android:enabled="false"
+                android:text="发送图片" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/emojicons"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_200"
+        android:visibility="gone" />
+</LinearLayout>

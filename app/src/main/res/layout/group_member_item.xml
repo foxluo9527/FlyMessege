@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/d_60"
+    android:background="@drawable/item_press"
+    android:clickable="true"
+    android:gravity="center_vertical">
+
+    <com.example.flymessagedome.ui.ImageViewCheckBox
+        android:id="@+id/group_choice"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginHorizontal="@dimen/d_5"
+        android:visibility="gone"
+        app:checked_bkg="@mipmap/radio_c"
+        app:checked_disabled="@mipmap/radio"
+        app:unchecked_bkg="@mipmap/radio" />
+
+    <com.example.flymessagedome.view.CircleImageView
+        android:id="@+id/head_img"
+        android:layout_marginHorizontal="@dimen/d_15"
+        android:layout_width="@dimen/d_40"
+        android:layout_height="@dimen/d_40"
+        app:srcCompat="@mipmap/ic_launcher_round" />
+
+    <TextView
+        android:id="@+id/group_creator_flag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/d_5"
+        android:background="@drawable/group_creator_flag_bg"
+        android:paddingHorizontal="@dimen/d_4"
+        android:paddingVertical="@dimen/d_2"
+        android:text="群主"
+        android:textColor="@color/white"
+        android:textSize="@dimen/d_9"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/group_nick_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:layout_weight="1"
+        android:text="群昵称" />
+</LinearLayout>

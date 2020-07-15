@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.SearchResultActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_16">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_weight="1"
+            android:background="@drawable/search_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/d_8">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="@dimen/d_20"
+                android:layout_marginHorizontal="@dimen/d_5"
+                android:maxWidth="@dimen/d_20"
+                android:maxHeight="@dimen/d_20"
+                android:src="@mipmap/search1" />
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/d_5"
+                android:layout_weight="1"
+                android:background="@null"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:maxLength="40" />
+
+            <ImageView
+                android:id="@+id/cancel"
+                android:layout_width="@dimen/d_20"
+                android:layout_height="@dimen/d_20"
+                android:src="@drawable/cancel"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/cancel_tv"
+            android:layout_width="@dimen/d_60"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginLeft="@dimen/d_5"
+            android:gravity="center"
+            android:text="取消" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/search_empty"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_40"
+        android:gravity="center"
+        android:text="这里空空如也" />
+
+    <cn.bingoogolapple.refreshlayout.BGARefreshLayout
+        android:id="@+id/blacklist_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/person_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
+
+</LinearLayout>

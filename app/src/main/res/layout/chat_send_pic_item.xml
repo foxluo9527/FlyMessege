@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_view"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/d_200"
+    android:background="@color/colorPrimaryDark"
+    android:gravity="right"
+    android:orientation="vertical"
+    android:padding="1dp">
+
+    <ImageView
+        android:id="@+id/img_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/d_200"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_background" />
+
+    <RadioButton
+        android:id="@+id/radio_choice"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/radiobutton_selecter"
+        android:button="@null" />
+
+</RelativeLayout>

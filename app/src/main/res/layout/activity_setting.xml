@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.activity.SettingActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="@dimen/d_50"
+            android:padding="@dimen/d_15"
+            app:srcCompat="@mipmap/back" />
+
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设置" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/account_setting"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_50"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/item_press"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="@dimen/d_15"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:text="账号管理"
+                    android:textColor="@color/black" />
+
+                <com.example.flymessagedome.view.CircleImageView
+                    android:id="@+id/head_img"
+                    android:layout_width="@dimen/d_40"
+                    android:layout_height="@dimen/d_40"
+                    android:src="@mipmap/ic_launcher_round" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/self_setting"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_50"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="@dimen/d_10"
+                android:background="@drawable/item_press"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="@dimen/d_15"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:text="账号与安全"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_20"
+                    android:layout_height="@dimen/d_20"
+                    app:srcCompat="@mipmap/right1" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/message_setting"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_50"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/item_press"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="@dimen/d_15"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:text="消息通知"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_20"
+                    android:layout_height="@dimen/d_20"
+                    app:srcCompat="@mipmap/right1" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/privacy_setting"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_50"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/item_press"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="@dimen/d_15"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:text="隐私"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_20"
+                    android:layout_height="@dimen/d_20"
+                    app:srcCompat="@mipmap/right1" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/settings"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_50"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="@dimen/d_10"
+                android:background="@drawable/item_press"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="@dimen/d_15"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:text="通用"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_20"
+                    android:layout_height="@dimen/d_20"
+                    app:srcCompat="@mipmap/right1" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/about"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_50"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/item_press"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="@dimen/d_15"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:text="关于飞讯与帮助"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_20"
+                    android:layout_height="@dimen/d_20"
+                    app:srcCompat="@mipmap/right1" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

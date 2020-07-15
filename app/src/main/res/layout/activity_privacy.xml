@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.activity.PrivacyActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/colorPrimary">
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="@dimen/d_50"
+        android:layout_height="@dimen/d_50"
+        android:padding="@dimen/d_15"
+        app:srcCompat="@mipmap/back" />
+
+    <TextView
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="隐私设置" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/d_5"
+        android:layout_marginHorizontal="@dimen/d_15"
+        android:text="个人信息" />
+
+    <LinearLayout
+        android:id="@+id/online_state"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/d_1"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="隐身状态" />
+
+        <Switch
+            android:id="@+id/online_state_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/allow_show"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/d_1"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="不让任何人查看我的主页" />
+
+        <Switch
+            android:id="@+id/allow_show_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/d_5"
+        android:layout_marginHorizontal="@dimen/d_15"
+        android:text="黑名单" />
+    <LinearLayout
+        android:id="@+id/black_list"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/d_1"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="用户黑名单" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="@dimen/d_20"
+            android:layout_height="@dimen/d_20"
+            app:srcCompat="@mipmap/right1" />
+
+    </LinearLayout>
+</LinearLayout>

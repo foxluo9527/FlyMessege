@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.activity.ChangePassActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="50dp"
+            android:padding="@dimen/d_15"
+            app:srcCompat="@mipmap/back" />
+
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="修改密码" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/d_15"
+        android:layout_marginVertical="@dimen/d_5"
+        android:text="旧密码" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_40"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <EditText
+            android:id="@+id/old_pass"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:textSize="@dimen/d_13"
+            android:ems="10"
+            android:hint="请输入旧密码"
+            android:inputType="textPassword" />
+
+        <ImageView
+            android:id="@+id/old_pass_cancel"
+            android:layout_width="@dimen/d_20"
+            android:layout_height="@dimen/d_20"
+            android:src="@drawable/cancel"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/old_pass_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/d_15"
+        android:layout_marginVertical="@dimen/d_5"
+        android:text="旧密码输入信息有误"
+        android:textColor="@color/red"
+        android:visibility="gone" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/d_15"
+        android:layout_marginVertical="@dimen/d_5"
+        android:text="新密码" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_40"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <EditText
+            android:id="@+id/new_pass"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:ems="10"
+            android:maxLength="20"
+            android:textSize="@dimen/d_13"
+            android:hint="请输入6-20位新密码"
+            android:inputType="textPassword" />
+
+        <ImageView
+            android:id="@+id/new_pass_cancel"
+            android:layout_width="@dimen/d_20"
+            android:layout_height="@dimen/d_20"
+            android:src="@drawable/cancel"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/new_pass_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/d_15"
+        android:layout_marginVertical="@dimen/d_5"
+        android:text="新密码输入信息有误"
+        android:textColor="@color/red"
+        android:visibility="gone" />
+
+    <CheckBox
+        android:id="@+id/show_pass_check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/d_7"
+        android:text="显示密码" />
+
+    <Button
+        android:id="@+id/change_pass_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_40"
+        android:layout_margin="@dimen/d_15"
+        android:background="@drawable/select_btn_bg"
+        android:text="修改密码" />
+</LinearLayout>

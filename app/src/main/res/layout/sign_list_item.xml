@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <com.example.flymessagedome.ui.ImageViewCheckBox
+        android:id="@+id/sign_choice"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginHorizontal="@dimen/d_16"
+        android:visibility="gone"
+        app:checked_bkg="@mipmap/radio_c"
+        app:checked_disabled="@mipmap/radio"
+        app:unchecked_bkg="@mipmap/radio" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/d_10"
+        android:layout_marginVertical="@dimen/d_10"
+        android:background="@drawable/add_sign_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/d_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/sign_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="发布时间"
+                android:textColor="@color/black_5"
+                android:textSize="@dimen/d_12" />
+
+            <TextView
+                android:id="@+id/sign_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:singleLine="false"
+                android:text="签名内容"
+                android:textColor="@color/black_2"
+                android:textSize="@dimen/d_15" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/d_80"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/send_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/d_30"
+                android:layout_weight="1"
+                android:background="@drawable/sign_send_btn_bg_selecter"
+                android:text="发布"
+                android:textColor="@color/black_5"
+                android:textSize="@dimen/d_10" />
+            <Button
+                android:id="@+id/del_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/d_30"
+                android:layout_weight="1"
+                android:background="@drawable/sign_del_btn_bg_selecter"
+                android:text="删除"
+                android:textColor="@color/black_5"
+                android:textSize="@dimen/d_10" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.ShowUserActivity">
+
+    <ImageView
+        android:id="@+id/main_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/show_bg_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/d_180"
+                    android:layout_marginBottom="@dimen/d_1">
+
+                    <ImageView
+                        android:id="@+id/back"
+                        android:layout_width="@dimen/d_52"
+                        android:layout_height="@dimen/d_52"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:padding="@dimen/d_16"
+                        app:srcCompat="@mipmap/back" />
+
+                    <ImageView
+                        android:id="@+id/user_set"
+                        android:layout_width="@dimen/d_52"
+                        android:layout_height="@dimen/d_52"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginRight="0dp"
+                        android:padding="@dimen/d_16"
+                        android:src="@mipmap/more1" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/msg_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/d_120"
+                    android:background="#33FAF1F1">
+
+                    <com.example.flymessagedome.view.CircleImageView
+                        android:id="@+id/u_head_img"
+                        android:layout_width="@dimen/d_80"
+                        android:layout_height="@dimen/d_80"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/d_25"
+                        android:src="@mipmap/ic_launcher_round" />
+
+                    <TextView
+                        android:id="@+id/nick_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="126dp"
+                        android:layout_marginLeft="126dp"
+                        android:layout_marginTop="20dp"
+                        android:text="昵称"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/d_18" />
+
+                    <LinearLayout
+                        android:id="@+id/u_msg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="126dp"
+                        android:layout_marginLeft="126dp"
+                        android:layout_marginBottom="20dp">
+
+                        <ImageView
+                            android:id="@+id/sex"
+                            android:layout_width="@dimen/d_16"
+                            android:layout_height="@dimen/d_16"
+                            app:srcCompat="@mipmap/man" />
+
+                        <TextView
+                            android:id="@+id/position"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/d_5"
+                            android:text="位置" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/u_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="126dp"
+                        android:layout_marginLeft="126dp"
+                        android:layout_marginBottom="51dp"
+                        android:editable="true"
+                        android:text="用户名"
+                        android:textColor="@color/black_7"
+                        android:textSize="@dimen/d_14" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#33FAF1F1"
+                    android:gravity="top"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/d_20"
+                        android:layout_height="@dimen/d_20"
+                        android:layout_margin="@dimen/d_15"
+                        app:srcCompat="@mipmap/sgin" />
+
+                    <TextView
+                        android:id="@+id/sgin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="@dimen/d_15"
+                        android:text="签名" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#33FAF1F1"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/d_20"
+            android:paddingHorizontal="@dimen/d_20">
+
+            <Button
+                android:id="@+id/send_btn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_42"
+                android:layout_marginVertical="@dimen/d_9"
+                android:background="@drawable/msg_btn_selector"
+                android:textColor="@color/blue_1"
+                android:text="发消息" />
+
+            <Button
+                android:id="@+id/add_fri_btn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d_42"
+                android:layout_marginVertical="@dimen/d_9"
+                android:background="@drawable/msg_btn_selector"
+                android:textColor="@color/blue_1"
+                android:text="加好友"
+                android:visibility="visible" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

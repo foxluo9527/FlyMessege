@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.activity.NotificationActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="@dimen/d_50"
+            android:padding="@dimen/d_15"
+            app:srcCompat="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="消息通知" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/d_5"
+        android:layout_marginHorizontal="@dimen/d_15"
+        android:text="通知开关" />
+
+    <LinearLayout
+        android:id="@+id/allow_notify"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="接收新消息通知" />
+
+        <Switch
+            android:id="@+id/allow_notify_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/d_5"
+        android:layout_marginHorizontal="@dimen/d_15"
+        android:text="声音与振动" />
+
+    <LinearLayout
+        android:id="@+id/setting_notify"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="新消息系统设置" />
+
+        <ImageView
+            android:layout_width="@dimen/d_20"
+            android:layout_height="@dimen/d_20"
+            app:srcCompat="@mipmap/right1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/notify_voice"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:layout_marginTop="@dimen/d_1"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="声音" />
+
+        <Switch
+            android:id="@+id/notify_voice_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/notify_vibrator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:layout_marginTop="@dimen/d_1"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="振动" />
+
+        <Switch
+            android:id="@+id/notify_vibrator_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

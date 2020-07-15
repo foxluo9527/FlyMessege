@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.WelcomeActivity">
+
+    <RelativeLayout
+        android:id="@+id/one_img_view"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/jump"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/d_40"
+            android:layout_marginEnd="@dimen/d_18"
+            android:background="@drawable/welcome_btn_press_bg"
+            android:text="跳过"
+            android:textColor="@color/black"
+            android:textSize="13dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="19dp" />
+
+        <ImageView
+            android:id="@+id/one_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/one_view"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/one_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="top|center_horizontal"
+            android:lineHeight="18dp"
+            android:padding="24dp"
+            android:scrollbars="vertical"
+            android:textColor="@color/black"
+            android:textSize="12dp" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.UserChatActivity"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="@dimen/d_50"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/d_16"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/d_10"
+            android:text="用户名"
+            android:textColor="@color/black"
+            android:textSize="@dimen/d_14" />
+
+        <TextView
+            android:id="@+id/tv_online_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="在线状态"
+            android:textColor="@color/black_5"
+            android:textSize="@dimen/d_9" />
+
+        <ImageView
+            android:id="@+id/more"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="@dimen/d_50"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/d_12"
+            android:src="@mipmap/more" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/un_friend_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_38"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/black_7d"
+            android:orientation="horizontal"
+            tools:ignore="Suspicious0dp"></LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/add_blacklist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/item_press"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/blacklist_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="拉入黑名单"
+                    android:textColor="@color/black_2"
+                    android:textSize="@dimen/d_12" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_20"
+                    android:layout_height="@dimen/d_20"
+                    app:srcCompat="@mipmap/unlink_relation" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/black_7d" />
+
+            <LinearLayout
+                android:id="@+id/add_friend"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/item_press"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="添加好友"
+                    android:textColor="@color/black_2"
+                    android:textSize="@dimen/d_12" />
+
+                <ImageView
+                    android:layout_width="@dimen/d_20"
+                    android:layout_height="@dimen/d_20"
+                    app:srcCompat="@mipmap/add2" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/black_7d"
+            android:orientation="horizontal"
+            tools:ignore="Suspicious0dp"></LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/bg_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/messge_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/d_5"
+            />
+    </FrameLayout>
+
+    <include
+        layout="@layout/chat_send_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

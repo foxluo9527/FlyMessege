@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.activity.SearchUserActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_60"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingRight="@dimen/d_15">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="@dimen/d_50"
+            android:padding="@dimen/d_15"
+            app:srcCompat="@mipmap/back" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_weight="1"
+            android:background="@drawable/search_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/d_8">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="@dimen/d_20"
+                android:layout_marginHorizontal="@dimen/d_5"
+                android:maxWidth="@dimen/d_20"
+                android:maxHeight="@dimen/d_20"
+                android:src="@mipmap/search1" />
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/d_5"
+                android:layout_weight="1"
+                android:background="@null"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:maxLength="40" />
+
+            <ImageView
+                android:id="@+id/cancel"
+                android:layout_width="@dimen/d_20"
+                android:layout_height="@dimen/d_20"
+                android:src="@drawable/cancel"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/contract_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/d_10"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:layout_marginTop="@dimen/d_1"
+            android:layout_marginBottom="1dp"
+            android:background="@color/colorPrimary"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/d_16"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="联系人" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/contract_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary" />
+
+    </LinearLayout>
+
+</LinearLayout>

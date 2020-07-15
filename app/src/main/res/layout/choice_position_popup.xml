@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/colorPrimary"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textview"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_30"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="请选择地区"
+        android:textColor="@color/black"
+        android:textSize="@dimen/textSize_16" />
+
+    <top.defaults.view.DivisionPickerView
+        android:id="@+id/divisionPicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:preferredMaxOffsetItemCount="4"
+        android:background="#e7e7e7">
+    </top.defaults.view.DivisionPickerView>
+
+    <Button
+        android:id="@+id/sure_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/select_btn_bg"
+        android:layout_margin="8dp"
+        android:text="确定" />
+</LinearLayout>

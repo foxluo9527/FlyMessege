@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/d_30">
+
+    <com.example.flymessagedome.view.CircleImageView
+        android:id="@+id/r_g_head_img"
+        android:layout_width="@dimen/d_35"
+        android:layout_height="@dimen/d_35"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="@dimen/d_16"
+        android:layout_marginRight="@dimen/d_16"
+        android:src="@mipmap/ic_launcher_round" />
+
+    <TextView
+        android:id="@+id/tv_send_time"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="16dp"
+        android:text="刚刚" />
+
+    <LinearLayout
+        android:id="@+id/msg_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="@dimen/d_25"
+        android:layout_marginLeft="@dimen/d_25"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:background="@drawable/balloon_r"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingVertical="@dimen/d_10"
+        android:paddingLeft="@dimen/d_25"
+        android:visibility="visible">
+
+        <include
+            android:id="@+id/voice_msg_view"
+            layout="@layout/voice_msg_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_group_member_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="@dimen/d_75"
+        android:layout_marginRight="@dimen/d_75"
+        android:singleLine="true"
+        android:text="群成员昵称" />
+
+    <ImageView
+        android:id="@+id/send_failed_img"
+        android:layout_width="@dimen/d_20"
+        android:layout_height="@dimen/d_20"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ssdk_exception_icon" />
+</RelativeLayout>

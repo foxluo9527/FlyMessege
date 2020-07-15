@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.activity.CreateGroupActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="@dimen/d_50"
+            android:padding="@dimen/d_15"
+            app:srcCompat="@mipmap/back" />
+
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="创建群聊" />
+
+        <TextView
+            android:id="@+id/create"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_50"
+            android:paddingHorizontal="@dimen/d_15"
+            android:gravity="center_vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:textColor="@drawable/login_text_touch"
+            android:text="完成" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray01"
+        android:layout_marginTop="@dimen/d_1"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/change_cover_view"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/item_press"
+            android:clickable="true"
+            android:focusable="false"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp">
+
+            <TextView
+                android:textSize="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="0dp"
+                android:text="群头像"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="0dp" />
+
+            <ImageView
+                android:id="@+id/cover_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="0dp"
+                android:src="@drawable/icon"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="0dp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginVertical="0.5dp"
+            android:background="@drawable/item_press"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="群聊名称" />
+
+            <EditText
+                android:id="@+id/edit_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:ems="10"
+                android:gravity="right"
+                android:hint="编辑群聊名称"
+                android:maxLength="20"
+                android:inputType="textPersonName"
+                android:textCursorDrawable="@drawable/edit_text_cursor"
+                android:textSize="15dp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/edit_introduce_view"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/item_press"
+            android:clickable="true"
+            android:focusable="false"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="0dp"
+                android:textSize="15dp"
+                android:text="群聊简介"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="0dp" />
+
+            <TextView
+                android:id="@+id/introduce_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
+                android:ellipsize="end"
+                android:gravity="right"
+                android:hint="编辑群聊简介"
+                android:maxWidth="300dp"
+                android:singleLine="true"
+                android:textSize="15dp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/show_edit_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <MultiAutoCompleteTextView
+                        android:id="@+id/edit_introduce"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@null"
+                        android:hint="编辑群聊简介"
+                        android:maxLength="200"
+                        android:textCursorDrawable="@drawable/edit_text_cursor" />
+                </LinearLayout>
+            </ScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/cancel_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/hint_btn_press_bg"
+                    android:text="取消" />
+
+                <Button
+                    android:id="@+id/sure_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/hint_btn_press_bg"
+                    android:text="确定" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

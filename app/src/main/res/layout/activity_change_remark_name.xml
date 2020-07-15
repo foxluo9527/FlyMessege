@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/colorPrimary"
+        android:layout_marginBottom="@dimen/d_1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="修改备注"
+            android:textColor="@color/black_3"
+            android:textSize="@dimen/d_14"/>
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_20"
+            android:layout_height="@dimen/d_20"
+            android:layout_marginLeft="@dimen/d_16"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/back" />
+
+        <Button
+            android:id="@+id/done"
+            android:layout_width="@dimen/d_60"
+            android:layout_height="@dimen/d_30"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/select_btn_bg"
+            android:layout_centerVertical="true"
+            android:text="完成" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorPrimaryDark">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/d_16"
+            android:textColor="@color/black_9"
+            android:textSize="@dimen/d_12"
+            android:layout_marginVertical="@dimen/d_5"
+            android:text="备注名" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d_40"
+            android:gravity="center_vertical"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/remark_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/d_16"
+                android:layout_weight="1"
+                android:background="@null"
+                android:ems="10"
+                android:maxLength="15"
+                android:singleLine="true"
+                android:inputType="textPersonName" />
+
+            <ImageView
+                android:id="@+id/cancel"
+                android:layout_width="@dimen/d_18"
+                android:layout_height="@dimen/d_18"
+                android:layout_marginHorizontal="@dimen/d_16"
+                app:srcCompat="@drawable/cancel" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

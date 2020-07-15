@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/d_50"
+    android:background="@drawable/item_press">
+
+    <com.example.flymessagedome.view.CircleImageView
+        android:id="@+id/user_head_img"
+        android:layout_width="@dimen/d_30"
+        android:layout_height="@dimen/d_30"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/d_16"
+        android:src="@mipmap/ic_launcher_round" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="7dp"
+        android:text="名称"
+        android:textColor="@color/black_7"
+        android:textSize="@dimen/d_14" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginBottom="7dp">
+
+        <TextView
+            android:id="@+id/m_content"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/d_16"
+            android:textSize="@dimen/d_12" />
+    </LinearLayout>
+
+</RelativeLayout>

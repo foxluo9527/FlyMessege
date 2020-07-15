@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.activity.CommonSettingActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="@dimen/d_50"
+            android:padding="@dimen/d_15"
+            app:srcCompat="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="通用设置" />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/d_5"
+        android:layout_marginHorizontal="@dimen/d_10"
+        android:text="开启后，主题会跟随系统深色模式切换" />
+    <LinearLayout
+        android:id="@+id/black_theme"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/d_1"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="跟随系统深色模式" />
+
+        <Switch
+            android:id="@+id/black_theme_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/d_5"
+        android:layout_marginHorizontal="@dimen/d_10"
+        android:text="储存空间" />
+
+    <LinearLayout
+        android:id="@+id/clean_cache"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:layout_marginBottom="0.5dp"
+        android:background="@drawable/item_press"
+        android:clickable="true"
+        android:focusable="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="清除缓存" />
+
+        <TextView
+            android:id="@+id/cache_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:text="2048M"
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/clean_download_file"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:layout_marginTop="@dimen/d_1"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="清理下载文件" />
+
+        <ImageView
+            android:layout_width="@dimen/d_20"
+            android:layout_height="@dimen/d_20"
+            app:srcCompat="@mipmap/right1" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/clean_chat_file"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:layout_marginTop="@dimen/d_1"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="清理聊天文件" />
+
+        <ImageView
+            android:layout_width="@dimen/d_20"
+            android:layout_height="@dimen/d_20"
+            app:srcCompat="@mipmap/right1" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/clean_temp_file"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:layout_marginTop="@dimen/d_1"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="清理临时文件" />
+
+        <ImageView
+            android:layout_width="@dimen/d_20"
+            android:layout_height="@dimen/d_20"
+            app:srcCompat="@mipmap/right1" />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/d_10"
+        android:layout_marginVertical="@dimen/d_5"
+        android:text="聊天" />
+
+    <LinearLayout
+        android:id="@+id/clean_message_record"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:layout_marginTop="@dimen/d_1"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="清除所有聊天记录" />
+
+        <ImageView
+            android:layout_width="@dimen/d_20"
+            android:layout_height="@dimen/d_20"
+            app:srcCompat="@mipmap/right1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/clean_chat_record"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        android:layout_marginTop="@dimen/d_1"
+        android:background="@drawable/item_press"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/d_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="清除所有消息列表" />
+
+        <ImageView
+            android:layout_width="@dimen/d_20"
+            android:layout_height="@dimen/d_20"
+            app:srcCompat="@mipmap/right1" />
+    </LinearLayout>
+</LinearLayout>

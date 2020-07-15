@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/share"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/item_press"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="分享" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/save"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/item_press"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="保存到本地" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cancel"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/item_press"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消" />
+    </LinearLayout>
+</LinearLayout>

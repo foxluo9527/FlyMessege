@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <com.example.flymessagedome.ui.ImageViewCheckBox
+        android:id="@+id/message_choice"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginHorizontal="@dimen/d_16"
+        android:layout_marginTop="@dimen/d_40"
+        android:visibility="gone"
+        app:checked_bkg="@mipmap/radio_c"
+        app:checked_disabled="@mipmap/radio"
+        app:unchecked_bkg="@mipmap/radio" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="@dimen/d_70">
+
+        <com.example.flymessagedome.view.CircleImageView
+            android:id="@+id/l_u_head_img"
+            android:layout_width="@dimen/d_40"
+            android:layout_height="@dimen/d_40"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="42dp"
+            android:src="@mipmap/ic_launcher_round" />
+
+        <TextView
+            android:id="@+id/tv_send_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="刚刚" />
+
+        <LinearLayout
+            android:id="@+id/msg_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="60dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="@dimen/d_40"
+            android:background="@drawable/balloon_l"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/d_10"
+            android:paddingLeft="@dimen/d_25"
+            android:visibility="visible">
+
+            <include
+                android:id="@+id/voice_msg_view"
+                layout="@layout/voice_msg_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
