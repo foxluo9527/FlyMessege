@@ -1,0 +1,2643 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+    xmlns:o="urn:schemas-microsoft-com:office:office"
+    xmlns:w="urn:schemas-microsoft-com:office:word"
+    xmlns="http://www.w3.org/TR/REC-html40">
+    <head><meta http-equiv=Content-Type content="text/html; charset=utf-8">
+    <style type="text/css">
+        table  
+        {  
+            border-collapse: collapse;
+            border: none;  
+            width: 100%;  
+        }  
+        td,tr  
+        {  
+            border: solid #CCC 1px;
+            padding:3px;
+            font-size:9pt;
+        } 
+        .codestyle{
+            word-break: break-all;
+            mso-highlight:rgb(252, 252, 252);
+            padding-left: 5px; background-color: rgb(252, 252, 252); border: 1px solid rgb(225, 225, 232);
+        }
+        img {
+            width:100;
+        }
+    </style>
+    <meta name=ProgId content=Word.Document>
+    <meta name=Generator content="Microsoft Word 11">
+    <meta name=Originator content="Microsoft Word 11">
+    <xml><w:WordDocument><w:View>Print</w:View></xml></head>
+    <body><h1>1、用户接口</h1><div style="margin-left:0px;"><h2>1.1、用户登录</h2><div style="margin-left:0px;"><h3>1.1.1、账号密码登录</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/login" title="http://www.foxluo.cn/FlyMessage/user/login"><a href="http://www.foxluo.cn/FlyMessage/user/login">http://www.foxluo.cn/FlyMessage/user/login</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/login?username=123&pass=wanling1314" title="http://www.foxluo.cn/FlyMessage/user/login?username=123&pass=wanling1314"><a href="http://www.foxluo.cn/FlyMessage/user/login?username=123&pass=wanling1314">http://www.foxluo.cn/FlyMessage/user/login?username=123&pass=wanling1314</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>username</td>
+<td>√</td>
+<td>String</td>
+<td>用户名/电话号码</td>
+</tr>
+<tr>
+<td>pass</td>
+<td>√</td>
+<td>String</td>
+<td>用户密码</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "登录成功",
+    "loginUser": {
+        "nowDate": 1590370361579,
+        "u_name": "123",
+        "u_sex": "男",
+        "u_create_time": 1589343049000,
+        "u_forbidden": 0,
+        "u_nick_name": "新用户",
+        "u_pass": "99490e90b5581d3e8fc35bd780398a03",
+        "u_sign": "哈哈哈哈",
+        "u_id": 1,
+        "u_phone": "17628648573",
+        "u_brithday": 930499200000,
+        "u_head_img": "http://www.foxluo.com/FlyMessage/images/defaultHead.png",
+        "u_position": "123",
+        "u_bg_img": "http://www.foxluo.cn/FlyMessage/images/userBgImg/20200521123701296.JPG"
+    },
+    "code": 200,
+    "token": "daef63cf-1708-4dee-a64b-c94ed4040903"
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录失败",
+  "code": "500"
+}</code></pre></table></div><h3>1.1.2、手机验证码登录</h3><div style="margin-left:30px;"><h5>1.发送验证码</h5>
+<p>接口地址: <a href="http://www.foxluo.cn/FlyMessage/SMS/sendLoginSMS" title="http://www.foxluo.cn/FlyMessage/SMS/sendLoginSMS"><a href="http://www.foxluo.cn/FlyMessage/SMS/sendLoginSMS">http://www.foxluo.cn/FlyMessage/SMS/sendLoginSMS</a></a></p>
+<p>请求示例: <a href="http://www.foxluo.cn/FlyMessage/SMS/sendLoginSMS?phone=17628648573" title="http://www.foxluo.cn/FlyMessage/SMS/sendLoginSMS?phone=17628648573"><a href="http://www.foxluo.cn/FlyMessage/SMS/sendLoginSMS?phone=17628648573">http://www.foxluo.cn/FlyMessage/SMS/sendLoginSMS?phone=17628648573</a></a></p>
+<p>请求发送: <strong>GET</strong></p>
+<p>请求参数:</p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>phone</td>
+<td>√</td>
+<td>String</td>
+<td>接收短信验证码的电话号码</td>
+</tr>
+</tbody>
+</table>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "验证码发送成功,请注意查收",
+    "code": 200
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "验证码发送失败,请检查号码后重试",
+    "code": 500
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "验证码发送失败:一分钟内不能重复发送",
+    "code": 500
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "验证码发送失败:一小时内发送不能超过三次",
+    "code": 500
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "验证码发送失败:该账号暂未注册",
+    "code": 500
+}</code></pre></table>
+<h5>2.校验验证码</h5>
+<p>接口地址: <a href="http://www.foxluo.cn/FlyMessage/SMS/noPassLogin" title="http://www.foxluo.cn/FlyMessage/SMS/noPassLogin"><a href="http://www.foxluo.cn/FlyMessage/SMS/noPassLogin">http://www.foxluo.cn/FlyMessage/SMS/noPassLogin</a></a></p>
+<p>请求示例: [<a href="http://www.foxluo.cn/FlyMessage/SMS/noPassLogin?phone=17628648573&code=638373](http://www.foxluo.cn/FlyMessage/SMS/noPassLogin?phone=17628648573">http://www.foxluo.cn/FlyMessage/SMS/noPassLogin?phone=17628648573&code=638373](http://www.foxluo.cn/FlyMessage/SMS/noPassLogin?phone=17628648573</a> &code=638373"<a href="http://www.foxluo.cn/FlyMessage/SMS/noPassLogin?phone=17628648573&code=638373">http://www.foxluo.cn/FlyMessage/SMS/noPassLogin?phone=17628648573&code=638373</a>")</p>
+<p>请求参数:</p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>phone</td>
+<td>√</td>
+<td>String</td>
+<td>接收短信验证码的电话号码</td>
+</tr>
+<tr>
+<td>code</td>
+<td>√</td>
+<td>String</td>
+<td>校验的短信验证码</td>
+</tr>
+</tbody>
+</table>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "登录成功",
+    "loginUser": {
+        "nowDate": 1589809838079,
+        "u_name": "123",
+        "u_sex": "男",
+        "u_create_time": 1589343049000,
+        "u_forbidden": 0,
+        "u_nick_name": "新用户",
+        "u_pass": "99490e90b5581d3e8fc35bd780398a03",
+        "u_sign": "哈哈哈哈",
+        "u_id": 1,
+        "u_phone": "176****8573",
+        "u_brithday": 1589299200000,
+        "u_head_img": "http://www.foxluo.cn/FlyMessage/images/userHeads/20200515192112562.JPG",
+        "u_position": "123",
+        "u_bg_img": "http://www.foxluo.com/FlyMessage/bg/defaultBg.png"
+    },
+    "code": 200,
+    "loginToken": "87c429c4-3ea4-473c-8744-258bb4235e2e"
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "登录失败:账号不存在",
+    "code": 502
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "登录失败:验证码已过期",
+    "code": 508
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "登录失败:验证码错误",
+    "code": 509
+}</code></pre></table></div><h3>1.1.3、退出登录</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/exit" title="http://www.foxluo.cn/FlyMessage/user/exit"><a href="http://www.foxluo.cn/FlyMessage/user/exit">http://www.foxluo.cn/FlyMessage/user/exit</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/exit?loginToken=8ef57446-7ba3-4faf-9b19-b184b056cf4b" title="http://www.foxluo.cn/FlyMessage/user/exit?loginToken=8ef57446-7ba3-4faf-9b19-b184b056cf4b"><a href="http://www.foxluo.cn/FlyMessage/user/exit?loginToken=8ef57446-7ba3-4faf-9b19-b184b056cf4b">http://www.foxluo.cn/FlyMessage/user/exit?loginToken=8ef57446-7ba3-4faf-9b19-b184b056cf4b</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "退出登录成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "未找到登录用户",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table></div></div><h2>1.2、用户注册</h2><div style="margin-left:0px;"><h3>1.2.1、手机验证码注册</h3><div style="margin-left:30px;"><h5>1.发送验证码</h5>
+<p>接口地址: <a href="http://www.foxluo.cn/FlyMessage/SMS/sendRegisterSMS" title="http://www.foxluo.cn/FlyMessage/SMS/sendRegisterSMS"><a href="http://www.foxluo.cn/FlyMessage/SMS/sendRegisterSMS">http://www.foxluo.cn/FlyMessage/SMS/sendRegisterSMS</a></a></p>
+<p>请求示例: <a href="http://www.foxluo.cn/FlyMessage/SMS/sendRegisterSMS?phone=17628648573" title="http://www.foxluo.cn/FlyMessage/SMS/sendRegisterSMS?phone=17628648573"><a href="http://www.foxluo.cn/FlyMessage/SMS/sendRegisterSMS?phone=17628648573">http://www.foxluo.cn/FlyMessage/SMS/sendRegisterSMS?phone=17628648573</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>phone</td>
+<td>√</td>
+<td>String</td>
+<td>接收短信验证码的电话号码</td>
+</tr>
+</tbody>
+</table>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "验证码发送成功,请注意查收",
+    "code": 200
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "验证码发送失败,请检查号码后重试",
+    "code": 503
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "验证码发送失败:一分钟内不能重复发送",
+    "code": 504
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "验证码发送失败:一小时内发送不能超过三次",
+    "code": 504
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "注册失败:该手机号已注册",
+    "code": 500
+}</code></pre></table>
+<h5>2.校验验证码并注册</h5>
+<p>接口地址: <a href="http://www.foxluo.cn/FlyMessage/SMS/register" title="http://www.foxluo.cn/FlyMessage/SMS/register"><a href="http://www.foxluo.cn/FlyMessage/SMS/register">http://www.foxluo.cn/FlyMessage/SMS/register</a></a></p>
+<p>请求示例: [<a href="http://www.foxluo.cn/FlyMessage/SMS/register?u_pass=111&u_phone=17628648573&code=833845](http://www.foxluo.cn/FlyMessage/SMS/register?u_pass=111&u_phone=17628648573&code=833845">http://www.foxluo.cn/FlyMessage/SMS/register?u_pass=111&u_phone=17628648573&code=833845](http://www.foxluo.cn/FlyMessage/SMS/register?u_pass=111&u_phone=17628648573&code=833845</a>" <a href="http://www.foxluo.cn/FlyMessage/SMS/register?u_pass=111&u_phone=17628648573&code=833845">http://www.foxluo.cn/FlyMessage/SMS/register?u_pass=111&u_phone=17628648573&code=833845</a>")</p>
+<p>请求方式:<strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>u_pass</td>
+<td>√</td>
+<td>String</td>
+<td>用户设置的初始密码</td>
+</tr>
+<tr>
+<td>u_phone</td>
+<td>√</td>
+<td>String</td>
+<td>接收短信验证码的电话号码</td>
+</tr>
+<tr>
+<td>code</td>
+<td>√</td>
+<td>String</td>
+<td>校验的短信验证码</td>
+</tr>
+</tbody>
+</table>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "注册成功",
+    "code": 200,
+    "account": "adce-4bbb-9baf-b2eab751600b"
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "注册失败:账号不存在",
+    "code": 500
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "注册失败:验证码已过期",
+    "code": 500
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "注册失败:验证码错误",
+    "code": 509
+}</code></pre></table></div></div><h2>1.3、账号安全</h2><div style="margin-left:0px;"><h3>1.3.1、修改密码</h3><div style="margin-left:30px;"><h5>1.发送验证码</h5>
+<p>接口地址: <a href="http://www.foxluo.cn/FlyMessage/SMS/sendChangePassSMS" title="http://www.foxluo.cn/FlyMessage/SMS/sendChangePassSMS"><a href="http://www.foxluo.cn/FlyMessage/SMS/sendChangePassSMS">http://www.foxluo.cn/FlyMessage/SMS/sendChangePassSMS</a></a></p>
+<p>请求示例: <a href="http://www.foxluo.cn/FlyMessage/SMS/sendChangePassSMS?phone=17628648573" title="http://www.foxluo.cn/FlyMessage/SMS/sendChangePassSMS?phone=17628648573"><a href="http://www.foxluo.cn/FlyMessage/SMS/sendChangePassSMS?phone=17628648573">http://www.foxluo.cn/FlyMessage/SMS/sendChangePassSMS?phone=17628648573</a></a></p>
+<p>请求发送: <strong>GET</strong></p>
+<p>请求参数:</p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>phone</td>
+<td>√</td>
+<td>String</td>
+<td>接收短信验证码的电话号码</td>
+</tr>
+</tbody>
+</table>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "验证码发送成功,请注意查收",
+    "code": 200
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "验证码发送失败,请检查号码后重试",
+    "code": 500
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "验证码发送失败:一分钟内不能重复发送",
+    "code": 500
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "验证码发送失败:一小时内发送不能超过三次",
+    "code": 500
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "验证码发送失败:该账号暂未注册",
+    "code": 500
+}</code></pre></table>
+<h5>2.校验验证码并修改密码</h5>
+<p>接口地址: <a href="http://www.foxluo.cn/FlyMessage/SMS/changePass" title="http://www.foxluo.cn/FlyMessage/SMS/changePass"><a href="http://www.foxluo.cn/FlyMessage/SMS/changePass">http://www.foxluo.cn/FlyMessage/SMS/changePass</a></a></p>
+<p>请求示例: [<a href="http://www.foxluo.cn/FlyMessage/SMS/changePass?u_phone=17628648573&u_pass=wanling1314&code=813418](http://www.foxluo.cn/FlyMessage/SMS/changePass?u_phone=17628648573&u_pass=wanling1314&code=813418">http://www.foxluo.cn/FlyMessage/SMS/changePass?u_phone=17628648573&u_pass=wanling1314&code=813418](http://www.foxluo.cn/FlyMessage/SMS/changePass?u_phone=17628648573&u_pass=wanling1314&code=813418</a>" <a href="http://www.foxluo.cn/FlyMessage/SMS/changePass?u_phone=17628648573&u_pass=wanling1314&code=813418">http://www.foxluo.cn/FlyMessage/SMS/changePass?u_phone=17628648573&u_pass=wanling1314&code=813418</a>")</p>
+<p>请求参数:</p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>u_pass</td>
+<td>√</td>
+<td>String</td>
+<td>用户更改的新密码</td>
+</tr>
+<tr>
+<td>u_phone</td>
+<td>√</td>
+<td>String</td>
+<td>接收短信验证码的电话号码</td>
+</tr>
+<tr>
+<td>code</td>
+<td>√</td>
+<td>String</td>
+<td>校验的短信验证码</td>
+</tr>
+</tbody>
+</table>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "修改密码成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "修改密码失败:请稍后重试",
+    "code": 500
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "修改密码失败:验证码已过期",
+    "code": 500
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "修改密码失败:验证码错误",
+    "code": 509
+}</code></pre></table></div><h3>1.3.2、校验用户名重复</h3><div style="margin-left:30px;"><p><a href="http://localhost:8080/FlyMessage/user/checkUserName?loginToken=a6c72aa9-b3e9-44e5-96a2-538c9363aa62&u_name=%E7%BD%97%E7%A6%8F%E6%9E%97">http://localhost:8080/FlyMessage/user/checkUserName?loginToken=a6c72aa9-b3e9-44e5-96a2-538c9363aa62&u_name=%E7%BD%97%E7%A6%8F%E6%9E%97</a></p></div><h3>1.3.3、修改手机号</h3><div style="margin-left:30px;"><p><a href="http://localhost:8080/FlyMessage/user/changePhone?loginToken=00c85fb7-201f-40f8-b0b3-cd797f1a47eb&u_phone=17628648573">http://localhost:8080/FlyMessage/user/changePhone?loginToken=00c85fb7-201f-40f8-b0b3-cd797f1a47eb&u_phone=17628648573</a></p></div><h3>1.3.4、修改密码(登录用户)</h3><div style="margin-left:30px;"><p><a href="http://localhost:8080/FlyMessage/user/changePass?loginToken=00c85fb7-201f-40f8-b0b3-cd797f1a47eb&u_pass=123">http://localhost:8080/FlyMessage/user/changePass?loginToken=00c85fb7-201f-40f8-b0b3-cd797f1a47eb&u_pass=123</a></p></div><h3>1.3.5、校验手机号重复</h3><div style="margin-left:30px;"><p><a href="http://localhost:8080/FlyMessage/user/checkUserPhone?loginToken=a6c72aa9-b3e9-44e5-96a2-538c9363aa62&phone=17628648573">http://localhost:8080/FlyMessage/user/checkUserPhone?loginToken=a6c72aa9-b3e9-44e5-96a2-538c9363aa62&phone=17628648573</a></p></div></div><h2>1.4、用户信息</h2><div style="margin-left:0px;"><h3>1.4.1、修改个人信息</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/updateUserMsg" title="http://www.foxluo.cn/FlyMessage/user/updateUserMsg"><a href="http://www.foxluo.cn/FlyMessage/user/updateUserMsg">http://www.foxluo.cn/FlyMessage/user/updateUserMsg</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/updateUserMsg?loginToken=c9a43848-2f18-4c1d-bd9a-5c40fda89b52&brithday930499200000" title="http://www.foxluo.cn/FlyMessage/user/updateUserMsg?loginToken=c9a43848-2f18-4c1d-bd9a-5c40fda89b52&brithday=930499200000"><a href="http://www.foxluo.cn/FlyMessage/user/updateUserMsg?loginToken=c9a43848-2f18-4c1d-bd9a-5c40fda89b52&brithday=930499200000">http://www.foxluo.cn/FlyMessage/user/updateUserMsg?loginToken=c9a43848-2f18-4c1d-bd9a-5c40fda89b52&brithday=930499200000</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>u_name</td>
+<td>×</td>
+<td>String</td>
+<td>用户名</td>
+</tr>
+<tr>
+<td>u_sex</td>
+<td>×</td>
+<td>String</td>
+<td>性别</td>
+</tr>
+<tr>
+<td>u_nick_name</td>
+<td>×</td>
+<td>String</td>
+<td>用户昵称</td>
+</tr>
+<tr>
+<td>brithday</td>
+<td>×</td>
+<td>long</td>
+<td>生日(毫秒数)</td>
+</tr>
+<tr>
+<td>u_position</td>
+<td>×</td>
+<td>String</td>
+<td>位置(格式:省-市-区;可从后至前省略)</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "修改用户信息成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "修改用户信息失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>1.4.2、搜索用户</h3><div style="margin-left:30px;"><p><strong>搜索出结果用户的隐私设置为不公开个人资料，以及搜索者在搜索结果用户的黑名单中时会移除此条结果
+</strong></p>
+<p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/searchUser" title="http://www.foxluo.cn/FlyMessage/user/searchUser"><a href="http://www.foxluo.cn/FlyMessage/user/searchUser">http://www.foxluo.cn/FlyMessage/user/searchUser</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/searchUser?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&queryString=123&pageSize=5&pageIndex=1" title="http://www.foxluo.cn/FlyMessage/user/searchUser?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&queryString=123&pageSize=5&pageIndex=1"><a href="http://www.foxluo.cn/FlyMessage/user/searchUser?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&queryString=123&pageSize=5&pageIndex=1">http://www.foxluo.cn/FlyMessage/user/searchUser?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&queryString=123&pageSize=5&pageIndex=1</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>pageSize</td>
+<td>√</td>
+<td>String</td>
+<td>页行数</td>
+</tr>
+<tr>
+<td>pageIndex</td>
+<td>√</td>
+<td>String</td>
+<td>当前页数</td>
+</tr>
+<tr>
+<td>queryString</td>
+<td>√</td>
+<td>String</td>
+<td>搜索词</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "result": [{
+        "nowDate": 1590025073781,
+        "u_name": "cf4f-4fae-9a26-027e18f12289",
+        "u_create_time": 1589550476000,
+        "u_nick_name": "123",
+        "isOnline": false,
+        "u_sign": "哈哈哈哈",
+        "u_id": 8,
+        "u_head_img": "http://www.foxluo.com/FlyMessage/head/defaultHead.png",
+        "isFriend": false,
+        "u_bg_img": "http://www.foxluo.com/FlyMessage/bg/defaultBg.png"
+    }],
+    "msg": "查询用户成功",
+    "code": 200
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "查询用户失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>1.4.3、获取用户信息</h3><div style="margin-left:30px;"><p><strong>通过完整的用户名获取用户信息，当对象用户隐私设置为不公开资料时无法获取结果，一般用于查看群成员</strong></p>
+<p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/getUserByName" title="http://www.foxluo.cn/FlyMessage/user/getUserByName"><a href="http://www.foxluo.cn/FlyMessage/user/getUserByName">http://www.foxluo.cn/FlyMessage/user/getUserByName</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/getUserByName?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf&u_name=123" title="http://www.foxluo.cn/FlyMessage/user/getUserByName?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf&u_name=123"><a href="http://www.foxluo.cn/FlyMessage/user/getUserByName?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf&u_name=123">http://www.foxluo.cn/FlyMessage/user/getUserByName?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf&u_name=123</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>u_name</td>
+<td>√</td>
+<td>String</td>
+<td>用户名</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "获取用户信息成功",
+    "code": 200,
+    "user": {
+        "nowDate": 1590370083705,
+        "u_name": "123",
+        "u_sex": "男",
+        "u_create_time": 1589343049000,
+        "u_nick_name": "新用户",
+        "isOnline": false,
+        "u_sign": "哈哈哈哈",
+        "u_id": 1,
+        "u_brithday": 930499200000,
+        "u_head_img": "http://www.foxluo.com/FlyMessage/images/defaultHead.png",
+        "isFriend": false,
+        "u_position": "123",
+        "u_bg_img": "http://www.foxluo.cn/FlyMessage/images/userBgImg/20200521123701296.JPG"
+    }
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "获取用户信息失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table>
+<p><strong>通过用户ID获取用户的信息，一般用于接收到消息后获取发送消息者的信息(头像，昵称，用户名等)，以及查看好友详情，此方法可绕过目标用户的隐私设置直接获取信息</strong></p>
+<p>请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/getUserByID?object_u_id=1&loginToken=a719b64a-6570-4162-ada2-eaab1ba752bf" title="http://www.foxluo.cn/FlyMessage/user/getUserByID?object_u_id=1&loginToken=a719b64a-6570-4162-ada2-eaab1ba752bf"><a href="http://www.foxluo.cn/FlyMessage/user/getUserByID?object_u_id=1&loginToken=a719b64a-6570-4162-ada2-eaab1ba752bf">http://www.foxluo.cn/FlyMessage/user/getUserByID?object_u_id=1&loginToken=a719b64a-6570-4162-ada2-eaab1ba752bf</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>object_u_id</td>
+<td>√</td>
+<td>int</td>
+<td>目标用户ID</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "获取用户信息成功",
+    "code": 200,
+    "user": {
+        "nowDate": 1590673808377,
+        "u_name": "123",
+        "u_sex": "男",
+        "u_create_time": 1589343049000,
+        "u_nick_name": "新用户",
+        "isOnline": false,
+        "u_sign": "哈哈哈哈",
+        "u_id": 1,
+        "u_brithday": 930499200000,
+        "u_head_img": "http://www.foxluo.com/FlyMessage/images/defaultHead.png",
+        "isFriend": false,
+        "u_position": "123",
+        "u_bg_img": "http://www.foxluo.cn/FlyMessage/images/userBgImg/20200521123701296.JPG"
+    }
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "获取用户信息失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>1.4.4、修改资料背景</h3><div style="margin-left:30px;"><p><strong>提交表单方式上传图片文件，同时url+loginToken，即GET+POST</strong></p>
+<p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/changeBgImg" title="http://www.foxluo.cn/FlyMessage/user/changeBgImg"><a href="http://www.foxluo.cn/FlyMessage/user/changeBgImg">http://www.foxluo.cn/FlyMessage/user/changeBgImg</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/changeBgImg?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf" title="http://www.foxluo.cn/FlyMessage/user/changeBgImg?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf"><a href="http://www.foxluo.cn/FlyMessage/user/changeBgImg?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf">http://www.foxluo.cn/FlyMessage/user/changeBgImg?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf</a></a></p>
+<p>请求方式: **GET/POST***</p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>bgImage</td>
+<td>√</td>
+<td>File</td>
+<td>背景图文件(POST)</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    msg: "修改背景成功",
+    code: 200,
+    bgUrl: "http://www.foxluo.cn/FlyMessage/images/userBgImg/20200521123701296.JPG"
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "修改背景失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div></div><h2>1.5、用户头像</h2><div style="margin-left:0px;"><h3>1.5.1、修改头像</h3><div style="margin-left:30px;"><p><strong>提交表单方式上传图片文件，同时url+loginToken，即GET+POST</strong></p>
+<p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/changeHead" title="http://www.foxluo.cn/FlyMessage/user/changeHead"><a href="http://www.foxluo.cn/FlyMessage/user/changeHead">http://www.foxluo.cn/FlyMessage/user/changeHead</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/changeHead?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf" title="http://www.foxluo.cn/FlyMessage/user/changeHead?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf"><a href="http://www.foxluo.cn/FlyMessage/user/changeHead?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf">http://www.foxluo.cn/FlyMessage/user/changeHead?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf</a></a></p>
+<p>请求方式: **GET/POST***</p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>headImage</td>
+<td>√</td>
+<td>File</td>
+<td>头像文件(POST)</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    msg: "修改头像成功",
+    code: 200,
+    headUrl: "http://www.foxluo.cn/FlyMessage/images/userHeads/20200521123701296.JPG"
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "修改头像失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>1.5.2、获取用户历史头像</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/getUserHeads" title="http://www.foxluo.cn/FlyMessage/user/getUserHeads"><a href="http://www.foxluo.cn/FlyMessage/user/getUserHeads">http://www.foxluo.cn/FlyMessage/user/getUserHeads</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/getUserHeads?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&queryString=123&pageSize=5&pageIndex=1" title="http://www.foxluo.cn/FlyMessage/user/getUserHeads?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1"><a href="http://www.foxluo.cn/FlyMessage/user/getUserHeads?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&queryString=123&pageSize=5&pageIndex=1">http://www.foxluo.cn/FlyMessage/user/getUserHeads?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&queryString=123&pageSize=5&pageIndex=1</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>pageSize</td>
+<td>√</td>
+<td>String</td>
+<td>页行数</td>
+</tr>
+<tr>
+<td>pageIndex</td>
+<td>√</td>
+<td>String</td>
+<td>当前页数</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "获取头像成功",
+    "code": 200,
+    "heads": [{
+        "h_id": 1,
+        "time": 1589472000000,
+        "u_id": 1,
+        "head_img_link": "http://www.foxluo.cn/FlyMessage/images/userHeads/20200515180806874.JPG"
+    }, {
+        "h_id": 16,
+        "time": 1589472000000,
+        "u_id": 1,
+        "head_img_link": "http://www.foxluo.cn/FlyMessage/images/userHeads/20200515192112562.JPG"
+    }, {
+        "h_id": 17,
+        "time": 1589472000000,
+        "u_id": 1,
+        "head_img_link": "http://www.foxluo.cn/FlyMessage/images/defaultHead.png"
+    }, {
+        "h_id": 18,
+        "time": 1589731200000,
+        "u_id": 1,
+        "head_img_link": "http://www.foxluo.cn/FlyMessage/images/defaultHead.png"
+    }, {
+        "h_id": 19,
+        "time": 1589990400000,
+        "u_id": 1,
+        "head_img_link": "http://www.foxluo.cn/FlyMessage/images/userHeads/20200521122847534.JPG"
+    }]
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "获取头像失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div></div><h2>1.6、用户签名</h2><div style="margin-left:0px;"><h3>1.6.1、发表签名</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/addUserSign" title="http://www.foxluo.cn/FlyMessage/user/addUserSign"><a href="http://www.foxluo.cn/FlyMessage/user/addUserSign">http://www.foxluo.cn/FlyMessage/user/addUserSign</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/addUserSign?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&s_content=测试签名" title="http://www.foxluo.cn/FlyMessage/user/addUserSign?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&s_content=测试签名"><a href="http://www.foxluo.cn/FlyMessage/user/addUserSign?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&s_content=测试签名">http://www.foxluo.cn/FlyMessage/user/addUserSign?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&s_content=测试签名</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>s_content</td>
+<td>√</td>
+<td>String</td>
+<td>签名内容</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "添加签名成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "添加签名失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>1.6.2、删除签名</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/delUserSign" title="http://www.foxluo.cn/FlyMessage/user/delUserSign"><a href="http://www.foxluo.cn/FlyMessage/user/delUserSign">http://www.foxluo.cn/FlyMessage/user/delUserSign</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/delUserSign?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&s_id=1" title="http://www.foxluo.cn/FlyMessage/user/delUserSign?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&s_id=1"><a href="http://www.foxluo.cn/FlyMessage/user/delUserSign?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&s_id=1">http://www.foxluo.cn/FlyMessage/user/delUserSign?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&s_id=1</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>s_id</td>
+<td>√</td>
+<td>String</td>
+<td>签名ID</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "删除签名成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "删除签名失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>1.6.3、获取用户签名</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/getUserSigns" title="http://www.foxluo.cn/FlyMessage/user/getUserSigns"><a href="http://www.foxluo.cn/FlyMessage/user/getUserSigns">http://www.foxluo.cn/FlyMessage/user/getUserSigns</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/getUserSigns?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&queryString=123&pageSize=5&pageIndex=1" title="http://www.foxluo.cn/FlyMessage/user/getUserSigns?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1"><a href="http://www.foxluo.cn/FlyMessage/user/getUserSigns?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&queryString=123&pageSize=5&pageIndex=1">http://www.foxluo.cn/FlyMessage/user/getUserSigns?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&queryString=123&pageSize=5&pageIndex=1</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>pageSize</td>
+<td>√</td>
+<td>String</td>
+<td>页行数</td>
+</tr>
+<tr>
+<td>pageIndex</td>
+<td>√</td>
+<td>String</td>
+<td>当前页数</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "获取签名成功",
+    "code": 200,
+    "sign": [{
+        "s_content": "1234",
+        "s_id": 2,
+        "time": 1589558274000,
+        "u_id": 1
+    }, {
+        "s_content": "哈哈哈哈",
+        "s_id": 3,
+        "time": 1589558281000,
+        "u_id": 1
+    }]
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "获取签名失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div></div><h2>1.7、用户隐私权限</h2><div style="margin-left:0px;"><h3>1.7.1、获取用户隐私权限</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/getUserPrivacy" title="http://www.foxluo.cn/FlyMessage/user/getUserPrivacy"><a href="http://www.foxluo.cn/FlyMessage/user/getUserPrivacy">http://www.foxluo.cn/FlyMessage/user/getUserPrivacy</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/getUserPrivacy?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf" title="http://www.foxluo.cn/FlyMessage/user/getUserPrivacy?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf"><a href="http://www.foxluo.cn/FlyMessage/user/getUserPrivacy?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf">http://www.foxluo.cn/FlyMessage/user/getUserPrivacy?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>u_id</td>
+<td>×</td>
+<td>long</td>
+<td>用户ID(0或不上传则获取登录用户的隐私设置)</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "获取用户隐私设置信息成功",
+    "code": 200,
+    "privacy": {
+        "p_u_id": 1,
+        "show_online_state": 0,
+        "add_friend_answer3": "123",
+        "add_friend_question1": "我的名字?",
+        "add_friend_question2": "我们认识吗？",
+        "add_friend_type": 2,
+        "add_friend_answer1": "罗福林",
+        "add_friend_question3": "为什么加我",
+        "p_id": 1,
+        "add_friend_answer2": "123",
+        "show_u_message": 1
+    }
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "获取用户隐私设置信息失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>1.7.2、修改用户隐私权限</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/changeUserPrivacy" title="http://www.foxluo.cn/FlyMessage/user/changeUserPrivacy"><a href="http://www.foxluo.cn/FlyMessage/user/changeUserPrivacy">http://www.foxluo.cn/FlyMessage/user/changeUserPrivacy</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/changeUserPrivacy?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf&add_friend_type=1" title="http://www.foxluo.cn/FlyMessage/user/changeUserPrivacy?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf&add_friend_type=1"><a href="http://www.foxluo.cn/FlyMessage/user/changeUserPrivacy?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf&add_friend_type=1">http://www.foxluo.cn/FlyMessage/user/changeUserPrivacy?loginToken=9a6a7fee-035f-4758-88d7-ad96243841cf&add_friend_type=1</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>show_u_message</td>
+<td>√</td>
+<td>int</td>
+<td>是否展示资料卡(0:其他人可见,1:其他人不可见)</td>
+</tr>
+<tr>
+<td>show_online_state</td>
+<td>√</td>
+<td>int</td>
+<td>是否显示在线状态(0:在线可见,1:隐身状态)</td>
+</tr>
+<tr>
+<td>add_friend_type</td>
+<td>√</td>
+<td>int</td>
+<td>添加好友权限(0:允许任何人，1:需验证信息，2:需回答问题，3:需正确回答问题)</td>
+</tr>
+<tr>
+<td>add_friend_question1</td>
+<td>×</td>
+<td>String</td>
+<td>添加好友问题1</td>
+</tr>
+<tr>
+<td>add_friend_answer1</td>
+<td>×</td>
+<td>String</td>
+<td>添加好友问题答案1</td>
+</tr>
+<tr>
+<td>add_friend_question2</td>
+<td>×</td>
+<td>String</td>
+<td>添加好友问题2</td>
+</tr>
+<tr>
+<td>add_friend_answer2</td>
+<td>×</td>
+<td>String</td>
+<td>添加好友问题答案2</td>
+</tr>
+<tr>
+<td>add_friend_question3</td>
+<td>×</td>
+<td>String</td>
+<td>添加好友问题3</td>
+</tr>
+<tr>
+<td>add_friend_answer3</td>
+<td>×</td>
+<td>String</td>
+<td>添加好友问题答案3</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "修改用户隐私设置成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "修改用户隐私设置失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div></div></div><h1>2、好友接口</h1><div style="margin-left:0px;"><h2>2.1、黑名单</h2><div style="margin-left:0px;"><h3>2.1.1、添加黑名单</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/friend/addBlackList" title="http://www.foxluo.cn/FlyMessage/friend/addBlackList"><a href="http://www.foxluo.cn/FlyMessage/friend/addBlackList">http://www.foxluo.cn/FlyMessage/friend/addBlackList</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/friend/addBlackList?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&object_u_id=8" title="http://www.foxluo.cn/FlyMessage/friend/addBlackList?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&object_u_id=8"><a href="http://www.foxluo.cn/FlyMessage/friend/addBlackList?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&object_u_id=8">http://www.foxluo.cn/FlyMessage/friend/addBlackList?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&object_u_id=8</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>object_u_id</td>
+<td>√</td>
+<td>int</td>
+<td>被拉黑用户ID</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "添加黑名单成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "添加黑名单失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>2.1.2、删除黑名单</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/friend/delBlackList" title="http://www.foxluo.cn/FlyMessage/friend/delBlackList"><a href="http://www.foxluo.cn/FlyMessage/friend/delBlackList">http://www.foxluo.cn/FlyMessage/friend/delBlackList</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/friend/delBlackList?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&bl_id=1" title="http://www.foxluo.cn/FlyMessage/friend/delBlackList?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&bl_id=1"><a href="http://www.foxluo.cn/FlyMessage/friend/delBlackList?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&bl_id=1">http://www.foxluo.cn/FlyMessage/friend/delBlackList?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&bl_id=1</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>bl_id</td>
+<td>×</td>
+<td>int</td>
+<td>黑名单ID(只能删除登录用户自己的黑名单)</td>
+</tr>
+<tr>
+<td>object_u_id</td>
+<td>×</td>
+<td>long</td>
+<td>对象用户id（黑名单id和对象id至少有一个）</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "删除黑名单成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "删除黑名单失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>2.1.3、获取黑名单</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/friend/getUserBlackList" title="http://www.foxluo.cn/FlyMessage/friend/getUserBlackList"><a href="http://www.foxluo.cn/FlyMessage/friend/getUserBlackList">http://www.foxluo.cn/FlyMessage/friend/getUserBlackList</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/friend/getUserBlackList?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1" title="http://www.foxluo.cn/FlyMessage/friend/getUserBlackList?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1"><a href="http://www.foxluo.cn/FlyMessage/friend/getUserBlackList?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1">http://www.foxluo.cn/FlyMessage/friend/getUserBlackList?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>pageSize</td>
+<td>√</td>
+<td>String</td>
+<td>页行数</td>
+</tr>
+<tr>
+<td>pageIndex</td>
+<td>√</td>
+<td>String</td>
+<td>当前页数</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "获取黑名单成功",
+    "code": 200,
+    "blackLists": [{
+        "object_u_id": 8,
+        "time": 1589550067000,
+        "source_u_id": 1,
+        "bl_id": 1
+    }]
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "获取黑名单失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div></div><h2>2.2、好友申请</h2><div style="margin-left:0px;"><h3>2.2.1、添加好友申请</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/friend/addFriendRequest" title="http://www.foxluo.cn/FlyMessage/friend/addFriendRequest"><a href="http://www.foxluo.cn/FlyMessage/friend/addFriendRequest">http://www.foxluo.cn/FlyMessage/friend/addFriendRequest</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/friend/addFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&rq_object_u_id=8&rq_content=加个好友吧&rq_remarks_name=新朋友" title="http://www.foxluo.cn/FlyMessage/friend/addFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&rq_object_u_id=8&rq_content=加个好友吧&rq_remarks_name=新朋友"><a href="http://www.foxluo.cn/FlyMessage/friend/addFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&rq_object_u_id=8&rq_content=加个好友吧&rq_remarks_name=新朋友">http://www.foxluo.cn/FlyMessage/friend/addFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&rq_object_u_id=8&rq_content=加个好友吧&rq_remarks_name=新朋友</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>rq_object_u_id</td>
+<td>√</td>
+<td>int</td>
+<td>被添加用户ID</td>
+</tr>
+<tr>
+<td>rq_content</td>
+<td>√</td>
+<td>String</td>
+<td>申请内容</td>
+</tr>
+<tr>
+<td>rq_remarks_name</td>
+<td>√</td>
+<td>String</td>
+<td>对被添加用户的备注</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "添加好友申请成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "添加好友申请失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>2.2.2、获取好友申请</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/friend/getFriendRequest" title="http://www.foxluo.cn/FlyMessage/friend/getFriendRequest"><a href="http://www.foxluo.cn/FlyMessage/friend/getFriendRequest">http://www.foxluo.cn/FlyMessage/friend/getFriendRequest</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/friend/getFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1" title="http://www.foxluo.cn/FlyMessage/friend/getFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1"><a href="http://www.foxluo.cn/FlyMessage/friend/getFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1">http://www.foxluo.cn/FlyMessage/friend/getFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>pageSize</td>
+<td>√</td>
+<td>String</td>
+<td>页行数</td>
+</tr>
+<tr>
+<td>pageIndex</td>
+<td>√</td>
+<td>String</td>
+<td>当前页数</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "friendRequests": [{
+        "rq_id": 4,
+        "rq_object_u_id": 8,
+        "rq_source_u_id": 1,
+        "isAccept": false,
+        "rq_remarks_name": "新朋友",
+        "rq_content": "加个好友吧",
+        "rq_receive_state": 0,
+        "time": 1590121883000
+    }],
+    "msg": "获取好友申请成功",
+    "code": 200
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "获取好友申请失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>2.2.3、删除好友申请</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/friend/delFriendRequest" title="http://www.foxluo.cn/FlyMessage/friend/delFriendRequest"><a href="http://www.foxluo.cn/FlyMessage/friend/delFriendRequest">http://www.foxluo.cn/FlyMessage/friend/delFriendRequest</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/friend/delFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&rq_id=4" title="http://www.foxluo.cn/FlyMessage/friend/delFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&rq_id=4"><a href="http://www.foxluo.cn/FlyMessage/friend/delFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&rq_id=4">http://www.foxluo.cn/FlyMessage/friend/delFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&rq_id=4</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>rq_id</td>
+<td>√</td>
+<td>int</td>
+<td>好友申请表ID(只有被添加用户才能删除申请)</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "删除好友申请成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "删除好友申请失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>2.2.4、通过好友申请</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/friend/acceptFriendRequest" title="http://www.foxluo.cn/FlyMessage/friend/acceptFriendRequest"><a href="http://www.foxluo.cn/FlyMessage/friend/acceptFriendRequest">http://www.foxluo.cn/FlyMessage/friend/acceptFriendRequest</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/friend/acceptFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&rq_id=4" title="http://www.foxluo.cn/FlyMessage/friend/acceptFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&rq_id=4"><a href="http://www.foxluo.cn/FlyMessage/friend/acceptFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&rq_id=4">http://www.foxluo.cn/FlyMessage/friend/acceptFriendRequest?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&rq_id=4</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>rq_id</td>
+<td>√</td>
+<td>int</td>
+<td>好友申请表ID(只有被添加用户才能通过好友申请)</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "通过好友申请成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "通过好友申请失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div></div><h2>2.3、好友管理</h2><div style="margin-left:0px;"><h3>2.3.1、获取用户好友</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/friend/getUserFriends" title="http://www.foxluo.cn/FlyMessage/friend/getUserFriends"><a href="http://www.foxluo.cn/FlyMessage/friend/getUserFriends">http://www.foxluo.cn/FlyMessage/friend/getUserFriends</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/friend/getUserFriends?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1" title="http://www.foxluo.cn/FlyMessage/friend/getUserFriends?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1"><a href="http://www.foxluo.cn/FlyMessage/friend/getUserFriends?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1">http://www.foxluo.cn/FlyMessage/friend/getUserFriends?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>pageSize</td>
+<td>√</td>
+<td>String</td>
+<td>页行数</td>
+</tr>
+<tr>
+<td>pageIndex</td>
+<td>√</td>
+<td>String</td>
+<td>当前页数</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "获取好友信息成功",
+    "code": 200,
+    "friends": [{
+        "friendUser": {
+            "nowDate": 1590128013556,
+            "u_name": "123",
+            "u_sex": "男",
+            "u_create_time": 1589343049000,
+            "u_nick_name": "新用户",
+            "u_sign": "哈哈哈哈",
+            "u_id": 1,
+            "u_brithday": -28800000,
+            "u_head_img": "http://www.foxluo.cn/FlyMessage/images/userHeads/20200521122847534.JPG",
+            "u_position": "123",
+            "u_bg_img": "http://www.foxluo.cn/FlyMessage/images/userBgImg/20200521123701296.JPG"
+        },
+        "f_remarks_name": "新用户",
+        "f_source_u_id": 8,
+        "isOnline": false,
+        "f_id": 7,
+        "time": 1590126983000,
+        "f_object_u_id": 1
+    }]
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "获取好友信息失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>2.3.2、删除好友</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/friend/delFriend" title="http://www.foxluo.cn/FlyMessage/friend/delFriend"><a href="http://www.foxluo.cn/FlyMessage/friend/delFriend">http://www.foxluo.cn/FlyMessage/friend/delFriend</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/friend/delFriend?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&f_id=6" title="http://www.foxluo.cn/FlyMessage/friend/delFriend?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&f_id=6"><a href="http://www.foxluo.cn/FlyMessage/friend/delFriend?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&f_id=6">http://www.foxluo.cn/FlyMessage/friend/delFriend?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&f_id=6</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>f_id</td>
+<td>√</td>
+<td>int</td>
+<td>好友表ID</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "删除好友成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "删除好友失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>2.3.3、修改好友备注</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/friend/changeFriendRemarkName" title="http://www.foxluo.cn/FlyMessage/friend/changeFriendRemarkName"><a href="http://www.foxluo.cn/FlyMessage/friend/changeFriendRemarkName">http://www.foxluo.cn/FlyMessage/friend/changeFriendRemarkName</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/friend/changeFriendRemarkName?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&f_id=6&f_remarks_name=备注测试" title="http://www.foxluo.cn/FlyMessage/friend/changeFriendRemarkName?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&f_id=6&f_remarks_name=备注测试"><a href="http://www.foxluo.cn/FlyMessage/friend/changeFriendRemarkName?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&f_id=6&f_remarks_name=备注测试">http://www.foxluo.cn/FlyMessage/friend/changeFriendRemarkName?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&f_id=6&f_remarks_name=备注测试</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>f_id</td>
+<td>√</td>
+<td>int</td>
+<td>好友表ID</td>
+</tr>
+<tr>
+<td>f_remarks_name</td>
+<td>√</td>
+<td>int</td>
+<td>好友备注</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "修改好友备注成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "修改好友备注失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div></div></div><h1>3、消息接口</h1><div style="margin-left:0px;"><h2>3.1、发送消息</h2><div style="margin-left:0px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/friend/message/sendMessage" title="http://www.foxluo.cn/FlyMessage/friend/message/sendMessage"><a href="http://www.foxluo.cn/FlyMessage/message/sendMessage">http://www.foxluo.cn/FlyMessage/message/sendMessage</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/message/sendMessage?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&m_type=0&m_object_id=8&m_content_type=0&m_content=测试信息" title="http://www.foxluo.cn/FlyMessage/message/sendMessage?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&m_type=0&m_object_id=8&m_content_type=0&m_content=测试信息"><a href="http://www.foxluo.cn/FlyMessage/message/sendMessage?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&m_type=0&m_object_id=8&m_content_type=0&m_content=测试信息">http://www.foxluo.cn/FlyMessage/message/sendMessage?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&m_type=0&m_object_id=8&m_content_type=0&m_content=测试信息</a></a></p>
+<p>请求方式: <strong>GET/POST</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>m_type</td>
+<td>√</td>
+<td>int</td>
+<td>消息类型(0:用户消息,1:群聊消息)</td>
+</tr>
+<tr>
+<td>m_source_g_id</td>
+<td>×</td>
+<td>int</td>
+<td>发送群ID(m_type=1时，此字段不能为空)</td>
+</tr>
+<tr>
+<td>m_object_id</td>
+<td>√</td>
+<td>int</td>
+<td>接收用户ID</td>
+</tr>
+<tr>
+<td>m_content_type</td>
+<td>√</td>
+<td>int</td>
+<td>消息内容类型(0:文字消息,1:文字+图片消息,2:图片,3:语音消息,4:文件)</td>
+</tr>
+<tr>
+<td>m_content</td>
+<td>√</td>
+<td>String</td>
+<td>消息内容</td>
+</tr>
+<tr>
+<td>messageFile</td>
+<td>×</td>
+<td>File</td>
+<td>消息附文件(POST)</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "发送成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "发送失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h2>3.2、获取未读消息</h2><div style="margin-left:0px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/message/getUserMessage" title="http://www.foxluo.cn/FlyMessage/message/getUserMessage"><a href="http://www.foxluo.cn/FlyMessage/message/getUserMessage">http://www.foxluo.cn/FlyMessage/message/getUserMessage</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/message/getUserMessage?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1" title="http://www.foxluo.cn/FlyMessage/message/getUserMessage?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1"><a href="http://www.foxluo.cn/FlyMessage/message/getUserMessage?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1">http://www.foxluo.cn/FlyMessage/message/getUserMessage?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>pageSize</td>
+<td>√</td>
+<td>String</td>
+<td>页行数</td>
+</tr>
+<tr>
+<td>pageIndex</td>
+<td>√</td>
+<td>String</td>
+<td>当前页数</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "获取用户消息成功",
+    "code": 200,
+    "messages": [{
+        "m_content_type": 1,
+        "m_source_g_id": 5,
+        "m_source_id": 1,
+        "m_send_time": 1590142527000,
+        "m_content": "测试图文消息[file:a67f29986f4a44f6019a27361c073edd.mp4,link:http://www.foxluo.cn/FlyMessage/file/messageFile/20200522181527278.mp4]",
+        "m_type": 1,
+        "m_object_id": 8,
+        "m_id": 18,
+        "m_receive_state": 0
+    }, {
+        "m_content_type": 1,
+        "m_source_g_id": 5,
+        "m_source_id": 1,
+        "m_send_time": 1590141708000,
+        "m_content": "测试图文消息[file:P91008-134039.JPG,link:http://www.foxluo.cn/FlyMessage/file/messageFile/20200522180203946.JPG]",
+        "m_type": 1,
+        "m_object_id": 8,
+        "m_id": 17,
+        "m_receive_state": 0
+    }, {
+        "m_content_type": 1,
+        "m_source_g_id": 5,
+        "m_source_id": 1,
+        "m_send_time": 1590140354000,
+        "m_content": "测试图文消息",
+        "m_type": 1,
+        "m_object_id": 8,
+        "m_id": 16,
+        "m_receive_state": 0
+    }]
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "获取用户消息失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h2>3.3、撤销/删除消息</h2><div style="margin-left:0px;"><p><strong>删除/撤销消息，若对方未在线，将不会再收到此消息</strong>
+接口地址:<a href="http://www.foxluo.cn/FlyMessage/friend/message/delMessage" title="http://www.foxluo.cn/FlyMessage/friend/message/delMessage"><a href="http://www.foxluo.cn/FlyMessage/message/delMessage">http://www.foxluo.cn/FlyMessage/message/delMessage</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/message/delMessage?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&m_id=20" title="http://www.foxluo.cn/FlyMessage/message/delMessage?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&m_id=20"><a href="http://www.foxluo.cn/FlyMessage/message/delMessage?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&m_id=20">http://www.foxluo.cn/FlyMessage/message/delMessage?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&m_id=20</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>m_id</td>
+<td>√</td>
+<td>int</td>
+<td>消息表ID</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "删除消息成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "删除消息失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div></div><h1>4、群聊接口</h1><div style="margin-left:0px;"><h2>4.1、群管理</h2><div style="margin-left:0px;"><h3>4.1.1、创建群聊</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/group/createGroup" title="http://www.foxluo.cn/FlyMessage/group/createGroup"><a href="http://www.foxluo.cn/FlyMessage/group/createGroup">http://www.foxluo.cn/FlyMessage/group/createGroup</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/group/createGroup?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_name=测试群聊&g_introduce=群聊简介" title="http://www.foxluo.cn/FlyMessage/group/createGroup?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_name=测试群聊&g_introduce=群聊简介"><a href="http://www.foxluo.cn/FlyMessage/group/createGroup?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_name=测试群聊&g_introduce=群聊简介">http://www.foxluo.cn/FlyMessage/group/createGroup?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_name=测试群聊&g_introduce=群聊简介</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>g_name</td>
+<td>√</td>
+<td>int</td>
+<td>群聊名称</td>
+</tr>
+<tr>
+<td>g_introduce</td>
+<td>√</td>
+<td>int</td>
+<td>群聊简介</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "创建群聊成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "创建群聊失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>4.1.2、修改群聊信息</h3><div style="margin-left:30px;"><p><strong>只有群主才能修改群聊信息</strong></p>
+<p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/group/updateGroupMsg" title="http://www.foxluo.cn/FlyMessage/group/updateGroupMsg"><a href="http://www.foxluo.cn/FlyMessage/group/updateGroupMsg">http://www.foxluo.cn/FlyMessage/group/updateGroupMsg</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/group/updateGroupMsg?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5&g_name=测试群聊&g_introduce=群聊简介" title="http://www.foxluo.cn/FlyMessage/group/updateGroupMsg?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5&g_name=测试群聊&g_introduce=群聊简介"><a href="http://www.foxluo.cn/FlyMessage/group/updateGroupMsg?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5&g_name=测试群聊&g_introduce=群聊简介">http://www.foxluo.cn/FlyMessage/group/updateGroupMsg?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5&g_name=测试群聊&g_introduce=群聊简介</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>g_id</td>
+<td>√</td>
+<td>int</td>
+<td>群聊ID</td>
+</tr>
+<tr>
+<td>g_name</td>
+<td>√</td>
+<td>int</td>
+<td>群聊名称</td>
+</tr>
+<tr>
+<td>g_introduce</td>
+<td>√</td>
+<td>int</td>
+<td>群聊简介</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "修改群聊资料成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "修改群聊资料失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>4.1.3、解散群聊</h3><div style="margin-left:30px;"><p><strong>只有群主才能解散群聊</strong></p>
+<p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/group/delGroup" title="http://www.foxluo.cn/FlyMessage/group/delGroup"><a href="http://www.foxluo.cn/FlyMessage/group/delGroup">http://www.foxluo.cn/FlyMessage/group/delGroup</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/group/delGroup?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5" title="http://www.foxluo.cn/FlyMessage/group/delGroup?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5"><a href="http://www.foxluo.cn/FlyMessage/group/delGroup?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5">http://www.foxluo.cn/FlyMessage/group/delGroup?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>g_id</td>
+<td>√</td>
+<td>int</td>
+<td>群聊ID</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "删除群聊成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "删除群聊失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>4.1.4、修改群头像</h3><div style="margin-left:30px;"><p><strong>只有群主才能修改群头像</strong></p>
+<p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/group/changeGroupHead" title="http://www.foxluo.cn/FlyMessage/group/changeGroupHead"><a href="http://www.foxluo.cn/FlyMessage/group/changeGroupHead">http://www.foxluo.cn/FlyMessage/group/changeGroupHead</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/group/changeGroupHead?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5" title="http://www.foxluo.cn/FlyMessage/group/changeGroupHead?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5"><a href="http://www.foxluo.cn/FlyMessage/group/changeGroupHead?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5">http://www.foxluo.cn/FlyMessage/group/changeGroupHead?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5</a></a></p>
+<p>请求方式: <strong>POST</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>g_id</td>
+<td>√</td>
+<td>int</td>
+<td>群聊ID</td>
+</tr>
+<tr>
+<td>headImage</td>
+<td>√</td>
+<td>File</td>
+<td>头像文件(表单提交)</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "修改群聊头像成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "修改群聊头像失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>4.1.5、获取用户群信息</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/group/getUserGroups" title="http://www.foxluo.cn/FlyMessage/group/getUserGroups"><a href="http://www.foxluo.cn/FlyMessage/group/getUserGroups">http://www.foxluo.cn/FlyMessage/group/getUserGroups</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/group/getUserGroups?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1" title="http://www.foxluo.cn/FlyMessage/group/getUserGroups?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1"><a href="http://www.foxluo.cn/FlyMessage/group/getUserGroups?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1">http://www.foxluo.cn/FlyMessage/group/getUserGroups?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>pageSize</td>
+<td>√</td>
+<td>String</td>
+<td>页行数</td>
+</tr>
+<tr>
+<td>pageIndex</td>
+<td>√</td>
+<td>String</td>
+<td>当前页数</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "获取用户群聊信息成功",
+    "code": 200,
+    "groups": [{
+        "g_create_time": 1589805602000,
+        "g_name": "测试群聊创建",
+        "g_id": 5,
+        "g_num": "f5ba3923-734b-4307-aaee-50c1c3931546",
+        "g_introduce": "第一个测试的群聊"
+    }, {
+        "g_create_time": 1590137700000,
+        "g_name": "测试群聊",
+        "g_id": 6,
+        "g_num": "dce6a25a-b4af-4014-b94d-d417f88d6a0f",
+        "g_head_img": "http://www.foxluo.cn/FlyMessage/images/defaultGroupHead.png",
+        "g_introduce": "群聊简介"
+    }]
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "获取用户群聊信息失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>4.1.6、获取群详情</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/group/getGroupMsg" title="http://www.foxluo.cn/FlyMessage/group/getGroupMsg"><a href="http://www.foxluo.cn/FlyMessage/group/getGroupMsg">http://www.foxluo.cn/FlyMessage/group/getGroupMsg</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/group/getGroupMsg?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5" title="http://www.foxluo.cn/FlyMessage/group/getGroupMsg?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5"><a href="http://www.foxluo.cn/FlyMessage/group/getGroupMsg?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5">http://www.foxluo.cn/FlyMessage/group/getGroupMsg?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>g_id</td>
+<td>√</td>
+<td>int</td>
+<td>群聊ID</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "获取群聊信息成功",
+    "code": 200,
+    "group": {
+        "g_create_time": 1590137700000,
+        "g_name": "测试群聊",
+        "g_id": 6,
+        "g_num": "dce6a25a-b4af-4014-b94d-d417f88d6a0f",
+        "g_head_img": "http://www.foxluo.cn/FlyMessage/images/defaultGroupHead.png",
+        "g_introduce": "群聊简介"
+    }
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "获取群聊信息失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>4.1.7、搜索群聊</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/group/queryGroup" title="http://www.foxluo.cn/FlyMessage/group/queryGroup"><a href="http://www.foxluo.cn/FlyMessage/group/queryGroup">http://www.foxluo.cn/FlyMessage/group/queryGroup</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/group/queryGroup?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&queryString=测试&pageSize=5&pageIndex=1" title="http://www.foxluo.cn/FlyMessage/group/queryGroup?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&queryString=测试&pageSize=5&pageIndex=1"><a href="http://www.foxluo.cn/FlyMessage/group/queryGroup?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&queryString=测试&pageSize=5&pageIndex=1">http://www.foxluo.cn/FlyMessage/group/queryGroup?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&queryString=测试&pageSize=5&pageIndex=1</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>pageSize</td>
+<td>√</td>
+<td>String</td>
+<td>页行数</td>
+</tr>
+<tr>
+<td>pageIndex</td>
+<td>√</td>
+<td>String</td>
+<td>当前页数</td>
+</tr>
+<tr>
+<td>queryString</td>
+<td>√</td>
+<td>String</td>
+<td>搜索词</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "搜索群聊信息成功",
+    "code": 200,
+    "groups": [{
+        "g_create_time": 1590137700000,
+        "g_name": "测试群聊",
+        "g_id": 6,
+        "g_num": "dce6a25a-b4af-4014-b94d-d417f88d6a0f",
+        "g_head_img": "http://www.foxluo.cn/FlyMessage/images/defaultGroupHead.png",
+        "g_introduce": "群聊简介",
+        "isMember": true
+    }]
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "搜索群聊信息失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div></div><h2>4.2、群员管理</h2><div style="margin-left:0px;"><h3>4.2.1、添加群成员</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/group/addGroupMember" title="http://www.foxluo.cn/FlyMessage/group/addGroupMember"><a href="http://www.foxluo.cn/FlyMessage/group/addGroupMember">http://www.foxluo.cn/FlyMessage/group/addGroupMember</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/group/addGroupMember?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=6" title="http://www.foxluo.cn/FlyMessage/group/addGroupMember?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=6"><a href="http://www.foxluo.cn/FlyMessage/group/addGroupMember?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=6">http://www.foxluo.cn/FlyMessage/group/addGroupMember?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=6</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>g_id</td>
+<td>√</td>
+<td>int</td>
+<td>群聊ID</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "添加群聊成员成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "添加群聊成员失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>4.2.2、删除群成员</h3><div style="margin-left:30px;"><p><strong>可群成员自己删除自己和群主删除群成员</strong></p>
+<p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/group/delGroupMember" title="http://www.foxluo.cn/FlyMessage/group/delGroupMember"><a href="http://www.foxluo.cn/FlyMessage/group/delGroupMember">http://www.foxluo.cn/FlyMessage/group/delGroupMember</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/group/delGroupMember?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=6&del_u_id=8" title="http://www.foxluo.cn/FlyMessage/group/delGroupMember?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=6&del_u_id=8"><a href="http://www.foxluo.cn/FlyMessage/group/delGroupMember?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=6&del_u_id=8">http://www.foxluo.cn/FlyMessage/group/delGroupMember?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=6&del_u_id=8</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>g_id</td>
+<td>√</td>
+<td>int</td>
+<td>群聊ID</td>
+</tr>
+<tr>
+<td>del_u_id</td>
+<td>√</td>
+<td>int</td>
+<td>被删除用户ID</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "删除群聊成员成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "删除群聊成员失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>4.2.3、获取群成员</h3><div style="margin-left:30px;"><p><strong>获取群成员列表</strong></p>
+<p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/group/getGroupMember" title="http://www.foxluo.cn/FlyMessage/group/getGroupMember"><a href="http://www.foxluo.cn/FlyMessage/group/getGroupMember">http://www.foxluo.cn/FlyMessage/group/getGroupMember</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/group/getGroupMember?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1&g_id=5" title="http://www.foxluo.cn/FlyMessage/group/getGroupMember?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1&g_id=5"><a href="http://www.foxluo.cn/FlyMessage/group/getGroupMember?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1&g_id=5">http://www.foxluo.cn/FlyMessage/group/getGroupMember?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&pageSize=5&pageIndex=1&g_id=5</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>g_id</td>
+<td>√</td>
+<td>int</td>
+<td>群聊ID</td>
+</tr>
+<tr>
+<td>pageSize</td>
+<td>√</td>
+<td>int</td>
+<td>页行数</td>
+</tr>
+<tr>
+<td>pageIndex</td>
+<td>√</td>
+<td>int</td>
+<td>当前页数</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "获取群聊成员成功",
+    "code": 200,
+    "group_members": [{
+        "g_nick_name": "新用户",
+        "g_id": 5,
+        "id": 5,
+        "power": 1,
+        "u_id": 1,
+        "add_time": 1589805602000
+    }, {
+        "g_nick_name": "123",
+        "g_id": 5,
+        "id": 6,
+        "power": 0,
+        "u_id": 8,
+        "add_time": 1589805913000
+    }]
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "获取群聊成员失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table>
+<p><strong>获取单个群成员信息</strong></p>
+<p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/group/getGroupMemberById" title="http://www.foxluo.cn/FlyMessage/group/getGroupMemberById"><a href="http://www.foxluo.cn/FlyMessage/group/getGroupMemberById">http://www.foxluo.cn/FlyMessage/group/getGroupMemberById</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/group/getGroupMemberById?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=6&object_u_id=8" title="http://www.foxluo.cn/FlyMessage/group/getGroupMemberById?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=6&object_u_id=8"><a href="http://www.foxluo.cn/FlyMessage/group/getGroupMemberById?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=6&object_u_id=8">http://www.foxluo.cn/FlyMessage/group/getGroupMemberById?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=6&object_u_id=8</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>g_id</td>
+<td>√</td>
+<td>int</td>
+<td>群聊ID</td>
+</tr>
+<tr>
+<td>object_u_id</td>
+<td>√</td>
+<td>int</td>
+<td>目标用户id</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "获取群聊成员信息成功",
+    "code": 200,
+    "group_member": {
+        "g_nick_name": "123",
+        "g_id": 6,
+        "id": 8,
+        "power": 0,
+        "u_id": 8,
+        "add_time": 1590152504000
+    }
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "获取群聊成员失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>4.2.4、修改用户群备注</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/group/changeGroupMemberRemarkName" title="http://www.foxluo.cn/FlyMessage/group/changeGroupMemberRemarkName"><a href="http://www.foxluo.cn/FlyMessage/group/changeGroupMemberRemarkName">http://www.foxluo.cn/FlyMessage/group/changeGroupMemberRemarkName</a></a>
+请求示例:<a href="http://www.foxluo.cn/FlyMessage/group/changeGroupMemberRemarkName?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5&g_nick_name=群聊之星" title="http://www.foxluo.cn/FlyMessage/group/changeGroupMemberRemarkName?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5&g_nick_name=群聊之星"><a href="http://www.foxluo.cn/FlyMessage/group/changeGroupMemberRemarkName?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5&g_nick_name=群聊之星">http://www.foxluo.cn/FlyMessage/group/changeGroupMemberRemarkName?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e&g_id=5&g_nick_name=群聊之星</a></a></p>
+<p>请求方式: <strong>GET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+<tr>
+<td>g_id</td>
+<td>√</td>
+<td>int</td>
+<td>群聊ID</td>
+</tr>
+<tr>
+<td>g_nick_name</td>
+<td>√</td>
+<td>String</td>
+<td>用户群备注名称</td>
+</tr>
+</tbody>
+</table>
+<p>返回格式: <strong>JSON</strong></p>
+<p>请求成功:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msg": "修改群备注成功",
+    "code": 200,
+}</code></pre></table>
+<p>请求失败:</p>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "修改群备注失败",
+  "code": "500"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "请先登录",
+  "code": "511"
+}</code></pre></table>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+  "msg": "登录超时，请重新登录",
+  "code": "512"
+}</code></pre></table></div><h3>4.2.5、获取群主</h3><div style="margin-left:30px;"><p><a href="http://www.foxluo.cn/FlyMessage/group/getGroupCreator?g_id=7&loginToken=d7490380-987d-4591-90fc-c921414fde9a">http://www.foxluo.cn/FlyMessage/group/getGroupCreator?g_id=7&loginToken=d7490380-987d-4591-90fc-c921414fde9a</a></p>
+<p>{"group_creator":{"g_nick_name":"新用户","g_id":7,"id":10,"power":1,"u_id":1,"add_time":1593173673000},"msg":"获取群主信息成功","code":200}</p></div></div></div><h1>5、WebSocket接口</h1><div style="margin-left:0px;"><h2>5.1、websocket server</h2><div style="margin-left:0px;"><p>接口地址:<a href="ws://www.foxluo.cn/FlyMessage/webSocketServer" title="ws://www.foxluo.cn/FlyMessage/webSocketServer">ws://www.foxluo.cn/FlyMessage/webSocketServer</a>
+请求示例:<a href="ws://www.foxluo.cn/FlyMessage/webSocketServer?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e" title="http://www.foxluo.cn/FlyMessage/group/queryGroup?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e">ws://www.foxluo.cn/FlyMessage/webSocketServer?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e</a></p>
+<p>连接方式: <strong>SOCKET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+</tbody>
+</table>
+<p>接收消息:<strong>JSON</strong></p>
+<h6>1.普通消息</h6>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msgType": 1,
+    "content": {
+        "m_content_type": 1,
+        "m_source_g_id": 5,
+        "m_source_id": 1,
+        "m_send_time": 1590143034000,
+        "m_content": "测试图文消息[picture:P91008-134039.JPG,link:http://www.foxluo.cn/FlyMessage/file/messageFile/20200522182359454.JPG]",
+        "m_type": 1,
+        "m_object_id": 8,
+        "m_id": 19,
+        "m_receive_state": 0
+    }
+}</code></pre></table>
+<h6>2.好友申请验证消息</h6>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msgType": 2,
+    "content": {
+        "rq_id": 6,
+        "rq_object_u_id": 8,
+        "rq_source_u_id": 1,
+        "isAccept": false,
+        "rq_remarks_name": "新朋友",
+        "rq_content": "加个好友吧",
+        "rq_receive_state": 0,
+        "time": 1590161842517
+    }
+}</code></pre></table>
+<h6>3.活动链接/广告类消息</h6>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msgType": 3,
+    "content": {
+        "link": "http://www.foxluo.cn",
+        "linkType": 1
+    }
+}</code></pre></table>
+<h6>4.下线通知</h6>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msgType": 4,
+    "content": "你已异地登陆，即将下线"
+}</code></pre></table></div><h2>5.2、socket js</h2><div style="margin-left:0px;"><p>接口地址:<a href="ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer" title="ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer">ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer</a>
+请求示例:<a href="ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e" title="ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e">ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e</a></p>
+<p>连接方式: <strong>SOCKET</strong></p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th>参数说明</th>
+<th>是否必须</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loginToken</td>
+<td>√</td>
+<td>String</td>
+<td>登录令牌</td>
+</tr>
+</tbody>
+</table>
+<p>接收消息:<strong>JSON</strong></p>
+<h6>1.普通消息</h6>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msgType": 1,
+    "content": {
+        "m_content_type": 1,
+        "m_source_g_id": 5,
+        "m_source_id": 1,
+        "m_send_time": 1590143034000,
+        "m_content": "测试图文消息[picture:P91008-134039.JPG,link:http://www.foxluo.cn/FlyMessage/file/messageFile/20200522182359454.JPG]",
+        "m_type": 1,
+        "m_object_id": 8,
+        "m_id": 19,
+        "m_receive_state": 0
+    }
+}</code></pre></table>
+<h6>2.好友申请验证消息</h6>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msgType": 2,
+    "content": {
+        "rq_id": 6,
+        "rq_object_u_id": 8,
+        "rq_source_u_id": 1,
+        "isAccept": false,
+        "rq_remarks_name": "新朋友",
+        "rq_content": "加个好友吧",
+        "rq_receive_state": 0,
+        "time": 1590161842517
+    }
+}</code></pre></table>
+<h6>3.活动链接/广告类消息</h6>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msgType": 3,
+    "content": {
+        "link": "http://www.foxluo.cn",
+        "linkType": 1
+    }
+}</code></pre></table>
+<h6>4.下线通知</h6>
+<table width='100%' class='codestyle'><pre><code class="language-json">{
+    "msgType": 4,
+    "content": "你已异地登陆，即将下线"
+}</code></pre></table>
+<video src="http://your-site.com/your.mp4" style="width: 100%; height: 100%;" controls="controls"></video></div></div><h1>6、管理员接口</h1><div style="margin-left:0px;"></div></body></html>
