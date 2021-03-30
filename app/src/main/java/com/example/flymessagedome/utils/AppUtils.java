@@ -16,6 +16,8 @@
 package com.example.flymessagedome.utils;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Handler;
@@ -63,5 +65,21 @@ public class AppUtils {
         } else {
             sHandler.removeCallbacks(r);
         }
+    }
+
+    public static String getAppPackageName() {
+        return mContext.getPackageName();
+    }
+
+    public static String getAppVersionName() {
+        PackageInfo packageInfo;
+        String appVersion = null;
+        try {
+            packageInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+            appVersion = packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return appVersion;
     }
 }

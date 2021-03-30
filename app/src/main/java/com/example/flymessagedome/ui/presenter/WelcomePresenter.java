@@ -25,7 +25,7 @@ public class WelcomePresenter extends RxPresenter<WelcomeContract.View> implemen
 
     @Override
     public void getOneData() {
-        Subscription rxSubscription = flyMessageApi.getOne(Constant.ONE_API).subscribeOn(Schedulers.io())
+        Subscription rxSubscription = flyMessageApi.getOne(Constant.ONE_API+"?key=92fa8d59057fdd134be4cf4a4db4e9da").subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<One>() {
                     @Override
@@ -42,7 +42,7 @@ public class WelcomePresenter extends RxPresenter<WelcomeContract.View> implemen
                     @Override
                     public void onNext(One one) {
                         if (one != null && mView != null && one.code == Constant.SUCCESS) {
-                            mView.showOne(one.getData().get(0));
+                            mView.showOne(one.getNewslist().get(0));
                         }else {
                             if (one != null && !TextUtils.isEmpty(one.msg)){
                                 mView.showError(one.msg);

@@ -8,9 +8,17 @@ android {
         applicationId "com.example.flymessagedome"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.01"
+        versionCode 3
+        versionName "1.0.3"
         multiDexEnabled true
+        /** 腾讯bugly */
+        /*ndk {
+            // 设置支持的 SO 库构架
+            abiFilters 'armeabi', 'x86'// 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+        }*/
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+        }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -37,8 +45,11 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-
+    //分包
     implementation 'com.android.support:multidex:1.0.3'
+    //腾讯bug管理平台
+    compile 'com.tencent.bugly:crashreport_upgrade:latest.release'//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.0.0
+    compile 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
     //语音录制
     implementation 'com.github.lewis-v:AudioH:1.0.0'
     //获取语音时长

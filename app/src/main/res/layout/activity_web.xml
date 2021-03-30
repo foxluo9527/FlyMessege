@@ -25,12 +25,20 @@
             android:onClick="onViewClick"
             android:layout_toRightOf="@id/back"
             android:src="@drawable/close"/>
+
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:text="加载中..."
-            android:layout_centerInParent="true"/>
+            android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="75dp"
+            android:layout_marginRight="75dp" />
         <ImageView
             android:id="@+id/open"
             android:layout_width="@dimen/d_30"

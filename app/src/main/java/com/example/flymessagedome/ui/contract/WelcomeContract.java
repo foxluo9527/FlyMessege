@@ -5,7 +5,7 @@ import com.example.flymessagedome.model.One;
 
 public interface WelcomeContract {
     interface View extends BaseContract.BaseView{
-        void showOne(One.DataBean data);
+        void showOne(One.NewsListBean data);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T>{

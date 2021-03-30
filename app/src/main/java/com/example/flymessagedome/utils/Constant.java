@@ -27,7 +27,7 @@ public class Constant {
     //读取联系人
     public static final int READ_CONTRACT=10;
     //欢迎界面资源获取（one一个）
-    public static final String ONE_API="http://api.youngam.cn/api/one.php";
+    public static final String ONE_API="http://api.tianapi.com/txapi/one/index";
 
     public static final String SOCKET_BASE_URL = "ws://www.foxluo.cn/FlyMessage/webSocketServer";
 

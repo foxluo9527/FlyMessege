@@ -80,7 +80,6 @@ public abstract class BaseActivity extends AppCompatActivity implements NetState
         setupActivityComponent(FlyMessageApplication.getInstances().getAppComponent());
         configViews();
         initDatas();
-        AppUtils.init(this);
         if (serviceMessageReceiver == null) {
             serviceMessageReceiver = new ServiceMessageReceiver(new Handler());
             IntentFilter itFilter = new IntentFilter();

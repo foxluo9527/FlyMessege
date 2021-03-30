@@ -14,7 +14,10 @@ import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.component.DaggerAppComponent;
 import com.example.flymessagedome.module.AppModule;
 import com.example.flymessagedome.module.FlyMessageApiModule;
+import com.example.flymessagedome.utils.AppUtils;
 import com.example.flymessagedome.utils.SharedPreferencesUtil;
+import com.tencent.bugly.Bugly;
+import com.tencent.bugly.beta.Beta;
 
 public class FlyMessageApplication extends MultiDexApplication {
     public static FlyMessageApplication instances;
@@ -27,9 +30,11 @@ public class FlyMessageApplication extends MultiDexApplication {
         super.onCreate();
         MultiDex.install(this);
         instances = this;
+        AppUtils.init(instances);
         setDatabase();
         initComponent();
         initPrefs();
+        initBugly();
         changeDefaultDarkModel(SharedPreferencesUtil.getInstance().getBoolean("withSystemDark", true));
     }
 
@@ -60,6 +65,44 @@ public class FlyMessageApplication extends MultiDexApplication {
                 .flyMessageApiModule(new FlyMessageApiModule())
                 .appModule(new AppModule(this))
                 .build();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+    }
+
+    /**
+     * 初始化腾讯bug管理平台
+     */
+    private void initBugly() {
+        /**
+         * true表示初始化时自动检查升级;
+         * false表示不会自动检查升级,需要手动调用Beta.checkUpgrade()方法;
+         */
+        Beta.autoCheckUpgrade = false;
+
+        /**
+         * 设置升级检查周期为60s(默认检查周期为0s)，60s内SDK不重复向后台请求策略);
+         */
+        Beta.upgradeCheckPeriod = 60 * 1000;
+
+        /**
+         * 设置启动延时为1s（默认延时3s），APP启动1s后初始化SDK，避免影响APP启动速度;
+         */
+        Beta.initDelay = 1 * 1000;
+
+        /**
+         * 设置通知栏大图标，largeIconId为项目中的图片资源;
+         */
+        Beta.largeIconId = R.drawable.icon;
+
+        /**
+         * 设置状态栏小图标，smallIconId为项目中的图片资源Id;
+         */
+        Beta.smallIconId = R.drawable.icon;
+
+        Bugly.init(getApplicationContext(), "cf62b927ee", false);
     }
 
     public AppComponent getAppComponent() {
