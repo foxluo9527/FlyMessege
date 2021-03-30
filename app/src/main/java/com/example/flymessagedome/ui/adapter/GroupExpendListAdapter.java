@@ -100,7 +100,7 @@ public class GroupExpendListAdapter extends BaseExpandableListAdapter {
         }else {
             childViewHolder = (ChildViewHolder) convertView.getTag();
         }
-        Glide.with(context).load(proxyCacheServer.getProxyUrl(groups.get(groupPosition).get(childPosition).getG_head_img())).error(R.mipmap.ic_launcher_round)
+        Glide.with(context).load(proxyCacheServer.getProxyUrl(groups.get(groupPosition).get(childPosition).getG_head_img()))
                 .into(childViewHolder.groupHead);
         childViewHolder.groupName.setText(groups.get(groupPosition).get(childPosition).getG_name());
         if (listener!=null){

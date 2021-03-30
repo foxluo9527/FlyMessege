@@ -1,11 +1,5 @@
 package com.example.flymessagedome.ui.activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,27 +7,23 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.content.res.AppCompatResources;
+
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.example.flymessagedome.FlyMessageApplication;
 import com.example.flymessagedome.R;
 import com.example.flymessagedome.base.BaseActivity;
@@ -45,11 +35,9 @@ import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.model.Base;
 import com.example.flymessagedome.model.CheckBlackListModel;
 import com.example.flymessagedome.model.Users;
-import com.example.flymessagedome.ui.fragment.FriendFragment;
 import com.example.flymessagedome.utils.Constant;
 import com.example.flymessagedome.utils.HttpRequest;
 import com.example.flymessagedome.utils.ImageUtils;
-import com.example.flymessagedome.utils.NetworkUtil;
 import com.example.flymessagedome.utils.NetworkUtils;
 import com.example.flymessagedome.utils.SharedPreferencesUtil;
 import com.example.flymessagedome.utils.ToastUtils;
@@ -82,14 +70,17 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
     TextView sgin;
     @BindView(R.id.add_fri_btn)
     Button add_fri;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_show_user;
     }
+
     UserBean userBean;
-    boolean inBlackList=false;
+    boolean inBlackList = false;
     FriendsBean friendsBean;
-    FriendsBeanDao friendsBeanDao=FlyMessageApplication.getInstances().getDaoSession().getFriendsBeanDao();
+    FriendsBeanDao friendsBeanDao = FlyMessageApplication.getInstances().getDaoSession().getFriendsBeanDao();
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
 
@@ -97,127 +88,128 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
 
     @Override
     public void initDatas() {
-        user_name=getIntent().getStringExtra("userName");
-        if (TextUtils.isEmpty(user_name)){
+        user_name = getIntent().getStringExtra("userName");
+        if (TextUtils.isEmpty(user_name)) {
             ToastUtils.showToast("用户名错误");
             finish();
             return;
         }
-        if (user_name.equals(LoginActivity.loginUser.getU_name())){
-            startActivity(new Intent(mContext,LoginUserMsgActivity.class));
+        if (user_name.equals(LoginActivity.loginUser.getU_name())) {
+            startActivity(new Intent(mContext, LoginUserMsgActivity.class));
             finish();
             return;
         }
-        if (NetworkUtils.isConnected(mContext)){
-            showLoadingDialog(true,"数据加载中");
-            new AsyncTask<Void,Void, Users>() {
+        if (NetworkUtils.isConnected(mContext)) {
+            showLoadingDialog(true, "数据加载中");
+            new AsyncTask<Void, Void, Users>() {
                 @Override
                 protected Users doInBackground(Void... voids) {
-                    String loginToken= SharedPreferencesUtil.getInstance().getString("loginToken");
-                    return HttpRequest.getUserMsg(user_name,loginToken);
+                    String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+                    return HttpRequest.getUserMsg(user_name, loginToken);
                 }
+
                 @Override
                 protected void onPostExecute(Users user) {
-                    if (user==null||user.code!=Constant.SUCCESS){
+                    if (user == null || user.code != Constant.SUCCESS) {
                         ToastUtils.showToast(user.msg);
                         finish();
                         return;
                     }
-                    userBean=user.getUser();
-                    List<FriendsBean> friends=friendsBeanDao.queryBuilder()
+                    userBean = user.getUser();
+                    List<FriendsBean> friends = friendsBeanDao.queryBuilder()
                             .where(FriendsBeanDao.Properties.F_source_u_id.eq(LoginActivity.loginUser.getU_id()))
                             .where(FriendsBeanDao.Properties.F_object_u_id.eq(userBean.getU_id()))
                             .list();
-                    if (friends.size()>0){
-                        friendsBean=friends.get(0);
+                    if (friends.size() > 0) {
+                        friendsBean = friends.get(0);
                     }
-                    new AsyncTask<Void,Void, CheckBlackListModel>() {
+                    new AsyncTask<Void, Void, CheckBlackListModel>() {
                         @Override
                         protected CheckBlackListModel doInBackground(Void... voids) {
                             return HttpRequest.checkBlackList(userBean.getU_id());
                         }
+
                         @Override
                         protected void onPostExecute(CheckBlackListModel blackListModel) {
                             dismissLoadingDialog();
-                            inBlackList=blackListModel.inBlacklist;
+                            inBlackList = blackListModel.inBlacklist;
                         }
                     }.execute();
                     Glide.with(mContext)
                             .load(FlyMessageApplication.getProxy(mContext).getProxyUrl(userBean.getU_head_img()))
-                            .error(R.mipmap.ic_launcher_round)
                             .into(headImg);
                     Glide.with(mContext)
                             .asDrawable()
                             .load(FlyMessageApplication.getProxy(mContext).getProxyUrl(userBean.getU_bg_img()))
                             .into(mainView);
                     sgin.setText(userBean.getU_sign());
-                    if (userBean.getU_sex()==null){
+                    if (userBean.getU_sex() == null) {
                         sex.setVisibility(View.GONE);
-                    }else if (userBean.getU_sex().equals("男")){
-                        sex.setImageDrawable(AppCompatResources.getDrawable(mContext,R.mipmap.man));
-                    }else if (userBean.getU_sex().equals("女")){
-                        sex.setImageDrawable(AppCompatResources.getDrawable(mContext,R.mipmap.women));
+                    } else if (userBean.getU_sex().equals("男")) {
+                        sex.setImageDrawable(AppCompatResources.getDrawable(mContext, R.mipmap.man));
+                    } else if (userBean.getU_sex().equals("女")) {
+                        sex.setImageDrawable(AppCompatResources.getDrawable(mContext, R.mipmap.women));
                     }
-                    if (friendsBean!=null&&!friendsBean.getF_remarks_name().equals(userBean.getU_nick_name()))
-                        nickName.setText(friendsBean.getF_remarks_name()+"("+userBean.getU_nick_name()+")");
+                    if (friendsBean != null && !friendsBean.getF_remarks_name().equals(userBean.getU_nick_name()))
+                        nickName.setText(friendsBean.getF_remarks_name() + "(" + userBean.getU_nick_name() + ")");
                     else
                         nickName.setText(userBean.getU_nick_name());
                     u_name.setText(userBean.getU_name());
                     position.setText(userBean.getU_position());
-                    if (userBean.getIsFriend()){
+                    if (userBean.getIsFriend()) {
                         add_fri.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         add_fri.setVisibility(View.VISIBLE);
                     }
                 }
             }.execute();
-        }else {
+        } else {
             ToastUtils.showToast("获取用户信息失败，请检查网络连接");
-            userBean=FlyMessageApplication.getInstances().getDaoSession().getUserBeanDao().queryBuilder().where(UserBeanDao.Properties.U_name.eq(user_name)).list().get(0);
-            if (userBean==null){
+            userBean = FlyMessageApplication.getInstances().getDaoSession().getUserBeanDao().queryBuilder().where(UserBeanDao.Properties.U_name.eq(user_name)).list().get(0);
+            if (userBean == null) {
                 finish();
                 return;
             }
-            List<FriendsBean> friends=friendsBeanDao.queryBuilder()
+            List<FriendsBean> friends = friendsBeanDao.queryBuilder()
                     .where(FriendsBeanDao.Properties.F_source_u_id.eq(LoginActivity.loginUser.getU_id()))
                     .where(FriendsBeanDao.Properties.F_object_u_id.eq(userBean.getU_id()))
                     .list();
-            if (friends.size()>0){
-                friendsBean=friends.get(0);
+            if (friends.size() > 0) {
+                friendsBean = friends.get(0);
             }
             Glide.with(mContext)
                     .load(FlyMessageApplication.getProxy(mContext).getProxyUrl(userBean.getU_head_img()))
-                    .error(R.mipmap.ic_launcher_round)
                     .into(headImg);
             Glide.with(mContext)
                     .asDrawable()
                     .load(FlyMessageApplication.getProxy(mContext).getProxyUrl(userBean.getU_bg_img()))
                     .into(mainView);
             sgin.setText(userBean.getU_sign());
-            if (userBean.getU_sex()==null){
+            if (userBean.getU_sex() == null) {
                 sex.setVisibility(View.GONE);
-            }else if (userBean.getU_sex().equals("男")){
-                sex.setImageDrawable(AppCompatResources.getDrawable(mContext,R.mipmap.man));
-            }else if (userBean.getU_sex().equals("女")){
-                sex.setImageDrawable(AppCompatResources.getDrawable(mContext,R.mipmap.women));
+            } else if (userBean.getU_sex().equals("男")) {
+                sex.setImageDrawable(AppCompatResources.getDrawable(mContext, R.mipmap.man));
+            } else if (userBean.getU_sex().equals("女")) {
+                sex.setImageDrawable(AppCompatResources.getDrawable(mContext, R.mipmap.women));
             }
-            if (friendsBean!=null&&!friendsBean.getF_remarks_name().equals(userBean.getU_nick_name()))
-                nickName.setText(friendsBean.getF_remarks_name()+"("+userBean.getU_nick_name()+")");
+            if (friendsBean != null && !friendsBean.getF_remarks_name().equals(userBean.getU_nick_name()))
+                nickName.setText(friendsBean.getF_remarks_name() + "(" + userBean.getU_nick_name() + ")");
             else
                 nickName.setText(userBean.getU_nick_name());
             u_name.setText(userBean.getU_name());
             position.setText(userBean.getU_position());
-            if (userBean.getIsFriend()){
+            if (userBean.getIsFriend()) {
                 add_fri.setVisibility(View.GONE);
-            }else {
+            } else {
                 add_fri.setVisibility(View.VISIBLE);
             }
         }
     }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @OnClick({R.id.back,R.id.user_set,R.id.send_btn,R.id.add_fri_btn,R.id.msg_view,R.id.u_head_img,R.id.show_bg_view})
-    public void onViewClick(View view){
-        switch (view.getId()){
+    @OnClick({R.id.back, R.id.user_set, R.id.send_btn, R.id.add_fri_btn, R.id.msg_view, R.id.u_head_img, R.id.show_bg_view})
+    public void onViewClick(View view) {
+        switch (view.getId()) {
             case R.id.back:
                 finish();
                 break;
@@ -225,20 +217,20 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
                 showListPopupMenu(mContext);
                 break;
             case R.id.send_btn:
-                Intent intent=new Intent(mContext, UserChatActivity.class);
-                intent.putExtra("userId",userBean.getU_id());
+                Intent intent = new Intent(mContext, UserChatActivity.class);
+                intent.putExtra("userId", userBean.getU_id());
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 finish();
                 break;
             case R.id.add_fri_btn:
-                Intent rq_intent=new Intent(mContext,RequestFriendActivity.class);
-                rq_intent.putExtra("uName",userBean.getU_name());
+                Intent rq_intent = new Intent(mContext, RequestFriendActivity.class);
+                rq_intent.putExtra("uName", userBean.getU_name());
                 startActivity(rq_intent);
                 break;
             case R.id.msg_view:
-                Intent showMsgIntent=new Intent(mContext,ShowUserMsgActivity.class);
-                showMsgIntent.putExtra("userId",userBean.getU_id());
+                Intent showMsgIntent = new Intent(mContext, ShowUserMsgActivity.class);
+                showMsgIntent.putExtra("userId", userBean.getU_id());
                 startActivity(showMsgIntent);
                 break;
             case R.id.u_head_img:
@@ -249,6 +241,7 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
                 break;
         }
     }
+
     @Override
     public void configViews() {
 
@@ -262,31 +255,31 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void showListPopupMenu(Context context) {
-        final View popView = View.inflate(context,R.layout.friend_more_popup,null);
-        TextView black_list_state=popView.findViewById(R.id.blacklist_state);
-        TextView fri_state=popView.findViewById(R.id.fri_state);
-        View changeRmk=popView.findViewById(R.id.change_rmk);
-        View add_fri=popView.findViewById(R.id.add_fri);
-        if (userBean.getIsFriend()){
+        final View popView = View.inflate(context, R.layout.friend_more_popup, null);
+        TextView black_list_state = popView.findViewById(R.id.blacklist_state);
+        TextView fri_state = popView.findViewById(R.id.fri_state);
+        View changeRmk = popView.findViewById(R.id.change_rmk);
+        View add_fri = popView.findViewById(R.id.add_fri);
+        if (userBean.getIsFriend()) {
             fri_state.setText("删除好友");
-        }else {
+        } else {
             changeRmk.setVisibility(View.GONE);
             fri_state.setText("添加好友");
         }
-        if (inBlackList){
+        if (inBlackList) {
             black_list_state.setText("移出黑名单");
-        }else {
+        } else {
             black_list_state.setText("加入黑名单");
         }
         //获取屏幕宽高
         int weight = getResources().getDisplayMetrics().widthPixels;
         int height;
         if (userBean.getIsFriend())
-            height = ImageUtils.dip2px(mContext,200);
+            height = ImageUtils.dip2px(mContext, 200);
         else {
-            height = ImageUtils.dip2px(mContext,165);
+            height = ImageUtils.dip2px(mContext, 165);
         }
-        PopupWindow popupWindow = new PopupWindow(popView,weight,height);
+        PopupWindow popupWindow = new PopupWindow(popView, weight, height);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setFocusable(true);
         //点击外部popueWindow消失
@@ -297,48 +290,49 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                WindowManager.LayoutParams lp = ((Activity)context).getWindow().getAttributes();
+                WindowManager.LayoutParams lp = ((Activity) context).getWindow().getAttributes();
                 lp.alpha = 1.0f;
-                ((Activity)context).getWindow().setAttributes(lp);
+                ((Activity) context).getWindow().setAttributes(lp);
             }
         });
         //popupWindow出现屏幕变为半透明
-        WindowManager.LayoutParams lp =  ((Activity)context).getWindow().getAttributes();
+        WindowManager.LayoutParams lp = ((Activity) context).getWindow().getAttributes();
         lp.alpha = 0.5f;
-        ((Activity)context).getWindow().setAttributes(lp);
-        View.OnClickListener listener=new View.OnClickListener() {
+        ((Activity) context).getWindow().setAttributes(lp);
+        View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()){
+                switch (v.getId()) {
                     case R.id.change_rmk:
-                        if (friendsBean!=null){
-                            Intent rmkIntent=new Intent(mContext, ChangeRemarkNameActivity.class);
-                            rmkIntent.putExtra("userId",userBean.getU_id());
-                            rmkIntent.putExtra("fId",friendsBean.getF_id());
+                        if (friendsBean != null) {
+                            Intent rmkIntent = new Intent(mContext, ChangeRemarkNameActivity.class);
+                            rmkIntent.putExtra("userId", userBean.getU_id());
+                            rmkIntent.putExtra("fId", friendsBean.getF_id());
                             startActivity(rmkIntent);
                         }
                         popupWindow.dismiss();
                         break;
                     case R.id.black_list:
-                        showLoadingDialog(false,"正在操作");
-                        new AsyncTask<Void,Void,Base>() {
+                        showLoadingDialog(false, "正在操作");
+                        new AsyncTask<Void, Void, Base>() {
                             @Override
                             protected Base doInBackground(Void... voids) {
-                                CheckBlackListModel blackListModel=HttpRequest.checkBlackList(userBean.getU_id());
-                                inBlackList=blackListModel.inBlacklist;
-                                if (inBlackList){
+                                CheckBlackListModel blackListModel = HttpRequest.checkBlackList(userBean.getU_id());
+                                inBlackList = blackListModel.inBlacklist;
+                                if (inBlackList) {
                                     return HttpRequest.delBlackList(userBean.getU_id());
-                                }else {
+                                } else {
                                     return HttpRequest.addBlackList(userBean.getU_id());
                                 }
                             }
+
                             @Override
                             protected void onPostExecute(Base base) {
                                 dismissLoadingDialog();
-                                if (base.code== Constant.SUCCESS){
-                                    inBlackList=!inBlackList;
+                                if (base.code == Constant.SUCCESS) {
+                                    inBlackList = !inBlackList;
                                     ToastUtils.showToast("操作成功");
-                                }else {
+                                } else {
                                     ToastUtils.showToast("操作失败");
                                 }
                             }
@@ -346,32 +340,34 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
                         popupWindow.dismiss();
                         break;
                     case R.id.add_fri:
-                        if (userBean.getIsFriend()){
+                        if (userBean.getIsFriend()) {
                             AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                             dialog.setMessage("确认删除此联系人")
                                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.cancel();//取消弹出框
-                                            showLoadingDialog(false,"正在删除");
-                                            new AsyncTask<Void,Void,Base>() {
+                                            showLoadingDialog(false, "正在删除");
+                                            new AsyncTask<Void, Void, Base>() {
                                                 @Override
                                                 protected Base doInBackground(Void... voids) {
-                                                   return HttpRequest.delFriend(friendsBean.getF_id());
+                                                    return HttpRequest.delFriend(friendsBean.getF_id());
                                                 }
+
                                                 @Override
                                                 protected void onPostExecute(Base base) {
                                                     dismissLoadingDialog();
-                                                    if (base.code== Constant.SUCCESS){
+                                                    if (base.code == Constant.SUCCESS) {
                                                         ToastUtils.showToast("操作成功");
                                                         initDatas();
-                                                        UserChatActivity.resultRefresh=true;
-                                                    }else {
+                                                        UserChatActivity.resultRefresh = true;
+                                                    } else {
                                                         ToastUtils.showToast("操作失败");
                                                     }
                                                 }
                                             }.execute();
-                                        }})
+                                        }
+                                    })
                                     .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -379,10 +375,10 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
                                         }
                                     })
                                     .create().show();
-                        }else {
+                        } else {
                             popupWindow.dismiss();
-                            Intent rq_intent=new Intent(mContext,RequestFriendActivity.class);
-                            rq_intent.putExtra("uName",userBean.getU_name());
+                            Intent rq_intent = new Intent(mContext, RequestFriendActivity.class);
+                            rq_intent.putExtra("uName", userBean.getU_name());
                             startActivity(rq_intent);
                         }
                         break;
@@ -393,14 +389,15 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
             }
         };
         changeRmk.setOnClickListener(listener);
-        View black_list=popView.findViewById(R.id.black_list);
+        View black_list = popView.findViewById(R.id.black_list);
         black_list.setOnClickListener(listener);
         add_fri.setOnClickListener(listener);
-        View cancel=popView.findViewById(R.id.cancel);
+        View cancel = popView.findViewById(R.id.cancel);
         cancel.setOnClickListener(listener);
 
-        popupWindow.showAtLocation(popView, Gravity.BOTTOM,0,0);
+        popupWindow.showAtLocation(popView, Gravity.BOTTOM, 0, 0);
     }
+
     @AfterPermissionGranted(Constant.REQUEST_CODE_SHOW_PHOTOS)
     public void showHeadImg() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -414,6 +411,7 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
             EasyPermissions.requestPermissions(this, "图片预览需要以下权限:\n\n1.访问设备上的照片", Constant.REQUEST_CODE_SHOW_PHOTOS, perms);
         }
     }
+
     @AfterPermissionGranted(Constant.REQUEST_CODE_SHOW_PHOTOS)
     public void showBGImg() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -427,9 +425,10 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
             EasyPermissions.requestPermissions(this, "图片预览需要以下权限:\n\n1.访问设备上的照片", Constant.REQUEST_CODE_SHOW_PHOTOS, perms);
         }
     }
+
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if (item.getItemId()==R.id.remark_name){
+        if (item.getItemId() == R.id.remark_name) {
 
         }
         return false;

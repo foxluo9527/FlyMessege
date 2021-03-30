@@ -83,11 +83,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     protected void onDestroy() {
         super.onDestroy();
         try {
-            if (conn!=null){
-                serviceBinder.closeConnect();
-                unbindService(conn);
-                stopService(new Intent(this,MessageService.class));
-            }
             if (updateConn!=null){
                 unbindService(updateConn);
                 stopService(new Intent(this,UpdateService.class));
@@ -149,7 +144,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     }
 
     private void initFragment(){
-        fragmentList=new ArrayList<Fragment>();
+        fragmentList= new ArrayList<>();
         fragmentList.add(new MessageFragment());
         fragmentList.add(new FriendFragment());
         fragmentList.add(new MineFragment());
@@ -166,7 +161,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             Intent intent = new Intent(this, MessageService.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             conn = new MyConnection();
-            startService(intent);
+            if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O)
+                getApplicationContext().startForegroundService(intent);
+            else
+                getApplicationContext().startService(intent);
             bindService(intent, conn, BIND_AUTO_CREATE);
         }
         if (updateBinder==null){

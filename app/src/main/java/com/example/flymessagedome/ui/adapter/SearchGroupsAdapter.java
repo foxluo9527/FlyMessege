@@ -54,8 +54,8 @@ public class SearchGroupsAdapter extends RecyclerView.Adapter {
         SearchViewHolder viewHolder=(SearchViewHolder)holder;
         GroupBean userBean=userBeans.get(position);
         Glide.with(context).load(proxyCacheServer.getProxyUrl(userBean.getG_head_img()))
-                .placeholder(R.mipmap.ic_launcher_round)
-                .error(R.mipmap.ic_launcher_round)
+
+
                 .into(viewHolder.headImg);
         viewHolder.name.setText(userBean.getG_name());
         viewHolder.introduce.setText(""+userBean.getG_introduce());

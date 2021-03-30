@@ -71,8 +71,7 @@
                         android:layout_width="@dimen/d_80"
                         android:layout_height="@dimen/d_80"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/d_25"
-                        android:src="@mipmap/ic_launcher_round" />
+                        android:layout_marginLeft="@dimen/d_25" />
 
                     <TextView
                         android:id="@+id/nick_name"
@@ -89,7 +88,6 @@
                         android:textSize="@dimen/d_18" />
 
                     <LinearLayout
-                        android:id="@+id/u_msg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"

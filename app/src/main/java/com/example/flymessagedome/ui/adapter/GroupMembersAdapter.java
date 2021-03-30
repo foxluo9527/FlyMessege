@@ -88,7 +88,7 @@ public class GroupMembersAdapter extends RecyclerView.Adapter {
             viewHolder.flag.setVisibility(View.GONE);
         }
         if (userBean!=null){
-            Glide.with(context).load(FlyMessageApplication.getProxy(context).getProxyUrl(userBean.getU_head_img())).error(R.mipmap.ic_launcher_round).into(viewHolder.headImg);
+            Glide.with(context).load(FlyMessageApplication.getProxy(context).getProxyUrl(userBean.getU_head_img())).into(viewHolder.headImg);
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

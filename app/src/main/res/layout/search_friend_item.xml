@@ -10,8 +10,7 @@
         android:layout_width="@dimen/d_30"
         android:layout_height="@dimen/d_30"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/d_16"
-        android:src="@mipmap/ic_launcher_round" />
+        android:layout_marginLeft="@dimen/d_16"/>
 
     <TextView
         android:id="@+id/name"

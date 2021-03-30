@@ -2,9 +2,7 @@ package com.example.flymessagedome.ui.activity;
 
 import android.content.Intent;
 import android.os.Build;
-import android.os.Looper;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -22,6 +20,7 @@ import com.example.flymessagedome.ui.contract.WelcomeContract;
 import com.example.flymessagedome.ui.presenter.WelcomePresenter;
 import com.example.flymessagedome.utils.NetworkUtils;
 import com.example.flymessagedome.utils.SharedPreferencesUtil;
+import com.example.flymessagedome.utils.ToastUtils;
 
 import javax.inject.Inject;
 
@@ -50,27 +49,27 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
 
     @Override
     public void initDatas() {
-        if (LoginActivity.loginUser!=null){
+        if (LoginActivity.loginUser != null) {
             MainActivity.startActivity(WelcomeActivity.this);
             finish();
-        }else if(!NetworkUtils.isConnected(WelcomeActivity.this)) {
+        } else if (!NetworkUtils.isConnected(WelcomeActivity.this)) {
             LoginActivity.startActivity(this);
             finish();
-        }else {
+        } else {
             welcomePresenter.getOneData();
-            new Thread(){
+            new Thread() {
                 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
                 @Override
                 public void run() {
                     super.run();
                     try {
                         sleep(5000);
-                        if (!WelcomeActivity.this.isDestroyed()){
-                            if (LoginActivity.loginUser!=null){
+                        if (!WelcomeActivity.this.isDestroyed()) {
+                            if (LoginActivity.loginUser != null) {
                                 MainActivity.startActivity(WelcomeActivity.this);
-                            }else {
-                                if (SharedPreferencesUtil.getInstance().getBoolean("isFirstUse",true))
-                                    startActivity(new Intent(mContext,GuideActivity.class));
+                            } else {
+                                if (SharedPreferencesUtil.getInstance().getBoolean("isFirstUse", true))
+                                    startActivity(new Intent(mContext, GuideActivity.class));
                                 else
                                     LoginActivity.startActivity(WelcomeActivity.this);
                             }
@@ -89,27 +88,27 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
         welcomePresenter.attachView(this);
     }
 
-    @OnClick({R.id.one_img_view,R.id.jump})
+    @OnClick({R.id.one_img_view, R.id.jump})
     public void onViewClicked(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.one_img_view:
-                if (LoginActivity.loginUser!=null){
+                if (LoginActivity.loginUser != null) {
                     MainActivity.startActivity(WelcomeActivity.this);
-                }else {
-                    if (SharedPreferencesUtil.getInstance().getBoolean("isFirstUse",true))
-                        startActivity(new Intent(mContext,GuideActivity.class));
+                } else {
+                    if (SharedPreferencesUtil.getInstance().getBoolean("isFirstUse", true))
+                        startActivity(new Intent(mContext, GuideActivity.class));
                     else
                         LoginActivity.startActivity(WelcomeActivity.this);
                 }
-                Intent intent= new Intent(WelcomeActivity.this,WebActivity.class);
-                intent.putExtra("URLString","http://wufazhuce.com/");
+                Intent intent = new Intent(WelcomeActivity.this, WebActivity.class);
+                intent.putExtra("URLString", "http://wufazhuce.com/");
                 finish();
                 startActivity(intent);
                 break;
             case R.id.jump:
                 welcomePresenter.detachView();
-                if (SharedPreferencesUtil.getInstance().getBoolean("isFirstUse",true))
-                    startActivity(new Intent(mContext,GuideActivity.class));
+                if (SharedPreferencesUtil.getInstance().getBoolean("isFirstUse", true))
+                    startActivity(new Intent(mContext, GuideActivity.class));
                 else
                     LoginActivity.startActivity(WelcomeActivity.this);
                 finish();
@@ -120,7 +119,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
     @Override
     public void showOne(One.DataBean data) {
         oneText.setText(data.getText());
-        HttpProxyCacheServer proxy=FlyMessageApplication.getProxy(WelcomeActivity.this);
+        HttpProxyCacheServer proxy = FlyMessageApplication.getProxy(WelcomeActivity.this);
         data.setSrc(proxy.getProxyUrl(data.getSrc()));
         Glide.with(WelcomeActivity.this).load(data.getSrc()).into(oneImg);
     }
@@ -135,8 +134,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void showError(String msg) {
-        if (!this.isDestroyed())
-            showError(msg);
+        ToastUtils.showToast(msg);
     }
 
     @Override

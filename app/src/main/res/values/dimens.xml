@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="d_half">0.5dp</dimen>
     <dimen name="d_1">1dp</dimen>
-    <dimen name="d_1b">1.5dp</dimen>
     <dimen name="d_2">2dp</dimen>
     <dimen name="d_3">3dp</dimen>
-    <dimen name="d_3_half">3.5dp</dimen>
     <dimen name="d_4">4dp</dimen>
     <dimen name="d_5">5dp</dimen>
-    <dimen name="d_6">6dp</dimen>
     <dimen name="d_7">7dp</dimen>
     <dimen name="d_8">8dp</dimen>
     <dimen name="d_9">9dp</dimen>
@@ -22,10 +18,8 @@
     <dimen name="d_17">17dp</dimen>
     <dimen name="d_18">18dp</dimen>
     <dimen name="d_20">20dp</dimen>
-    <dimen name="d_22">22dp</dimen>
     <dimen name="d_25">25dp</dimen>
     <dimen name="d_26">26dp</dimen>
-    <dimen name="d_27">27dp</dimen>
     <dimen name="d_30">30dp</dimen>
     <dimen name="d_32">32dp</dimen>
     <dimen name="d_38">38dp</dimen>
@@ -35,69 +29,19 @@
     <dimen name="d_45">45dp</dimen>
     <dimen name="d_50">50dp</dimen>
     <dimen name="d_52">52dp</dimen>
-    <dimen name="d_53">53dp</dimen>
-    <dimen name="d_55">55dp</dimen>
     <dimen name="d_60">60dp</dimen>
-    <dimen name="d_63">63dp</dimen>
-    <dimen name="d_65">65dp</dimen>
     <dimen name="d_70">70dp</dimen>
     <dimen name="d_75">75dp</dimen>
     <dimen name="d_80">80dp</dimen>
-    <dimen name="d_83">83dp</dimen>
-    <dimen name="d_85">85dp</dimen>
-    <dimen name="d_88">88dp</dimen>
-    <dimen name="d_90">90dp</dimen>
-    <dimen name="d_95">95dp</dimen>
     <dimen name="d_100">100dp</dimen>
-    <dimen name="d_105">105dp</dimen>
     <dimen name="d_110">110dp</dimen>
-    <dimen name="d_115">115dp</dimen>
     <dimen name="d_120">120dp</dimen>
-    <dimen name="d_125">125dp</dimen>
-    <dimen name="d_130">130dp</dimen>
-    <dimen name="d_140">140dp</dimen>
-    <dimen name="d_145">145dp</dimen>
-    <dimen name="d_150">150dp</dimen>
     <dimen name="d_160">160dp</dimen>
-    <dimen name="d_170">170dp</dimen>
-    <dimen name="d_175">175dp</dimen>
     <dimen name="d_180">180dp</dimen>
-    <dimen name="d_190">190dp</dimen>
     <dimen name="d_200">200dp</dimen>
-    <dimen name="d_230">230dp</dimen>
-    <dimen name="d_235">235dp</dimen>
-    <dimen name="d_240">240dp</dimen>
-    <dimen name="d_245">245dp</dimen>
-    <dimen name="d_250">250dp</dimen>
-    <dimen name="d_260">260dp</dimen>
-    <dimen name="d_270">270dp</dimen>
-    <dimen name="d_210">210dp</dimen>
-    <dimen name="d_300">300dp</dimen>
-    <dimen name="d_350">350dp</dimen>
     <dimen name="d_500">500dp</dimen>
-    <dimen name="d_400">400dp</dimen>
-    <dimen name="d_450">450dp</dimen>
-    <dimen name="d_800">800dp</dimen>
-    <dimen name="d_1000">1000dp</dimen>
-    <dimen name="default_action_bar_height">56dp</dimen>
-    <dimen name="default_keyboard_height">267dp</dimen>
 
-    <dimen name="s_8">8sp</dimen>
-    <dimen name="s_10">10sp</dimen>
-    <dimen name="s_11">11sp</dimen>
     <dimen name="s_12">12sp</dimen>
-    <dimen name="s_13">13sp</dimen>
     <dimen name="s_14">14sp</dimen>
-    <dimen name="s_15">15sp</dimen>
-    <dimen name="s_16">16sp</dimen>
-    <dimen name="s_17">17sp</dimen>
-    <dimen name="s_18">18sp</dimen>
-    <dimen name="s_19">19sp</dimen>
-    <dimen name="s_20">20sp</dimen>
-    <dimen name="s_22">22sp</dimen>
-    <dimen name="s_24">24sp</dimen>
-    <dimen name="s_26">26sp</dimen>
-    <dimen name="s_28">28sp</dimen>
-    <dimen name="s_30">30sp</dimen>
 
 </resources>

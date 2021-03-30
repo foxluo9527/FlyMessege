@@ -9,6 +9,7 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 
 import com.google.zxing.ResultPoint;
+import com.journeyapps.barcodescanner.Size;
 import com.journeyapps.barcodescanner.ViewfinderView;
 
 import java.util.ArrayList;
@@ -33,12 +34,12 @@ public class CustomZxingView extends ViewfinderView {
     @Override
     public void onDraw(Canvas canvas) {
         refreshSizes();
-        if (framingRect == null || previewFramingRect == null) {
+        if (framingRect == null || previewSize == null) {
             return;
         }
 
         Rect frame = framingRect;
-        Rect previewFrame = previewFramingRect;
+        Size previewFrame = previewSize;
 
         int width = canvas.getWidth();
         int height = canvas.getHeight();
@@ -79,8 +80,8 @@ public class CustomZxingView extends ViewfinderView {
             //绘制扫描线
             canvas.drawRect(frame.left + 1, frame.top + laserLinePosition, frame.right - 1, frame.top + 10 + laserLinePosition, paint);
             paint.setShader(null);
-            float scaleX = frame.width() / (float) previewFrame.width();
-            float scaleY = frame.height() / (float) previewFrame.height();
+            float scaleX = frame.width() / (float) previewFrame.width;
+            float scaleY = frame.height() / (float) previewFrame.height;
 
             List<ResultPoint> currentPossible = possibleResultPoints;
             List<ResultPoint> currentLast = lastPossibleResultPoints;

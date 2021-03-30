@@ -1,2 +1,2 @@
 rootProject.name='FlyMessageDome'
-include ':app', ':EasyAdapterLibrary'
+include ':app'

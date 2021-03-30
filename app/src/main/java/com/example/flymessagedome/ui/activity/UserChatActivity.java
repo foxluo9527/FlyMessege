@@ -1,15 +1,8 @@
 package com.example.flymessagedome.ui.activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.DownloadManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
@@ -35,6 +28,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.arialyy.annotations.Download;
 import com.arialyy.aria.core.Aria;
@@ -104,7 +103,7 @@ import static com.example.flymessagedome.utils.DataCleanManager.getFormatSize;
 
 public class UserChatActivity extends BaseActivity implements UserMessageContart.View
         , EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener
-        , EasyPermissions.PermissionCallbacks{
+        , EasyPermissions.PermissionCallbacks {
     private static final String TAG = "FlyMessage";
     @BindView(R.id.send_voice)
     ImageViewCheckBox send_voice;
@@ -155,33 +154,34 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     @Inject
     UserMessagePresenter userMessagePresenter;
 
-    public Context context=this;
-    ArrayList<String> photoUrls=new ArrayList<>();
-    UserBeanDao userBeanDao= FlyMessageApplication.getInstances().getDaoSession().getUserBeanDao();
-    MessageDao messageDao=FlyMessageApplication.getInstances().getDaoSession().getMessageDao();
-    FriendsBeanDao friendsBeanDao=FlyMessageApplication.getInstances().getDaoSession().getFriendsBeanDao();
+    public Context context = this;
+    ArrayList<String> photoUrls = new ArrayList<>();
+    UserBeanDao userBeanDao = FlyMessageApplication.getInstances().getDaoSession().getUserBeanDao();
+    MessageDao messageDao = FlyMessageApplication.getInstances().getDaoSession().getMessageDao();
+    FriendsBeanDao friendsBeanDao = FlyMessageApplication.getInstances().getDaoSession().getFriendsBeanDao();
     MessageAdapter messageAdapter;
     UserBean user;
     private ArrayList<Message> messages;
-    private ArrayList<MessageAdapter.photoMap> photoMaps=new ArrayList<>();
-    private ArrayList<String> showPhotoUrls=new ArrayList<>();
-    public ArrayList<Integer> choiceIndex=new ArrayList<>();
-    public ArrayList<DownloadTaskBean> downloadTasks=new ArrayList<>();
+    private ArrayList<MessageAdapter.photoMap> photoMaps = new ArrayList<>();
+    private ArrayList<String> showPhotoUrls = new ArrayList<>();
+    public ArrayList<Integer> choiceIndex = new ArrayList<>();
+    public ArrayList<DownloadTaskBean> downloadTasks = new ArrayList<>();
     public static boolean choice[];
     public static boolean[] viocePlay;
-    private boolean playStateChanged=false;
-    private String content=null;
-    private boolean stopRefresh=false;
-    private boolean onRecording=false;
-    private long lastPlayMid=0;
+    private boolean playStateChanged = false;
+    private String content = null;
+    private boolean stopRefresh = false;
+    private boolean onRecording = false;
+    private long lastPlayMid = 0;
     //选中发送的图片张数
-    private int choiceNum=0;
-    private long mPositionId=-1;
-    private int showPhotoPosition=0;
+    private int choiceNum = 0;
+    private long mPositionId = -1;
+    private int showPhotoPosition = 0;
     ChatPhotoViewAdapter photoViewAdapter;
     long userId;
     //浏览图片返回不刷新消息列表
-    public static boolean resultRefresh=true;
+    public static boolean resultRefresh = true;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,71 +193,73 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
         return R.layout.activity_chat;
     }
 
-    Handler onRecordHandler=new Handler(){
+    Handler onRecordHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull android.os.Message msg) {
             super.handleMessage(msg);
-            if (recordMsg!=null){
-                recordMsg.setText(msg.what+"/120s");
+            if (recordMsg != null) {
+                recordMsg.setText(msg.what + "/120s");
             }
         }
     };
-    Handler voicePlayDownHandler=new Handler(){
+    Handler voicePlayDownHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull android.os.Message msg) {
             super.handleMessage(msg);
-            if (messageAdapter!=null){
+            if (messageAdapter != null) {
                 messageAdapter.notifyItemChanged(msg.what);
             }
         }
     };
-    @OnClick({R.id.back,R.id.more,R.id.send_btn,R.id.cancel_choice,R.id.send_img_btn,R.id.get_photo,R.id.send_voice_cancel,R.id.send_voice_control,R.id.add_blacklist,R.id.add_friend})
+
+    @SuppressLint("NonConstantResourceId")
+    @OnClick({R.id.back, R.id.more, R.id.send_btn, R.id.cancel_choice, R.id.send_img_btn, R.id.get_photo, R.id.send_voice_cancel, R.id.send_voice_control, R.id.add_blacklist, R.id.add_friend})
     public void onViewClicked(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.back:
                 if (!TextUtils.isEmpty(content))
-                    userMessagePresenter.inserting(user,content);
+                    userMessagePresenter.inserting(user, content);
                 finish();
                 break;
             case R.id.more:
-                Intent intent=new Intent(mContext,ChatSettingActivity.class);
-                intent.putExtra("userName",user.getU_name());
+                Intent intent = new Intent(mContext, ChatSettingActivity.class);
+                intent.putExtra("userName", user.getU_name());
                 startActivity(intent);
                 break;
             case R.id.send_btn:
-                showLoadingDialog(true,"消息发送中");
-                String content=msgTv.getText().toString();
-                userMessagePresenter.sendUserMessage(null,user,0,content);
+                showLoadingDialog(true, "消息发送中");
+                String content = msgTv.getText().toString();
+                userMessagePresenter.sendUserMessage(null, user, 0, content);
                 msgTv.setText("");
-                userMessagePresenter.inserting(user,null);
+                userMessagePresenter.inserting(user, null);
                 sendBtn.setEnabled(false);
                 break;
             case R.id.cancel_choice:
-                if (choiceNum>0){
-                    for (Integer index:
-                         choiceIndex) {
-                        choice[index]=false;
+                if (choiceNum > 0) {
+                    for (Integer index :
+                            choiceIndex) {
+                        choice[index] = false;
                     }
                     choiceIndex.clear();
-                    choiceNum=0;
+                    choiceNum = 0;
                     sendImgBtn.setEnabled(false);
-                    ((ChatPhotoViewAdapter)photoList.getAdapter()).notifyDataSetChanged();
+                    photoList.getAdapter().notifyDataSetChanged();
                     cancelChoice.setText("取消选中(0)");
                 }
                 break;
             case R.id.send_img_btn:
-                if (choiceNum>0){
-                    showLoadingDialog(true,"图片发送中");
-                    for (Integer index:
-                         choiceIndex) {
-                        if (choice[index]){
-                            userMessagePresenter.sendUserMessage(photoUrls.get(index),user,2,"");
-                            choice[index]=!choice[index];
+                if (choiceNum > 0) {
+                    showLoadingDialog(true, "图片发送中");
+                    for (Integer index :
+                            choiceIndex) {
+                        if (choice[index]) {
+                            userMessagePresenter.sendUserMessage(photoUrls.get(index), user, 2, "");
+                            choice[index] = !choice[index];
                             photoViewAdapter.notifyItemChanged(index);
                         }
                     }
                     choiceIndex.clear();
-                    choiceNum=0;
+                    choiceNum = 0;
                     sendImgBtn.setEnabled(false);
                     cancelChoice.setText("取消选中(0)");
                 }
@@ -269,18 +271,18 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                 try {
                     if (onRecording)
                         AudioRecoderManager.getInstance().cancel(this);//取消录音
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.send_voice_control:
                 try {
-                    if (onRecording){
+                    if (onRecording) {
                         AudioRecoderManager.getInstance().stop(this);//结束录音
-                    }else {
+                    } else {
                         takeAudio();
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
@@ -288,86 +290,74 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                 userMessagePresenter.addBlackList(user);
                 break;
             case R.id.add_friend:
-                Intent rq_intent=new Intent(mContext,RequestFriendActivity.class);
-                rq_intent.putExtra("uName",user.getU_name());
+                Intent rq_intent = new Intent(mContext, RequestFriendActivity.class);
+                rq_intent.putExtra("uName", user.getU_name());
                 startActivity(rq_intent);
                 break;
         }
     }
 
-    public void initEvent(){
-        send_voice.setOnCheckStateChangedListener(new ImageViewCheckBox.OnCheckStateChangedListener() {
-            @Override
-            public void onCheckStateChanged(boolean isChecked) {
-                if (isChecked){
-                    photoView.setVisibility(View.GONE);
-                    voiceView.setVisibility(View.VISIBLE);
-                    emojisView.setVisibility(View.GONE);
-                    send_pic.setChecked(false);
-                    send_file.setChecked(false);
-                    take_photo.setChecked(false);
-                    CommUtil.closeKeybord(msgTv,UserChatActivity.this);
-                    recyclerView.scrollToPosition(messageAdapter.getItemCount()-1);
-                }else {
-                    voiceView.setVisibility(View.GONE);
-                }
+    public void initEvent() {
+        send_voice.setOnCheckStateChangedListener(isChecked -> {
+            if (isChecked) {
+                photoView.setVisibility(View.GONE);
+                voiceView.setVisibility(View.VISIBLE);
+                emojisView.setVisibility(View.GONE);
+                send_pic.setChecked(false);
+                send_file.setChecked(false);
+                take_photo.setChecked(false);
+                CommUtil.closeKeybord(msgTv, UserChatActivity.this);
+                recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
+            } else {
+                voiceView.setVisibility(View.GONE);
             }
         });
-        send_pic.setOnCheckStateChangedListener(new ImageViewCheckBox.OnCheckStateChangedListener() {
-            @Override
-            public void onCheckStateChanged(boolean isChecked) {
-                if (isChecked){
-                    if (photoUrls.size()==0)
-                        getPhoto();
-                    photoView.setVisibility(View.VISIBLE);
-                    voiceView.setVisibility(View.GONE);
-                    emojisView.setVisibility(View.GONE);
-                    send_voice.setChecked(false);
-                    send_file.setChecked(false);
-                    take_photo.setChecked(false);
-                    CommUtil.closeKeybord(msgTv,UserChatActivity.this);
-                    recyclerView.scrollToPosition(messageAdapter.getItemCount()-1);
-                }else {
-                    photoView.setVisibility(View.GONE);
-                }
+        send_pic.setOnCheckStateChangedListener(isChecked -> {
+            if (isChecked) {
+                if (photoUrls.size() == 0)
+                    getPhoto();
+                photoView.setVisibility(View.VISIBLE);
+                voiceView.setVisibility(View.GONE);
+                emojisView.setVisibility(View.GONE);
+                send_voice.setChecked(false);
+                send_file.setChecked(false);
+                take_photo.setChecked(false);
+                CommUtil.closeKeybord(msgTv, UserChatActivity.this);
+                recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
+            } else {
+                photoView.setVisibility(View.GONE);
             }
         });
-        send_file.setOnCheckStateChangedListener(new ImageViewCheckBox.OnCheckStateChangedListener() {
-            @Override
-            public void onCheckStateChanged(boolean isChecked) {
-                if (isChecked){
-                    photoView.setVisibility(View.GONE);
-                    voiceView.setVisibility(View.GONE);
-                    emojisView.setVisibility(View.GONE);
-                    send_pic.setChecked(false);
-                    send_voice.setChecked(false);
-                    take_photo.setChecked(false);
-                    CommUtil.closeKeybord(msgTv,UserChatActivity.this);
-                    recyclerView.scrollToPosition(messageAdapter.getItemCount()-1);
-                    takeFile();
-                }
+        send_file.setOnCheckStateChangedListener(isChecked -> {
+            if (isChecked) {
+                photoView.setVisibility(View.GONE);
+                voiceView.setVisibility(View.GONE);
+                emojisView.setVisibility(View.GONE);
+                send_pic.setChecked(false);
+                send_voice.setChecked(false);
+                take_photo.setChecked(false);
+                CommUtil.closeKeybord(msgTv, UserChatActivity.this);
+                recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
+                takeFile();
             }
         });
-        take_photo.setOnCheckStateChangedListener(new ImageViewCheckBox.OnCheckStateChangedListener() {
-            @Override
-            public void onCheckStateChanged(boolean isChecked) {
-                if (isChecked){
-                    photoView.setVisibility(View.GONE);
-                    voiceView.setVisibility(View.GONE);
-                    emojisView.setVisibility(View.VISIBLE);
-                    send_pic.setChecked(false);
-                    send_voice.setChecked(false);
-                    send_file.setChecked(false);
-                    CommUtil.closeKeybord(msgTv,UserChatActivity.this);
-                    recyclerView.scrollToPosition(messageAdapter.getItemCount()-1);
-                }
+        take_photo.setOnCheckStateChangedListener(isChecked -> {
+            if (isChecked) {
+                photoView.setVisibility(View.GONE);
+                voiceView.setVisibility(View.GONE);
+                emojisView.setVisibility(View.VISIBLE);
+                send_pic.setChecked(false);
+                send_voice.setChecked(false);
+                send_file.setChecked(false);
+                CommUtil.closeKeybord(msgTv, UserChatActivity.this);
+                recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
             }
         });
         recyclerView.addOnScrollListener(new OnVerticalScrollListener() {
             @Override
             public void onScrolledUp() {
                 super.onScrolledUp();
-                CommUtil.closeKeybord(msgTv,UserChatActivity.this);
+                CommUtil.closeKeybord(msgTv, UserChatActivity.this);
                 photoView.setVisibility(View.GONE);
                 voiceView.setVisibility(View.GONE);
                 emojisView.setVisibility(View.GONE);
@@ -380,7 +370,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
             @Override
             public void onScrolledDown() {
                 super.onScrolledDown();
-                CommUtil.closeKeybord(msgTv,UserChatActivity.this);
+                CommUtil.closeKeybord(msgTv, UserChatActivity.this);
                 photoView.setVisibility(View.GONE);
                 voiceView.setVisibility(View.GONE);
                 emojisView.setVisibility(View.GONE);
@@ -398,7 +388,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
         msgTv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus){
+                if (hasFocus) {
                     photoView.setVisibility(View.GONE);
                     voiceView.setVisibility(View.GONE);
                     emojisView.setVisibility(View.GONE);
@@ -406,9 +396,9 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                     send_voice.setChecked(false);
                     send_file.setChecked(false);
                     take_photo.setChecked(false);
-                    recyclerView.scrollToPosition(messageAdapter.getItemCount()-1);
-                }else {
-                    CommUtil.closeKeybord(msgTv,UserChatActivity.this);
+                    recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
+                } else {
+                    CommUtil.closeKeybord(msgTv, UserChatActivity.this);
                 }
             }
         });
@@ -422,7 +412,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                 send_voice.setChecked(false);
                 send_file.setChecked(false);
                 take_photo.setChecked(false);
-                recyclerView.scrollToPosition(messageAdapter.getItemCount()-1);
+                recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
             }
         });
         msgTv.addTextChangedListener(new TextWatcher() {
@@ -433,19 +423,19 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().length()>198){
+                if (s.toString().length() > 198) {
                     ToastUtils.showToast("超过输入限制字符数:200");
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                content=s.toString();
-                if (s.length()>0){
+                content = s.toString();
+                if (s.length() > 0) {
                     sendBtn.setEnabled(true);
 
-                }else {
-                    userMessagePresenter.inserting(user,null);
+                } else {
+                    userMessagePresenter.inserting(user, null);
                     sendBtn.setEnabled(false);
                 }
             }
@@ -469,19 +459,19 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
 
                     @Override
                     public void onStop() {//停止播放
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
                                 super.run();
                                 try {
                                     sleep(400);
-                                    for (int i=0;i<messages.size();i++){
-                                        if (messages.get(i).getM_id()==lastPlayMid){
-                                            if (viocePlay[i]&&!playStateChanged){
-                                                viocePlay[i]=false;
+                                    for (int i = 0; i < messages.size(); i++) {
+                                        if (messages.get(i).getM_id() == lastPlayMid) {
+                                            if (viocePlay[i] && !playStateChanged) {
+                                                viocePlay[i] = false;
                                                 voicePlayDownHandler.sendEmptyMessage(i);
-                                            }else {
-                                                playStateChanged=false;
+                                            } else {
+                                                playStateChanged = false;
                                             }
                                             break;
                                         }
@@ -495,19 +485,19 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
 
                     @Override
                     public void onFail(Exception e, String msg) {//播放时出错
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
                                 super.run();
                                 try {
                                     sleep(400);
-                                    for (int i=0;i<messages.size();i++){
-                                        if (messages.get(i).getM_id()==lastPlayMid){
-                                            if (viocePlay[i]&&!playStateChanged){
-                                                viocePlay[i]=false;
+                                    for (int i = 0; i < messages.size(); i++) {
+                                        if (messages.get(i).getM_id() == lastPlayMid) {
+                                            if (viocePlay[i] && !playStateChanged) {
+                                                viocePlay[i] = false;
                                                 voicePlayDownHandler.sendEmptyMessage(i);
-                                            }else {
-                                                playStateChanged=false;
+                                            } else {
+                                                playStateChanged = false;
                                             }
                                             break;
                                         }
@@ -520,14 +510,16 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                     }
                 });
     }
+
     //在这里处理任务执行中的状态，如进度进度条的刷新
-    @Download.onTaskRunning protected void running(DownloadTask task) {
-        int p = task.getPercent();	//任务进度百分比
-        String speed =task.getConvertSpeed();//转换单位后的下载速度，单位转换需要在配置文件中打开
-        for (DownloadTaskBean downloadTask:
-             downloadTasks) {
-            if (downloadTask.getUrl().equals(task.getKey())){
-                Message message=messageDao.load(downloadTask.getMessageId());
+    @Download.onTaskRunning
+    protected void running(DownloadTask task) {
+        int p = task.getPercent();    //任务进度百分比
+        String speed = task.getConvertSpeed();//转换单位后的下载速度，单位转换需要在配置文件中打开
+        for (DownloadTaskBean downloadTask :
+                downloadTasks) {
+            if (downloadTask.getUrl().equals(task.getKey())) {
+                Message message = messageDao.load(downloadTask.getMessageId());
                 message.setDownloadId(downloadTask.getDownloadId());
                 message.setDownloadState(1);
                 messageDao.update(message);
@@ -536,11 +528,13 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
             }
         }
     }
-    @Download.onTaskFail void taskFail(DownloadTask task, Exception e) {
-        for (DownloadTaskBean downloadTask:
+
+    @Download.onTaskFail
+    void taskFail(DownloadTask task, Exception e) {
+        for (DownloadTaskBean downloadTask :
                 downloadTasks) {
-            if (downloadTask.getUrl().equals(task.getKey())){
-                Message message=messageDao.load(downloadTask.getMessageId());
+            if (downloadTask.getUrl().equals(task.getKey())) {
+                Message message = messageDao.load(downloadTask.getMessageId());
                 message.setDownloadState(2);
                 messageDao.update(message);
                 messageAdapter.notifyDataSetChanged();
@@ -549,13 +543,15 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
             }
         }
     }
-    @Download.onTaskComplete void taskComplete(DownloadTask task) {
-        for (DownloadTaskBean downloadTask:
+
+    @Download.onTaskComplete
+    void taskComplete(DownloadTask task) {
+        for (DownloadTaskBean downloadTask :
                 downloadTasks) {
-            if (downloadTask.getUrl().equals(task.getKey())){
-                Message message=messageDao.load(downloadTask.getMessageId());
+            if (downloadTask.getUrl().equals(task.getKey())) {
+                Message message = messageDao.load(downloadTask.getMessageId());
                 message.setDownloadState(4);
-                StringUtil.MsgFile msgFile=StringUtil.getMsgFile(message.getM_content());
+                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(message.getM_content());
                 msgFile.setLink(task.getFilePath());
                 message.setM_content(msgFile.toString());
                 messageDao.update(message);
@@ -566,11 +562,13 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
             }
         }
     }
-    @Download.onTaskStop void taskStop(DownloadTask task) {
-        for (DownloadTaskBean downloadTask:
+
+    @Download.onTaskStop
+    void taskStop(DownloadTask task) {
+        for (DownloadTaskBean downloadTask :
                 downloadTasks) {
-            if (downloadTask.getUrl().equals(task.getKey())){
-                Message message=messageDao.load(downloadTask.getMessageId());
+            if (downloadTask.getUrl().equals(task.getKey())) {
+                Message message = messageDao.load(downloadTask.getMessageId());
                 message.setDownloadState(3);
                 messageDao.update(message);
                 messageAdapter.notifyDataSetChanged();
@@ -582,24 +580,24 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        if (item.getGroupId()==0&&item.getOrder()==0){
+        if (item.getGroupId() == 0 && item.getOrder() == 0) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
             dialog.setMessage("是否删除此条消息")
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();//取消弹出框
-                            if (lastPlayMid==messages.get(item.getItemId()).getM_id()&&messages.get(item.getItemId()).getM_content_type()==3){
-                                for (int i=0;i<messages.size();i++){
-                                    if (messages.get(i).getM_id()==lastPlayMid){
-                                        if (viocePlay[i]){
+                            if (lastPlayMid == messages.get(item.getItemId()).getM_id() && messages.get(item.getItemId()).getM_content_type() == 3) {
+                                for (int i = 0; i < messages.size(); i++) {
+                                    if (messages.get(i).getM_id() == lastPlayMid) {
+                                        if (viocePlay[i]) {
                                             AudioPlayManager.getInstance().stop();
                                         }
                                         break;
                                     }
                                 }
                             }
-                            userMessagePresenter.delMessage(user,item.getItemId());
+                            userMessagePresenter.delMessage(user, item.getItemId());
                         }
                     })
                     .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -609,37 +607,37 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                         }
                     })
                     .create().show();
-        }else if (item.getGroupId()==0&&item.getOrder()==1){
+        } else if (item.getGroupId() == 0 && item.getOrder() == 1) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
             dialog.setMessage("是否下载此文件")
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();//取消弹出框
-                            StringUtil.MsgFile msgFile=StringUtil.getMsgFile(messages.get(item.getItemId()).getM_content());
-                            if (messages.get(item.getItemId()).getDownloadState()==0&&msgFile.getLink().contains("http")){
+                            StringUtil.MsgFile msgFile = StringUtil.getMsgFile(messages.get(item.getItemId()).getM_content());
+                            if (messages.get(item.getItemId()).getDownloadState() == 0 && msgFile.getLink().contains("http")) {
                                 long taskId = Aria.download(this)
                                         .load(msgFile.getLink())     //读取下载地址
                                         .ignoreCheckPermissions()
                                         .ignoreFilePathOccupy()
-                                        .setFilePath(Constant.DownloadPath+msgFile.getFilename()) //设置文件保存的完整路径
+                                        .setFilePath(Constant.DownloadPath + msgFile.getFilename()) //设置文件保存的完整路径
                                         .create();
                                 ToastUtils.showToast("下载开始");
-                                downloadTasks.add(new DownloadTaskBean(taskId,messages.get(item.getItemId()).getM_id(),msgFile.getLink()));
-                            }else if (messages.get(item.getItemId()).getDownloadState()==2&&msgFile.getLink().contains("http")){
+                                downloadTasks.add(new DownloadTaskBean(taskId, messages.get(item.getItemId()).getM_id(), msgFile.getLink()));
+                            } else if (messages.get(item.getItemId()).getDownloadState() == 2 && msgFile.getLink().contains("http")) {
                                 long taskId = Aria.download(this)
                                         .load(msgFile.getLink())     //读取下载地址
                                         .ignoreCheckPermissions()
                                         .ignoreFilePathOccupy()
-                                        .setFilePath(Constant.DownloadPath+msgFile.getFilename()) //设置文件保存的完整路径
+                                        .setFilePath(Constant.DownloadPath + msgFile.getFilename()) //设置文件保存的完整路径
                                         .create();
                                 ToastUtils.showToast("下载开始");
-                                downloadTasks.add(new DownloadTaskBean(taskId,messages.get(item.getItemId()).getM_id(),msgFile.getLink()));
-                            }else if (messages.get(item.getItemId()).getDownloadState()==3&&msgFile.getLink().contains("http")){
-                                boolean hadAdded=false;
-                                for (DownloadTaskBean downloadTask:
+                                downloadTasks.add(new DownloadTaskBean(taskId, messages.get(item.getItemId()).getM_id(), msgFile.getLink()));
+                            } else if (messages.get(item.getItemId()).getDownloadState() == 3 && msgFile.getLink().contains("http")) {
+                                boolean hadAdded = false;
+                                for (DownloadTaskBean downloadTask :
                                         downloadTasks) {
-                                    if (downloadTask.getMessageId()==messages.get(item.getItemId()).getM_id()){
+                                    if (downloadTask.getMessageId() == messages.get(item.getItemId()).getM_id()) {
                                         Aria.download(this)
                                                 .load(downloadTask.getDownloadId())     //读取任务id
                                                 .resume();    // 恢复任务
@@ -647,18 +645,18 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                                         break;
                                     }
                                 }
-                                if (!hadAdded){
+                                if (!hadAdded) {
                                     long taskId = Aria.download(this)
                                             .load(msgFile.getLink())     //读取下载地址
                                             .ignoreCheckPermissions()
                                             .ignoreFilePathOccupy()
-                                            .setFilePath(Constant.DownloadPath+msgFile.getFilename()) //设置文件保存的完整路径
+                                            .setFilePath(Constant.DownloadPath + msgFile.getFilename()) //设置文件保存的完整路径
                                             .create();
                                     ToastUtils.showToast("下载开始");
-                                    downloadTasks.add(new DownloadTaskBean(taskId,messages.get(item.getItemId()).getM_id(),msgFile.getLink()));
+                                    downloadTasks.add(new DownloadTaskBean(taskId, messages.get(item.getItemId()).getM_id(), msgFile.getLink()));
                                 }
-                            }else {
-                                Message message=messages.get(item.getItemId());
+                            } else {
+                                Message message = messages.get(item.getItemId());
                                 message.setDownloadState(4);
                                 messageDao.update(message);
                                 messageAdapter.notifyDataSetChanged();
@@ -673,13 +671,13 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                         }
                     })
                     .create().show();
-        }else if (item.getGroupId()==0&&item.getOrder()==2){
-            StringUtil.MsgFile msgFile=StringUtil.getMsgFile(messages.get(item.getItemId()).getM_content());
+        } else if (item.getGroupId() == 0 && item.getOrder() == 2) {
+            StringUtil.MsgFile msgFile = StringUtil.getMsgFile(messages.get(item.getItemId()).getM_content());
             ClipboardManager clip = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
             clip.setPrimaryClip(ClipData.newPlainText("url", msgFile.getLink()));
-            if (messages.get(item.getItemId()).getDownloadState()==0&&msgFile.getLink().contains("http")){
+            if (messages.get(item.getItemId()).getDownloadState() == 0 && msgFile.getLink().contains("http")) {
                 ToastUtils.showToast("文件直链已复制在剪切板");
-            }else {
+            } else {
                 ToastUtils.showToast("文件路径已复制在剪切板");
             }
         }
@@ -696,18 +694,17 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
         super.onBackPressed();
         //退出时若输入框内有文字
         if (!TextUtils.isEmpty(content))
-            userMessagePresenter.inserting(user,content);
+            userMessagePresenter.inserting(user, content);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (resultRefresh){
-            userMessagePresenter.getUserMsg(userId,true);
+        if (resultRefresh) {
+            userMessagePresenter.getUserMsg(userId, true);
             initDatas();
-        }
-        else
-            resultRefresh=true;
+        } else
+            resultRefresh = true;
     }
 
     @Override
@@ -723,20 +720,20 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
 
     @Override
     public void initDatas() {
-        Intent intent=getIntent();
-        userId=intent.getLongExtra("userId",-1);
-        if (userId==-1){
+        Intent intent = getIntent();
+        userId = intent.getLongExtra("userId", -1);
+        if (userId == -1) {
             ToastUtils.showToast("用户ID错误");
             finish();
             return;
         }
-        mPositionId=intent.getLongExtra("positionMId",-1);
-        if (user==null){
-            showLoadingDialog(true,"加载中");
-            userMessagePresenter.getUserMsg(userId,true);
-        }else {
+        mPositionId = intent.getLongExtra("positionMId", -1);
+        if (user == null) {
+            showLoadingDialog(true, "加载中");
+            userMessagePresenter.getUserMsg(userId, true);
+        } else {
             initUserMsg();
-            if (NetworkUtils.isConnected(mContext)){
+            if (NetworkUtils.isConnected(mContext)) {
                 new Thread(refreshUserMsgRunnable).start();
             }
         }
@@ -747,13 +744,13 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     @Override
     public void sendSuccess() {
         dismissLoadingDialog();
-        userMessagePresenter.getMessages(user,true);
+        userMessagePresenter.getMessages(user, true);
     }
 
     @Override
     public void initEntryTextToView(String text) {
-        if (!TextUtils.isEmpty(text)&&msgTv!=null){
-            msgTv.setText(""+text);
+        if (!TextUtils.isEmpty(text) && msgTv != null) {
+            msgTv.setText("" + text);
             sendBtn.setEnabled(true);
         }
     }
@@ -761,12 +758,12 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopRefresh=false;
-        refreshUserMsgRunnable=null;
-        SharedPreferencesUtil.getInstance().putInt("onChatUserId",-1);
+        stopRefresh = false;
+        refreshUserMsgRunnable = null;
+        SharedPreferencesUtil.getInstance().putInt("onChatUserId", -1);
         if (!TextUtils.isEmpty(content))
-            userMessagePresenter.inserting(user,content);
-        if (!AudioPlayManager.getInstance().getPlayStatus().toString().equals("FREE")){
+            userMessagePresenter.inserting(user, content);
+        if (!AudioPlayManager.getInstance().getPlayStatus().toString().equals("FREE")) {
             AudioPlayManager.getInstance().stop();
             AudioPlayManager.getInstance().destory();
         }
@@ -775,7 +772,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     @Override
     protected void onPause() {
         super.onPause();
-        if (!AudioPlayManager.getInstance().getPlayStatus().toString().equals("FREE")){
+        if (!AudioPlayManager.getInstance().getPlayStatus().toString().equals("FREE")) {
             AudioPlayManager.getInstance().stop();
             AudioPlayManager.getInstance().destory();
         }
@@ -784,8 +781,8 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     @Override
     public void onPressHome() {
         super.onPressHome();
-        resultRefresh=false;
-        if (!AudioPlayManager.getInstance().getPlayStatus().toString().equals("FREE")){
+        resultRefresh = false;
+        if (!AudioPlayManager.getInstance().getPlayStatus().toString().equals("FREE")) {
             AudioPlayManager.getInstance().stop();
             AudioPlayManager.getInstance().destory();
         }
@@ -794,8 +791,8 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     @Override
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
-        resultRefresh=false;
-        if (!AudioPlayManager.getInstance().getPlayStatus().toString().equals("FREE")){
+        resultRefresh = false;
+        if (!AudioPlayManager.getInstance().getPlayStatus().toString().equals("FREE")) {
             AudioPlayManager.getInstance().stop();
             AudioPlayManager.getInstance().destory();
         }
@@ -804,20 +801,20 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     @Override
     protected void receiveUserMessage() {
         super.receiveUserMessage();
-        int onChatUId=SharedPreferencesUtil.getInstance().getInt("onChatUserId",-1);
-        if (user!=null&&MessageService.isRunningForeground(this)&&onChatUId==user.getU_id())
-            userMessagePresenter.getMessages(user,true);
+        int onChatUId = SharedPreferencesUtil.getInstance().getInt("onChatUserId", -1);
+        if (user != null && MessageService.isRunningForeground(this) && onChatUId == user.getU_id())
+            userMessagePresenter.getMessages(user, true);
         else
-            userMessagePresenter.getMessages(user,false);
+            userMessagePresenter.getMessages(user, false);
     }
 
-    Runnable refreshUserMsgRunnable=new Runnable() {
+    Runnable refreshUserMsgRunnable = new Runnable() {
         @Override
         public void run() {
-            while (stopRefresh){
-                userMessagePresenter.getUserMsg(user.getU_id(),false);
+            while (stopRefresh) {
+                userMessagePresenter.getUserMsg(user.getU_id(), false);
                 try {
-                    Thread.sleep(60*1000);
+                    Thread.sleep(60 * 1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -828,7 +825,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     @Override
     public void configViews() {
         userMessagePresenter.attachView(this);
-        userMessagePresenter.context=this;
+        userMessagePresenter.context = this;
     }
 
     private void setEmojiconFragment(boolean useSystemDefault) {
@@ -841,13 +838,13 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     @Override
     public void initData() {
         //重试加载数据
-        user=userBeanDao.load(userId);
-        if (!NetworkUtils.isConnected(mContext)){
+        user = userBeanDao.load(userId);
+        if (!NetworkUtils.isConnected(mContext)) {
             ToastUtils.showToast("更新用户信息失败，请检查网络连接");
         }
         userMessagePresenter.initUserChat(user);
         userMessagePresenter.getEntryText();
-        userMessagePresenter.getMessages(user,true);
+        userMessagePresenter.getMessages(user, true);
         initDatas();
     }
 
@@ -856,21 +853,22 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
         Glide.with(mContext).asBitmap().load(filePath).into(bg_img);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void initUserMsg() {
         //只刷新用户信息
-        user=userBeanDao.load(userId);
-        List<FriendsBean> friendsBeans=friendsBeanDao.queryBuilder().where(FriendsBeanDao.Properties.F_object_u_id.eq(user.getU_id())).list();
-        if (friendsBeans.size()>0){
-            FriendsBean friendsBean=friendsBeans.get(0);
-            if (friendsBean!=null&&friendsBean.getFriendUser()!=null){
-                if (!TextUtils.isEmpty(friendsBean.getF_remarks_name())){
+        user = userBeanDao.load(userId);
+        List<FriendsBean> friendsBeans = friendsBeanDao.queryBuilder().where(FriendsBeanDao.Properties.F_object_u_id.eq(user.getU_id())).list();
+        if (friendsBeans.size() > 0) {
+            FriendsBean friendsBean = friendsBeans.get(0);
+            if (friendsBean != null && friendsBean.getFriendUser() != null) {
+                if (!TextUtils.isEmpty(friendsBean.getF_remarks_name())) {
                     name.setText("" + friendsBean.getF_remarks_name());
-                }else {
+                } else {
                     name.setText("" + user.getU_nick_name());
                 }
             }
-        }else {
+        } else {
             name.setText("" + user.getU_nick_name());
         }
         if (user.getIsOnline())
@@ -881,18 +879,20 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
             unFriendView.setVisibility(View.VISIBLE);
         else
             unFriendView.setVisibility(View.GONE);
-        SharedPreferencesUtil.getInstance().putInt("onChatUserId",Integer.valueOf(user.getU_id().toString()));
+        SharedPreferencesUtil.getInstance().putInt("onChatUserId", Integer.parseInt(user.getU_id().toString()));
         dismissLoadingDialog();
     }
+
     @Override
-    public void initBlackList(boolean inBlacklist){
+    public void initBlackList(boolean inBlacklist) {
         dismissLoadingDialog();
-        if (inBlacklist){
+        if (inBlacklist) {
             blacklistState.setText("移出黑名单");
-        }else {
+        } else {
             blacklistState.setText("拉入黑名单");
         }
     }
+
     @Override
     public void initDataFailed() {
         dismissLoadingDialog();
@@ -902,23 +902,23 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
 
     @Override
     public void sendFailed(Long m_id) {
-        userMessagePresenter.getMessages(user,true);
+        userMessagePresenter.getMessages(user, true);
         dismissLoadingDialog();
         ToastUtils.showToast("消息发送失败");
-        if (m_id!=null){
-            Message sendMessage=messageDao.load(m_id);
+        if (m_id != null) {
+            Message sendMessage = messageDao.load(m_id);
         }
     }
 
     @Override
     public void loginFailed(Login login) {
         dismissLoadingDialog();
-        userMessagePresenter.getMessages(user,true);
-        if (!NetworkUtils.isConnected(mContext)||login==null){
+        userMessagePresenter.getMessages(user, true);
+        if (!NetworkUtils.isConnected(mContext) || login == null) {
             Intent actionIntent = new Intent(SOCKET_SERVICE_ACTION);
-            actionIntent.putExtra(MSG_TYPE,SERVICE_DISCONNECT);
+            actionIntent.putExtra(MSG_TYPE, SERVICE_DISCONNECT);
             mContext.sendBroadcast(actionIntent);
-        }else if (login!=null&&login.code== Constant.FAILED) {
+        } else if (login != null && login.code == Constant.FAILED) {
             Log.e(TAG, "获取用户登录信息失败，请重新登录");
             ToastUtils.showToast("获取用户登录信息失败，请重新登录");
             SharedPreferencesUtil.getInstance().removeAll();
@@ -929,54 +929,55 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
 
     @Override
     public void initMessage(ArrayList<Message> messages) {
-        this.messages=messages;
+        this.messages = messages;
         dismissLoadingDialog();
-        viocePlay=new boolean[messages.size()];
-        messageAdapter=new MessageAdapter(this,messages,photoMaps);
-        StaggeredGridLayoutManager msgGridLayoutManager=new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        viocePlay = new boolean[messages.size()];
+        messageAdapter = new MessageAdapter(this, messages, photoMaps);
+        StaggeredGridLayoutManager msgGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(msgGridLayoutManager);
-        ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         recyclerView.setAdapter(messageAdapter);
-        if (mPositionId==-1)
-            recyclerView.scrollToPosition(messageAdapter.getItemCount()-1);
+        if (mPositionId == -1)
+            recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
         else {
-            int position=-1;
-            boolean hadPosition=false;
-            for (Message m:
-                 messages) {
+            int position = -1;
+            boolean hadPosition = false;
+            for (Message m :
+                    messages) {
                 position++;
-                if (m.getM_id()==mPositionId){
-                    hadPosition=true;
+                if (m.getM_id() == mPositionId) {
+                    hadPosition = true;
                     break;
                 }
             }
-            if (hadPosition){
+            if (hadPosition) {
                 recyclerView.scrollToPosition(position);
             }
-            mPositionId=-1;
+            mPositionId = -1;
         }
         messageAdapter.setOnRecyclerViewItemClickListener(new MessageAdapter.OnRecyclerViewItemClickListener() {
+            @SuppressLint("NonConstantResourceId")
             @Override
             public void onItemClick(View view, int position) {
-                switch (view.getId()){
+                switch (view.getId()) {
                     case R.id.l_u_head_img:
-                        Intent showIntent=new Intent(mContext,ShowUserActivity.class);
-                        showIntent.putExtra("userName",user.getU_name());
+                        Intent showIntent = new Intent(mContext, ShowUserActivity.class);
+                        showIntent.putExtra("userName", user.getU_name());
                         startActivity(showIntent);
                         break;
                     case R.id.r_u_head_img:
-                        startActivity(new Intent(mContext,LoginUserMsgActivity.class));
+                        startActivity(new Intent(mContext, LoginUserMsgActivity.class));
                         break;
                     case R.id.msg_pic:
-                        int photoIndex=0;
+                        int photoIndex = 0;
                         showPhotoUrls.clear();
-                        for (MessageAdapter.photoMap photoMap: photoMaps) {
+                        for (MessageAdapter.photoMap photoMap : photoMaps) {
                             showPhotoUrls.add(photoMap.getUrl());
                         }
-                        for (MessageAdapter.photoMap photoMap:
+                        for (MessageAdapter.photoMap photoMap :
                                 photoMaps) {
-                            if (photoMap.getPosition()==position){
-                                showPhotoPosition=photoIndex;
+                            if (photoMap.getPosition() == position) {
+                                showPhotoPosition = photoIndex;
                                 photoPreviewWrapper();
                                 break;
                             }
@@ -984,83 +985,75 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                         }
                         break;
                     case R.id.file_msg_view:
-                        StringUtil.MsgFile msgFile=StringUtil.getMsgFile(messages.get(position).getM_content());
-                        if (!msgFile.getLink().contains("http")){
-                            FileUtil.openFile(mContext,new File(msgFile.getLink()));
-                            resultRefresh=false;
-                        }
-                        else if (msgFile.getFileType().equals("ppt")||msgFile.getFileType().equals("word")
-                                ||msgFile.getFileType().equals("excel")
-                                ||msgFile.getFileType().equals("pdf")){
-                            Intent intent= new Intent(mContext,WebActivity.class);
-                            intent.putExtra("URLString",Constant.ONLINE_OPEN_OFFICE_FILE+msgFile.getLink());
+                        StringUtil.MsgFile msgFile = StringUtil.getMsgFile(messages.get(position).getM_content());
+                        if (!msgFile.getLink().contains("http")) {
+                            FileUtil.openFile(mContext, new File(msgFile.getLink()));
+                            resultRefresh = false;
+                        } else if (msgFile.getFileType().equals("ppt") || msgFile.getFileType().equals("word")
+                                || msgFile.getFileType().equals("excel")
+                                || msgFile.getFileType().equals("pdf")) {
+                            Intent intent = new Intent(mContext, WebActivity.class);
+                            intent.putExtra("URLString", Constant.ONLINE_OPEN_OFFICE_FILE + msgFile.getLink());
                             startActivity(intent);
-                            resultRefresh=false;
-                        }
-                        else if (msgFile.getFileType().equals("video")||msgFile.getFileType().equals("music")||msgFile.getFileType().equals("gif")){
-                            Intent intent= new Intent(mContext,WebActivity.class);
-                            intent.putExtra("URLString",msgFile.getLink());
+                            resultRefresh = false;
+                        } else if (msgFile.getFileType().equals("video") || msgFile.getFileType().equals("music") || msgFile.getFileType().equals("gif")) {
+                            Intent intent = new Intent(mContext, WebActivity.class);
+                            intent.putExtra("URLString", msgFile.getLink());
                             startActivity(intent);
-                            resultRefresh=false;
-                        }
-                        else {
-                            if (messages.get(position).getDownloadState()!=4){
+                            resultRefresh = false;
+                        } else {
+                            if (messages.get(position).getDownloadState() != 4) {
                                 AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                                 dialog.setMessage("是否下载此文件")
                                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 dialog.cancel();//取消弹出框
-                                                StringUtil.MsgFile msgFile=StringUtil.getMsgFile(messages.get(position).getM_content());
-                                                if (messages.get(position).getDownloadState()==0){
+                                                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(messages.get(position).getM_content());
+                                                if (messages.get(position).getDownloadState() == 0) {
                                                     long taskId = Aria.download(this)
                                                             .load(msgFile.getLink())     //读取下载地址
                                                             .ignoreCheckPermissions()
                                                             .ignoreFilePathOccupy()
-                                                            .setFilePath(Constant.DownloadPath+msgFile.getFilename()) //设置文件保存的完整路径
+                                                            .setFilePath(Constant.DownloadPath + msgFile.getFilename()) //设置文件保存的完整路径
                                                             .create();
-                                                    downloadTasks.add(new DownloadTaskBean(taskId,messages.get(position).getM_id(),msgFile.getLink()));
+                                                    downloadTasks.add(new DownloadTaskBean(taskId, messages.get(position).getM_id(), msgFile.getLink()));
                                                 }
                                             }
                                         })
-                                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.cancel();//取消弹出框
-                                            }
+                                        .setNegativeButton("取消", (dialog1, which) -> {
+                                            dialog1.cancel();//取消弹出框
                                         })
                                         .create().show();
-                            }
-                            else if (messages.get(position).getDownloadState()==2){
+                            } else if (messages.get(position).getDownloadState() == 2) {
                                 long taskId = Aria.download(this)
                                         .load(msgFile.getLink())     //读取下载地址
                                         .ignoreCheckPermissions()
                                         .ignoreFilePathOccupy()
-                                        .setFilePath(Constant.DownloadPath+msgFile.getFilename()) //设置文件保存的完整路径
+                                        .setFilePath(Constant.DownloadPath + msgFile.getFilename()) //设置文件保存的完整路径
                                         .create();
                                 ToastUtils.showToast("下载开始");
-                                downloadTasks.add(new DownloadTaskBean(taskId,messages.get(position).getM_id(),msgFile.getLink()));
-                            }
-                            else if (messages.get(position).getDownloadState()==3){
-                                boolean hadAdded=false;
-                                for (DownloadTaskBean downloadTask:
+                                downloadTasks.add(new DownloadTaskBean(taskId, messages.get(position).getM_id(), msgFile.getLink()));
+                            } else if (messages.get(position).getDownloadState() == 3) {
+                                boolean hadAdded = false;
+                                for (DownloadTaskBean downloadTask :
                                         downloadTasks) {
-                                    if (downloadTask.getMessageId()==messages.get(position).getM_id()){
+                                    if (downloadTask.getMessageId() == messages.get(position).getM_id()) {
                                         Aria.download(this)
                                                 .load(downloadTask.getDownloadId())     //读取任务id
                                                 .resume();    // 恢复任务
                                         break;
                                     }
                                 }
-                                if (!hadAdded){
+                                if (!hadAdded) {
                                     long taskId = Aria.download(this)
                                             .load(msgFile.getLink())     //读取下载地址
                                             .ignoreCheckPermissions()
                                             .ignoreFilePathOccupy()
-                                            .setFilePath(Constant.DownloadPath+msgFile.getFilename()) //设置文件保存的完整路径
+                                            .setFilePath(Constant.DownloadPath + msgFile.getFilename()) //设置文件保存的完整路径
                                             .create();
                                     ToastUtils.showToast("下载开始");
-                                    downloadTasks.add(new DownloadTaskBean(taskId,messages.get(position).getM_id(),msgFile.getLink()));
+                                    downloadTasks.add(new DownloadTaskBean(taskId, messages.get(position).getM_id(), msgFile.getLink()));
                                 }
                             }
                         }
@@ -1068,81 +1061,66 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                     case R.id.send_failed_img:
                         AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                         dialog.setMessage("重新发送此条消息")
-                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();//取消弹出框
-                                        showLoadingDialog(true,"消息发送中");
-                                        userMessagePresenter.reSendMessage(messages.get(position),user);
-                                    }
+                                .setPositiveButton("确定", (dialog13, which) -> {
+                                    dialog13.cancel();//取消弹出框
+                                    showLoadingDialog(true, "消息发送中");
+                                    userMessagePresenter.reSendMessage(messages.get(position), user);
                                 })
-                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();//取消弹出框
-                                    }
-                                })
+                                .setNegativeButton("取消", (dialog12, which) -> dialog12.cancel())
                                 .create().show();
                         break;
                     case R.id.voice_msg_view:
-                        String state=AudioPlayManager.getInstance().getPlayStatus().toString();
-                        String link=StringUtil.getMsgFile(messages.get(position).getM_content()).getLink();
-                        Log.e(TAG,link);
-                        Log.e(TAG,state);
-                        if (lastPlayMid==0||state.equals("FREE")){
-                            lastPlayMid=messages.get(position).getM_id();
-                            playVoice(link,false);
-                            viocePlay[position]=true;
-                            playStateChanged=false;
-                        }else if (lastPlayMid==messages.get(position).getM_id()){
-                            lastPlayMid=messages.get(position).getM_id();
-                            if (state.equals("FREE")){
-                                playVoice(link,false);
-                                viocePlay[position]=true;
-                                playStateChanged=true;
-                            }else {
-                                playVoice(null,true);
-                                viocePlay[position]=false;
+                        String state = AudioPlayManager.getInstance().getPlayStatus().toString();
+                        String link = StringUtil.getMsgFile(messages.get(position).getM_content()).getLink();
+                        Log.e(TAG, link);
+                        Log.e(TAG, state);
+                        if (lastPlayMid == 0 || state.equals("FREE")) {
+                            lastPlayMid = messages.get(position).getM_id();
+                            playVoice(link, false);
+                            viocePlay[position] = true;
+                            playStateChanged = false;
+                        } else if (lastPlayMid == messages.get(position).getM_id()) {
+                            lastPlayMid = messages.get(position).getM_id();
+                            if (state.equals("FREE")) {
+                                playVoice(link, false);
+                                viocePlay[position] = true;
+                                playStateChanged = true;
+                            } else {
+                                playVoice(null, true);
+                                viocePlay[position] = false;
                             }
-                            playStateChanged=false;
-                        }else {
-                            playVoice(null,true);
-                            playVoice(link,false);
-                            for (int i=0;i<messages.size();i++){
-                                if (messages.get(i).getM_id()==lastPlayMid){
-                                    viocePlay[i]=false;
+                            playStateChanged = false;
+                        } else {
+                            playVoice(null, true);
+                            playVoice(link, false);
+                            for (int i = 0; i < messages.size(); i++) {
+                                if (messages.get(i).getM_id() == lastPlayMid) {
+                                    viocePlay[i] = false;
                                     messageAdapter.notifyItemChanged(i);
                                     break;
                                 }
                             }
-                            lastPlayMid=messages.get(position).getM_id();
-                            viocePlay[position]=true;
-                            playStateChanged=true;
+                            lastPlayMid = messages.get(position).getM_id();
+                            viocePlay[position] = true;
+                            playStateChanged = true;
                         }
                         messageAdapter.notifyItemChanged(position);
                         break;
                 }
             }
+
             @Override
             public void onItemMenuClick(View view, int position, int itemId) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-                switch (itemId){
+                switch (itemId) {
                     case 2:
                         //删除
                         dialog.setMessage("是否删除此条消息")
-                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();//取消弹出框
-                                        userMessagePresenter.delMessage(user,position);
-                                    }
+                                .setPositiveButton("确定", (dialog14, which) -> {
+                                    dialog14.cancel();
+                                    userMessagePresenter.delMessage(user, position);
                                 })
-                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();//取消弹出框
-                                    }
-                                })
+                                .setNegativeButton("取消", (dialog15, which) -> dialog15.cancel())
                                 .create().show();
                         break;
                 }
@@ -1168,11 +1146,11 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     @Override
     public void tokenExceed() {
         dismissLoadingDialog();
-        String u_name=SharedPreferencesUtil.getInstance().getString(Constant.U_NAME);
-        String u_pass=SharedPreferencesUtil.getInstance().getString(Constant.U_PASS);
-        if (u_name!=null&&u_pass!=null){
-            userMessagePresenter.login(u_name,u_pass);
-        }else {
+        String u_name = SharedPreferencesUtil.getInstance().getString(Constant.U_NAME);
+        String u_pass = SharedPreferencesUtil.getInstance().getString(Constant.U_PASS);
+        if (u_name != null && u_pass != null) {
+            userMessagePresenter.login(u_name, u_pass);
+        } else {
             Log.e(TAG, "获取用户登录信息失败，请重新登录");
             ToastUtils.showToast("获取用户登录信息失败，请重新登录");
             SharedPreferencesUtil.getInstance().removeAll();
@@ -1193,33 +1171,33 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
 
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-        if (requestCode==Constant.REQUEST_CODE_PERMISSION_CHOICE_PHOTO){
+        if (requestCode == Constant.REQUEST_CODE_PERMISSION_CHOICE_PHOTO) {
             //同意获取读写权限
             getPhoto();
-        }else if (requestCode==Constant.REQUEST_CODE_PERMISSION_TAKE_PHOTO){
+        } else if (requestCode == Constant.REQUEST_CODE_PERMISSION_TAKE_PHOTO) {
             choicePhotoWrapper();
-        }else if (requestCode==Constant.REQUEST_CODE_SHOW_PHOTOS){
+        } else if (requestCode == Constant.REQUEST_CODE_SHOW_PHOTOS) {
             photoPreviewWrapper();
         }
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-        if (requestCode==Constant.REQUEST_CODE_PERMISSION_CHOICE_PHOTO){
+        if (requestCode == Constant.REQUEST_CODE_PERMISSION_CHOICE_PHOTO) {
             ToastUtils.showToast("你拒绝了读写存储空间权限");
-        }else if (requestCode==Constant.REQUEST_CODE_PERMISSION_TAKE_PHOTO){
+        } else if (requestCode == Constant.REQUEST_CODE_PERMISSION_TAKE_PHOTO) {
             ToastUtils.showToast("你拒绝了摄像头权限");
-        }else if (requestCode==Constant.REQUEST_CODE_PERMISSION_CHOICE_FILE){
+        } else if (requestCode == Constant.REQUEST_CODE_PERMISSION_CHOICE_FILE) {
             ToastUtils.showToast("你拒绝了读写存储空间权限");
-        }else if (requestCode==Constant.REQUEST_CODE_PERMISSION_RECORD_AUDIO){
+        } else if (requestCode == Constant.REQUEST_CODE_PERMISSION_RECORD_AUDIO) {
             ToastUtils.showToast("你拒绝了录音和麦克风权限");
-        }else if (requestCode==Constant.REQUEST_CODE_SHOW_PHOTOS){
+        } else if (requestCode == Constant.REQUEST_CODE_SHOW_PHOTOS) {
             ToastUtils.showToast("访问设备上的照片权限");
         }
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, 1010);
-            resultRefresh=false;
+            resultRefresh = false;
         }
     }
 
@@ -1236,18 +1214,26 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                 onScrolledDown();
             }
         }
-        public void onScrolledUp() {}
-        public void onScrolledDown() {}
-        public void onScrolledToTop() {}
-        public void onScrolledToBottom() {}
+
+        public void onScrolledUp() {
+        }
+
+        public void onScrolledDown() {
+        }
+
+        public void onScrolledToTop() {
+        }
+
+        public void onScrolledToBottom() {
+        }
     }
 
     @AfterPermissionGranted(Constant.REQUEST_CODE_PERMISSION_CHOICE_PHOTO)
-    public void getPhoto(){
-        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE};
+    public void getPhoto() {
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
-            resultRefresh=false;
-            new AsyncTask<Void,Void, Boolean>() {
+            resultRefresh = false;
+            new AsyncTask<Void, Void, Boolean>() {
                 @Override
                 protected Boolean doInBackground(Void... voids) {
                     try {
@@ -1269,50 +1255,51 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                                 choice = new boolean[photoUrls.size()];
                             }
                         }
-                    }catch (Exception e){
-                            e.printStackTrace();
-                            return false;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
                     }
                     return true;
                 }
 
                 @Override
                 protected void onPostExecute(Boolean success) {
-                    if (success){
-                        StaggeredGridLayoutManager staggeredGridLayoutManager=new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
+                    if (success) {
+                        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
                         photoList.setLayoutManager(staggeredGridLayoutManager);
-                        photoViewAdapter=new ChatPhotoViewAdapter(photoUrls,context,choice);
+                        photoViewAdapter = new ChatPhotoViewAdapter(photoUrls, context, choice);
                         photoList.setAdapter(photoViewAdapter);
-                        photoViewAdapter.setOnRecyclerViewItemClickListener(new ChatPhotoViewAdapter.OnRecyclerViewItemClickListener(){
+                        photoViewAdapter.setOnRecyclerViewItemClickListener(new ChatPhotoViewAdapter.OnRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                if (view.getId()==R.id.main_view||view.getId()==R.id.radio_choice){
-                                    if (choiceNum==20&&!choice[position]){
+                                if (view.getId() == R.id.main_view || view.getId() == R.id.radio_choice) {
+                                    if (choiceNum == 20 && !choice[position]) {
                                         ToastUtils.showToast("最多选择20张");
                                         return;
                                     }
-                                    choice[position]=!choice[position];
+                                    choice[position] = !choice[position];
                                     photoList.getAdapter().notifyDataSetChanged();
-                                    if (choice[position]){
+                                    if (choice[position]) {
                                         choiceNum++;
                                         choiceIndex.add(new Integer(position));
                                         sendImgBtn.setEnabled(true);
-                                    }else {
+                                    } else {
                                         choiceIndex.remove(new Integer(position));
                                         choiceNum--;
-                                        if (choiceNum==0){
+                                        if (choiceNum == 0) {
                                             sendImgBtn.setEnabled(false);
                                         }
                                     }
-                                    cancelChoice.setText("取消选中("+choiceNum+")");
+                                    cancelChoice.setText("取消选中(" + choiceNum + ")");
                                 }
                             }
+
                             @Override
                             public void onItemLongClick(View view, int position) {
 
                             }
                         });
-                    }else {
+                    } else {
                         ToastUtils.showToast("获取图片信息失败");
                     }
                 }
@@ -1321,16 +1308,17 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
             EasyPermissions.requestPermissions(this, "请开起读写存储空间权限，以正常使用", Constant.REQUEST_CODE_PERMISSION_CHOICE_PHOTO, perms);
         }
     }
+
     @AfterPermissionGranted(Constant.REQUEST_CODE_PERMISSION_TAKE_PHOTO)
     private void choicePhotoWrapper() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
         if (EasyPermissions.hasPermissions(this, perms)) {
             // 拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话就没有拍照功能
             File takePhotoDir = new File(Environment.getExternalStorageDirectory(), "FlyMessage/File/photograph/");
-            ArrayList<String> checkPhotos=new ArrayList<>();
-            if (choiceNum>0){
-                for (Integer index:
-                     choiceIndex) {
+            ArrayList<String> checkPhotos = new ArrayList<>();
+            if (choiceNum > 0) {
+                for (Integer index :
+                        choiceIndex) {
                     checkPhotos.add(photoUrls.get(index));
                 }
             }
@@ -1341,46 +1329,46 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                     .pauseOnScroll(false) // 滚动列表时是否暂停加载图片
                     .build();
             startActivityForResult(photoPickerIntent, RC_CHOOSE_PHOTO);
-            resultRefresh=false;
+            resultRefresh = false;
         } else {
             EasyPermissions.requestPermissions(this, "图片选择需要以下权限:\n\n1.访问设备上的照片\n\n2.拍照", Constant.REQUEST_CODE_PERMISSION_TAKE_PHOTO, perms);
         }
     }
+
     @AfterPermissionGranted(Constant.REQUEST_CODE_PERMISSION_RECORD_AUDIO)
-    private void playVoice(String link,boolean stop){
-        String[] perms = {Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private void playVoice(String link, boolean stop) {
+        String[] perms = {Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
-            if (stop){
+            if (stop) {
                 AudioPlayManager.getInstance().stop();
-            }else {
-                AudioPlayManager.getInstance().play(link,context, AudioPlayMode.MEGAPHONE);
+            } else {
+                AudioPlayManager.getInstance().play(link, context, AudioPlayMode.MEGAPHONE);
             }
-        }else {
+        } else {
             EasyPermissions.requestPermissions(this, "播放语音选择需要以下权限:\n\n1.访问文件", Constant.REQUEST_CODE_PERMISSION_RECORD_AUDIO, perms);
         }
     }
+
     @AfterPermissionGranted(Constant.REQUEST_CODE_PERMISSION_RECORD_AUDIO)
-    private void takeAudio(){
-        String[] perms = {Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private void takeAudio() {
+        String[] perms = {Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
             try {
                 File takeRecordDir = new File(Environment.getExternalStorageDirectory(), "FlyMessage/chat/record/");
-                if (!takeRecordDir.exists()){
+                if (!takeRecordDir.exists()) {
                     takeRecordDir.mkdirs();
                 }
-                AudioManager magager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-                AudioManager.OnAudioFocusChangeListener listener=new AudioManager.OnAudioFocusChangeListener() {
-                    @Override
-                    public void onAudioFocusChange(int focusChange) {
 
-                    }
+                AudioManager magager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+                AudioManager.OnAudioFocusChangeListener listener = focusChange -> {
                 };
                 magager.requestAudioFocus(listener, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN);
+
                 RecoderBuilder builder = new DefaultRecoderBuilder()
-                        .setMAX_LENGTH(2*60*1000)//最大录音120秒
+                        .setMAX_LENGTH(2 * 60 * 1000)//最大录音120秒
                         .setMIN_LENGTH(500)//最小录音0.5秒
                         .setSAMPLEING_RATE(200)//录音监听回调间隔，200ms回调一次
-                        .setSaveFolderPath(takeRecordDir.getPath()+"/");
+                        .setSaveFolderPath(takeRecordDir.getPath() + "/");
                 AudioRecoderManager.getInstance()//获取单例
                         .setAudioRecoderData(builder.create())//设置自定义配置，已有默认的配置，可不用配置
                         .setAudioRecoderListener(new AudioRecoderListener() {//设置监听
@@ -1388,18 +1376,18 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                             public void onStart() {//开始录音
                                 send_voice_state_tv.setText("点击停止发送，点击取消取消发送");
                                 send_voice_cancel.setVisibility(View.VISIBLE);
-                                onRecording=true;
-                                new Thread(){
+                                onRecording = true;
+                                new Thread() {
                                     @Override
                                     public void run() {
                                         super.run();
-                                        for (int i=1;i<121;i++){
-                                            if (!onRecording){
+                                        for (int i = 1; i < 121; i++) {
+                                            if (!onRecording) {
                                                 this.interrupt();
                                                 break;
-                                            }else {
-                                                android.os.Message msg=new android.os.Message();
-                                                msg.what=i;
+                                            } else {
+                                                android.os.Message msg = new android.os.Message();
+                                                msg.what = i;
                                                 onRecordHandler.sendMessage(msg);
                                             }
                                             try {
@@ -1414,17 +1402,18 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
 
                             @Override
                             public void onStop(AudioRecoderData audioRecoderData) {//停止/结束播放
-                                Log.e(TAG,audioRecoderData.getFilePath());
-                                showLoadingDialog(true,"语音发送中");
+                                Log.e(TAG, audioRecoderData.getFilePath());
+                                showLoadingDialog(true, "语音发送中");
                                 send_voice_control.setChecked(false);
-                                userMessagePresenter.sendUserMessage(audioRecoderData.getFilePath(),user,3,"");
+                                userMessagePresenter.sendUserMessage(audioRecoderData.getFilePath(), user, 3, "");
                                 send_voice_state_tv.setText("点击开始录音");
                                 send_voice_cancel.setVisibility(View.GONE);
                                 recordMsg.setText("0/120s");
-                                onRecording=false;
+                                onRecording = false;
                                 magager.abandonAudioFocus(listener);
                             }
 
+                            @SuppressLint("SetTextI18n")
                             @Override
                             public void onFail(Exception e, String msg) {//录音时出现的错误
                                 e.printStackTrace();
@@ -1433,10 +1422,11 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                                 send_voice_state_tv.setText("点击开始录音");
                                 send_voice_cancel.setVisibility(View.GONE);
                                 recordMsg.setText("0/120s");
-                                onRecording=false;
+                                onRecording = false;
                                 magager.abandonAudioFocus(listener);
                             }
 
+                            @SuppressLint("SetTextI18n")
                             @Override
                             public void onCancel() {//录音取消
                                 send_voice_control.setChecked(false);
@@ -1444,25 +1434,26 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                                 send_voice_state_tv.setText("点击开始录音");
                                 send_voice_cancel.setVisibility(View.GONE);
                                 recordMsg.setText("0/120s");
-                                onRecording=false;
+                                onRecording = false;
                                 magager.abandonAudioFocus(listener);
                             }
 
                             @Override
                             public void onSoundSize(int level) {//录音时声音大小的回调，分贝
-                                Log.e(TAG,"level:"+level);
+                                Log.e(TAG, "level:" + level);
                             }
                         });
                 AudioRecoderManager.getInstance().start(this);//开始录音
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             EasyPermissions.requestPermissions(this, "发送语音选择需要以下权限:\n\n1.录音\n\n2.麦克风\n\n3.访问文件", Constant.REQUEST_CODE_PERMISSION_RECORD_AUDIO, perms);
         }
     }
+
     @AfterPermissionGranted(Constant.REQUEST_CODE_PERMISSION_CHOICE_FILE)
-    private void takeFile(){
+    private void takeFile() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
             Intent intent = new Intent();
@@ -1474,14 +1465,15 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
             intent.setType("*/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             startActivityForResult(intent, RC_CHOOSE_FILE);
-            resultRefresh=false;
-        }else {
+            resultRefresh = false;
+        } else {
             EasyPermissions.requestPermissions(this, "文件选择需要以下权限:\n\n1.读取存储空间\n\n2.写入存储空间", Constant.REQUEST_CODE_PERMISSION_CHOICE_FILE, perms);
         }
     }
+
     @AfterPermissionGranted(Constant.REQUEST_CODE_SHOW_PHOTOS)
     public void photoPreviewWrapper() {
-        if (showPhotoUrls==null||showPhotoUrls.size()==0) {
+        if (showPhotoUrls == null || showPhotoUrls.size() == 0) {
             return;
         }
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -1492,13 +1484,13 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
             if (showPhotoUrls.size() == 1) {
                 // 预览单张图片
                 photoPreviewIntentBuilder.previewPhoto(showPhotoUrls.get(showPhotoPosition));
-            } else if (showPhotoUrls.size()> 1) {
+            } else if (showPhotoUrls.size() > 1) {
                 // 预览多张图片
                 photoPreviewIntentBuilder.previewPhotos(showPhotoUrls)
                         .currentPosition(showPhotoPosition); // 当前预览图片的索引
             }
-            startActivityForResult(photoPreviewIntentBuilder.build(),-1);
-            resultRefresh=false;
+            startActivityForResult(photoPreviewIntentBuilder.build(), -1);
+            resultRefresh = false;
         } else {
             EasyPermissions.requestPermissions(this, "图片预览需要以下权限:\n\n1.访问设备上的照片", Constant.REQUEST_CODE_SHOW_PHOTOS, perms);
         }
@@ -1507,45 +1499,42 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        resultRefresh=false;
+        resultRefresh = false;
         if (resultCode == RESULT_OK && requestCode == RC_CHOOSE_PHOTO) {
             List<String> selectedPhotos = BGAPhotoPickerActivity.getSelectedPhotos(data);
-            if (selectedPhotos.size()>0){
+            if (selectedPhotos.size() > 0) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-                dialog.setMessage("是否发送选中的"+selectedPhotos.size()+"张图片")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
-                                showLoadingDialog(false,"图片发送中");
-                                for (String url:
-                                        selectedPhotos) {
-                                    userMessagePresenter.sendUserMessage(url,user,2,"");
-                                }
-                                choiceIndex.clear();
-                                choiceNum=0;
-                                sendImgBtn.setEnabled(false);
-                                cancelChoice.setText("取消选中(0)");
+                dialog.setMessage("是否发送选中的" + selectedPhotos.size() + "张图片")
+                        .setPositiveButton("确定", (dialog13, which) -> {
+                            dialog13.cancel();//取消弹出框
+                            showLoadingDialog(false, "图片发送中");
+                            for (String url :
+                                    selectedPhotos) {
+                                userMessagePresenter.sendUserMessage(url, user, 2, "");
                             }
+                            choiceIndex.clear();
+                            choiceNum = 0;
+                            sendImgBtn.setEnabled(false);
+                            cancelChoice.setText("取消选中(0)");
                         })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
-
-                            }
+                        .setNegativeButton("取消", (dialog12, which) -> {
+                            dialog12.cancel();//取消弹出框
                         })
                         .create().show();
             }
-        }else if (resultCode == RESULT_OK && requestCode==RC_CHOOSE_FILE) {
+        } else if (requestCode == RC_CHOOSE_FILE) {
+            send_file.setChecked(false);
+            if (resultCode != RESULT_OK){
+                return;
+            }
             Uri uri = data.getData();
             try {
-                String chooseFilePath= FileChooseUtil.getInstance(mContext).getChooseFileResultPath(uri);
-                showLoadingDialog(true,"获取文件信息中");
-                new AsyncTask<Void,Void,Long>() {
+                String chooseFilePath = FileChooseUtil.getInstance(mContext).getChooseFileResultPath(uri);
+                showLoadingDialog(true, "获取文件信息中");
+                new AsyncTask<Void, Void, Long>() {
                     @Override
                     protected Long doInBackground(Void... voids) {
-                        long fileSize= 0;
+                        long fileSize = 0;
                         try {
                             fileSize = new File(chooseFilePath).length();
                         } catch (Exception e) {
@@ -1553,35 +1542,27 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                         }
                         return fileSize;
                     }
+
                     @Override
                     protected void onPostExecute(Long fileSize) {
                         AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                         dismissLoadingDialog();
                         try {
-                            if (0<fileSize&&fileSize<20*1024*1024){
-                                dialog.setMessage("是否发送文件:"+new File(chooseFilePath).getName()+"?（"+getFormatSize(fileSize)+")")
-                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.cancel();//取消弹出框
-                                                showLoadingDialog(false,"文件发送中");
-                                                userMessagePresenter.sendUserMessage(chooseFilePath,user,4,"");
-                                            }
+                            if (0 < fileSize && fileSize < 20 * 1024 * 1024) {
+                                dialog.setMessage("是否发送文件:" + new File(chooseFilePath).getName() + "?（" + getFormatSize(fileSize) + ")")
+                                        .setPositiveButton("确定", (dialog1, which) -> {
+                                            dialog1.cancel();//取消弹出框
+                                            showLoadingDialog(false, "文件发送中");
+                                            userMessagePresenter.sendUserMessage(chooseFilePath, user, 4, "");
                                         })
-                                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.cancel();//取消弹出框
-                                            }
+                                        .setNegativeButton("取消", (dialog14, which) -> {
+                                            dialog14.cancel();//取消弹出框
                                         })
                                         .create().show();
-                            }else {
+                            } else {
                                 dialog.setMessage("文件过大，请将文件大小限制在20M以下)")
-                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.cancel();//取消弹出框
-                                            }
+                                        .setPositiveButton("确定", (dialog15, which) -> {
+                                            dialog15.cancel();//取消弹出框
                                         }).create().show();
                             }
                         } catch (Exception e) {
@@ -1589,7 +1570,6 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                         }
                     }
                 }.execute();
-                send_file.setChecked(false);
             } catch (Exception e) {
                 e.printStackTrace();
             }

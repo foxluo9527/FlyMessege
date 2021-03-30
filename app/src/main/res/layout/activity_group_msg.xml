@@ -139,8 +139,7 @@
                     android:id="@+id/group_creator_head"
                     android:layout_width="@dimen/d_45"
                     android:layout_height="@dimen/d_45"
-                    android:layout_marginHorizontal="@dimen/d_5"
-                    app:srcCompat="@mipmap/ic_launcher_round" />
+                    android:layout_marginHorizontal="@dimen/d_5"/>
 
                 <ImageView
                     android:layout_width="@dimen/d_20"

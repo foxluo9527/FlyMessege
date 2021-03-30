@@ -19,8 +19,7 @@
             android:id="@+id/user_head_img"
             android:layout_width="46dp"
             android:layout_height="46dp"
-            android:layout_margin="@dimen/d_20"
-            android:src="@mipmap/ic_launcher_round" />
+            android:layout_margin="@dimen/d_20"/>
 
         <LinearLayout
             android:layout_width="match_parent"

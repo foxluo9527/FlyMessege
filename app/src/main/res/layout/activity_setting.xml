@@ -58,8 +58,7 @@
                 <com.example.flymessagedome.view.CircleImageView
                     android:id="@+id/head_img"
                     android:layout_width="@dimen/d_40"
-                    android:layout_height="@dimen/d_40"
-                    android:src="@mipmap/ic_launcher_round" />
+                    android:layout_height="@dimen/d_40"/>
 
             </LinearLayout>
             <LinearLayout

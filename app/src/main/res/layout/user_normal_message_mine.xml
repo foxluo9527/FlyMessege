@@ -52,7 +52,7 @@
                 android:layout_height="@dimen/d_20"
                 android:layout_margin="@dimen/d_5"
                 android:visibility="visible"
-                app:srcCompat="@drawable/ssdk_exception_icon" />
+                app:srcCompat="@drawable/send_error" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -85,8 +85,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="45dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:src="@mipmap/ic_launcher_round" />
+            android:layout_marginRight="16dp"/>
     </RelativeLayout>
 
 

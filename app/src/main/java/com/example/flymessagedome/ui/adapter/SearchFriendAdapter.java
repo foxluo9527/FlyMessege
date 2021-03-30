@@ -65,8 +65,8 @@ public class SearchFriendAdapter extends RecyclerView.Adapter {
         FriendsBean friendsBean=friendsBeans.get(position);
         UserBean userBean=friendsBean.getFriendUser();
         Glide.with(context).load(proxyCacheServer.getProxyUrl(userBean.getU_head_img()))
-                .placeholder(R.mipmap.ic_launcher_round)
-                .error(R.mipmap.ic_launcher_round)
+
+
                 .into(viewHolder.headImg);
         if (!TextUtils.isEmpty(friendsBean.getF_remarks_name())){
             viewHolder.name.setText(TextSpanUtil.getInstant().setColor(friendsBean.getF_remarks_name()+"("+userBean.getU_nick_name()+")",

@@ -28,7 +28,16 @@
             android:padding="@dimen/d_15"
             app:srcCompat="@mipmap/back" />
     </RelativeLayout>
-
+    <TextView
+        android:id="@+id/none"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="暂无好友申请"
+        android:textColor="@color/black"
+        android:textSize="13sp"
+        android:visibility="gone"
+        android:paddingVertical="@dimen/d_10"
+        android:layout_gravity="center"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fri_rq_list"
         android:layout_width="match_parent"

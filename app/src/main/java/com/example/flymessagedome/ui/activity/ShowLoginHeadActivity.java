@@ -104,7 +104,7 @@ public class ShowLoginHeadActivity extends BaseActivity implements BGARefreshLay
                 showHeadPopupMenu(mContext,position);
             }
         });
-        Glide.with(mContext).load(FlyMessageApplication.getProxy(mContext).getProxyUrl(LoginActivity.loginUser.getU_head_img())).error(R.mipmap.ic_launcher).into(now_head);
+        Glide.with(mContext).load(FlyMessageApplication.getProxy(mContext).getProxyUrl(LoginActivity.loginUser.getU_head_img())).error(R.drawable.icon).into(now_head);
         mRefreshLayout.beginRefreshing();
     }
     private void initRefreshLayout() {
@@ -202,7 +202,7 @@ public class ShowLoginHeadActivity extends BaseActivity implements BGARefreshLay
         dismissLoadingDialog();
         LoginActivity.loginUser.setU_head_img(headUrl);
         FlyMessageApplication.getInstances().getDaoSession().getUserDao().update(LoginActivity.loginUser);
-        Glide.with(mContext).load(FlyMessageApplication.getProxy(mContext).getProxyUrl(headUrl)).error(R.mipmap.ic_launcher).into(now_head);
+        Glide.with(mContext).load(FlyMessageApplication.getProxy(mContext).getProxyUrl(headUrl)).error(R.drawable.icon).into(now_head);
     }
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void showHeadPopupMenu(Context context,int position) {

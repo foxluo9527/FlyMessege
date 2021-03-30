@@ -52,14 +52,12 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/imageView"
                     android:layout_width="@dimen/d_26"
                     android:layout_height="@dimen/d_26"
                     android:layout_margin="@dimen/d_7"
                     android:src="@mipmap/search1" />
 
                 <TextView
-                    android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="飞讯名/手机号/昵称"
@@ -83,7 +81,6 @@
                     android:text="我的飞讯名:" />
 
                 <ImageView
-                    android:id="@+id/imageView4"
                     android:layout_width="@dimen/d_20"
                     android:layout_height="@dimen/d_20"
                     android:src="@mipmap/qr_code" />
@@ -114,14 +111,12 @@
                     android:paddingHorizontal="@dimen/d_16">
 
                     <ImageView
-                        android:id="@+id/imageView5"
                         android:layout_width="@dimen/d_25"
                         android:layout_height="@dimen/d_25"
                         android:layout_marginRight="5dp"
                         android:src="@mipmap/sys" />
 
                     <TextView
-                        android:id="@+id/textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

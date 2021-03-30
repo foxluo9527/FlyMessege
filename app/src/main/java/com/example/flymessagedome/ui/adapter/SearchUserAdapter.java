@@ -62,8 +62,8 @@ public class SearchUserAdapter extends RecyclerView.Adapter {
         SearchViewHolder viewHolder=(SearchViewHolder)holder;
         SearchUserModel.ResultBean userBean=userBeans.get(position);
         Glide.with(context).load(proxyCacheServer.getProxyUrl(userBean.getU_head_img()))
-                .placeholder(R.mipmap.ic_launcher_round)
-                .error(R.mipmap.ic_launcher_round)
+
+
                 .into(viewHolder.headImg);
         viewHolder.name.setText(TextSpanUtil.getInstant().setColor(userBean.getU_nick_name()+"("+userBean.getU_name()+")",
                 searchString,context.getApplicationContext().getColor(R.color.blue_1)));

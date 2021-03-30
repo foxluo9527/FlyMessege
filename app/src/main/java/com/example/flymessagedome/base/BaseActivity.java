@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +26,7 @@ import com.example.flymessagedome.receiver.NetStateChangeObserver;
 import com.example.flymessagedome.receiver.NetStateChangeReceiver;
 import com.example.flymessagedome.service.MessageService;
 import com.example.flymessagedome.ui.activity.LoginActivity;
+import com.example.flymessagedome.ui.activity.MainActivity;
 import com.example.flymessagedome.utils.ActivityCollector;
 import com.example.flymessagedome.utils.AppUtils;
 import com.example.flymessagedome.utils.NetworkType;
@@ -51,17 +51,18 @@ public abstract class BaseActivity extends AppCompatActivity implements NetState
     private MaterialDialog mLoadingDialog;
     private ServiceMessageReceiver serviceMessageReceiver;
     private HomeEventReceiver homeEventReceiver;
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@androidx.annotation.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         NetStateChangeReceiver.registerReceiver(this);
-        String className=this.getLocalClassName();
-        Log.e("className",className);
-        if (SharedPreferencesUtil.getInstance().getString("loginToken")==null){
-            if (!className.equals("ui.activity.LoginActivity")&&
-                    !className.equals("ui.activity.WebActivity")&&
-                    !className.equals("ui.activity.WelcomeActivity")){
+        String className = this.getLocalClassName();
+        Log.e("className", className);
+        if (SharedPreferencesUtil.getInstance().getString("loginToken") == null) {
+            if (!className.equals("ui.activity.LoginActivity") &&
+                    !className.equals("ui.activity.WebActivity") &&
+                    !className.equals("ui.activity.WelcomeActivity")) {
                 finish();
                 ActivityCollector.finishAll();
                 LoginActivity.startActivity(this);
@@ -69,7 +70,7 @@ public abstract class BaseActivity extends AppCompatActivity implements NetState
             }
         }
         setContentView(getLayoutId());
-        if (getSupportActionBar()!=null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
         activity = this;
@@ -80,40 +81,42 @@ public abstract class BaseActivity extends AppCompatActivity implements NetState
         configViews();
         initDatas();
         AppUtils.init(this);
-        if (serviceMessageReceiver==null){
+        if (serviceMessageReceiver == null) {
             serviceMessageReceiver = new ServiceMessageReceiver(new Handler());
             IntentFilter itFilter = new IntentFilter();
             itFilter.addAction(MessageService.SOCKET_SERVICE_ACTION);
             registerReceiver(serviceMessageReceiver, itFilter);
         }
-        if (homeEventReceiver==null){
-            homeEventReceiver=new HomeEventReceiver();
+        if (homeEventReceiver == null) {
+            homeEventReceiver = new HomeEventReceiver();
             IntentFilter itFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-            registerReceiver(homeEventReceiver,itFilter);
+            registerReceiver(homeEventReceiver, itFilter);
         }
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
         ActivityCollector.removeActivity(this);
         dismissLoadingDialog();
-        if (serviceMessageReceiver!=null){
+        if (serviceMessageReceiver != null) {
             unregisterReceiver(serviceMessageReceiver);
         }
-        if (homeEventReceiver!=null){
+        if (homeEventReceiver != null) {
             unregisterReceiver(homeEventReceiver);
         }
         try {
-            if (unbinder!=null)
+            if (unbinder != null)
                 unbinder.unbind();
             NetStateChangeReceiver.unRegisterReceiver(this);
-        }catch (Exception e){
+        } catch (Exception e) {
         }
     }
 
@@ -138,9 +141,10 @@ public abstract class BaseActivity extends AppCompatActivity implements NetState
     public void onNetConnected(NetworkType networkType) {
         // 监听到网络连接
     }
+
     //按下home
-    public void onPressHome(){
-        Log.e(TAG,"按下home键");
+    public void onPressHome() {
+        Log.e(TAG, "按下home键");
     }
 
     public abstract int getLayoutId();
@@ -149,28 +153,33 @@ public abstract class BaseActivity extends AppCompatActivity implements NetState
 
     public abstract void initDatas();
 
-    protected void serviceDisconnect(){
-        Log.e(TAG,"连接已断开");
+    protected void serviceDisconnect() {
+        Log.e(TAG, "连接已断开");
     }
 
-    protected void serviceConnected(){
-        Log.e(TAG,"连接服务成功");
+    protected void serviceConnected() {
+        Log.e(TAG, "连接服务成功");
     }
 
-    protected  void receiveUserMessage(){
-        Log.e(TAG,"收到消息");
+    protected void receiveUserMessage() {
+        Log.e(TAG, "收到消息");
     }
 
-    protected void receiveFriendRequest(){
-        Log.e(TAG,"收到好友申请");
+    protected void receiveFriendRequest() {
+        Log.e(TAG, "收到好友申请");
     }
-    protected void loginRemote(){
-        Log.e(TAG,"异地登陆，请重新登录");
+
+    protected void loginRemote() {
+        Log.e(TAG, "异地登陆，请重新登录");
         ToastUtils.showToast("异地登陆，请重新登录");
-        LoginActivity.loginUser=null;
+        MainActivity.serviceBinder.closeConnect();
+        LoginActivity.loginUser = null;
         ActivityCollector.finishAll();
-        LoginActivity.startActivity(this);
+        Bundle data=new Bundle();
+        data.putBoolean("auto_login",false);
+        LoginActivity.startActivity(this,data);
     }
+
     /**
      * 对各种控件进行设置、适配、填充数据
      */
@@ -201,7 +210,7 @@ public abstract class BaseActivity extends AppCompatActivity implements NetState
         return view.getVisibility() == View.VISIBLE;
     }
 
-    public void showLoadingDialog(Boolean cancelable,String msg) {
+    public void showLoadingDialog(Boolean cancelable, String msg) {
         if (mLoadingDialog == null) {
             mLoadingDialog = new MaterialDialog.Builder(this)
                     .widgetColorRes(R.color.black)
@@ -219,39 +228,45 @@ public abstract class BaseActivity extends AppCompatActivity implements NetState
         }
     }
 
-    public void toastServerEx(boolean isInternet,String msg){
-        if (isInternet){
+    public void toastServerEx(boolean isInternet, String msg) {
+        if (isInternet) {
             if (TextUtils.isEmpty(msg))
                 ToastUtils.showToast("请求数据失败,请稍后再试");//服务器异常,请稍后再试   请求数据失败,请稍后再试
             else
                 ToastUtils.showToast(msg);
-        }else{
+        } else {
             ToastUtils.showToast("网络异常,请检查网络是否可用");//网络异常,请检查网络是否可用
         }
     }
+
     //按下home监听
-    private class HomeEventReceiver  extends BroadcastReceiver {
-        String SYSTEM_REASON="reason";
-        String SYSTEM_HOME_KEY="homekey";
-        String SYSTEM__HOME_KEY_LONG="recentapps";
+    private class HomeEventReceiver extends BroadcastReceiver {
+        String SYSTEM_REASON = "reason";
+        String SYSTEM_HOME_KEY = "homekey";
+        String SYSTEM__HOME_KEY_LONG = "recentapps";
+
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action=intent.getAction();
-            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)){
-                String reason=intent.getStringExtra(SYSTEM_REASON);
-                if (TextUtils.equals(reason,SYSTEM_HOME_KEY)){
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+                String reason = intent.getStringExtra(SYSTEM_REASON);
+                if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
                     //按下home进入后台
                     onPressHome();
-                }else if (TextUtils.equals(reason,SYSTEM__HOME_KEY_LONG)){
+                } else if (TextUtils.equals(reason, SYSTEM__HOME_KEY_LONG)) {
                     //长按home进入后台应用
                     onPressHome();
                 }
             }
         }
-    };
+    }
+
+    ;
+
     //收到消息
     private class ServiceMessageReceiver extends BroadcastReceiver {
         private final Handler handler;
+
         // Handler used to execute code on the UI thread
         public ServiceMessageReceiver(Handler handler) {
             this.handler = handler;
@@ -264,8 +279,8 @@ public abstract class BaseActivity extends AppCompatActivity implements NetState
                 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public void run() {
-                    int m_type=intent.getIntExtra(MessageService.MSG_TYPE,-1);
-                    switch (m_type){
+                    int m_type = intent.getIntExtra(MessageService.MSG_TYPE, -1);
+                    switch (m_type) {
                         case SERVICE_CONNECTED:
                             serviceConnected();
                             break;

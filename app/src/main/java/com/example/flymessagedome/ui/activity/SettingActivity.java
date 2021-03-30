@@ -61,7 +61,7 @@ public class SettingActivity extends BaseActivity {
     @Override
     public void initDatas() {
         if (LoginActivity.loginUser!=null)
-        Glide.with(mContext).load(LoginActivity.loginUser.getU_head_img()).placeholder(R.mipmap.ic_launcher_round).error(R.mipmap.ic_launcher_round).into(head_img);
+        Glide.with(mContext).load(LoginActivity.loginUser.getU_head_img()).into(head_img);
     }
 
     @Override

@@ -54,10 +54,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
-                        app:srcCompat="@mipmap/ic_launcher" />
+                        android:src="@drawable/icon"/>
 
                     <TextView
-                        android:id="@+id/textView13"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/d_16"
@@ -74,7 +73,6 @@
                 </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/textView14"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/d_5"

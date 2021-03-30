@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.example.flymessagedome.FlyMessageApplication;
 import com.example.flymessagedome.R;
 import com.example.flymessagedome.model.SearchUserModel;
@@ -27,21 +26,22 @@ public class ContractAdapter extends RecyclerView.Adapter {
     Context context;
     private OnRecyclerViewItemClickListener listener;
     private LayoutInflater mLayoutInflater;
-    private HttpProxyCacheServer proxyCacheServer;
 
     public ContractAdapter(ArrayList<SearchUserModel.ResultBean> resultBeans, Context context) {
         this.resultBeans = resultBeans;
         this.context = context;
         mLayoutInflater = LayoutInflater.from(context);
-        proxyCacheServer= FlyMessageApplication.getProxy(context);
+        FlyMessageApplication.getProxy(context);
     }
 
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int position);
     }
-    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener){
-        listener=onRecyclerViewItemClickListener;
+
+    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
+        listener = onRecyclerViewItemClickListener;
     }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,42 +50,32 @@ public class ContractAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ContractViewHolder viewHolder=(ContractViewHolder)holder;
-        SearchUserModel.ResultBean resultBean=resultBeans.get(position);
-        if (listener!=null){
-            viewHolder.add_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(v,position);
-                }
-            });
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(v,position);
-                }
-            });
+        ContractViewHolder viewHolder = (ContractViewHolder) holder;
+        SearchUserModel.ResultBean resultBean = resultBeans.get(position);
+        if (listener != null) {
+            viewHolder.add_btn.setOnClickListener(v -> listener.onItemClick(v, position));
+            viewHolder.itemView.setOnClickListener(v -> listener.onItemClick(v, position));
         }
         Glide.with(context)
                 .load(resultBean.getU_head_img())
-                .error(R.mipmap.ic_launcher_round)
                 .into(viewHolder.head);
-        if (resultBean.isFriend()){
+        if (resultBean.isFriend()) {
             viewHolder.add_btn.setVisibility(View.GONE);
             viewHolder.add_text.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             viewHolder.add_btn.setVisibility(View.VISIBLE);
             viewHolder.add_text.setVisibility(View.GONE);
         }
-        viewHolder.contract_name.setText(""+resultBean.getU_sign());
-        viewHolder.fly_name.setText("飞讯:"+resultBean.getU_nick_name());
+        viewHolder.contract_name.setText("" + resultBean.getU_sign());
+        viewHolder.fly_name.setText("飞讯:" + resultBean.getU_nick_name());
     }
 
     @Override
     public int getItemCount() {
         return resultBeans.size();
     }
-    static class ContractViewHolder extends RecyclerView.ViewHolder{
+
+    static class ContractViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.head_img)
         CircleImageView head;
         @BindView(R.id.contract_name)
@@ -96,6 +86,7 @@ public class ContractAdapter extends RecyclerView.Adapter {
         Button add_btn;
         @BindView(R.id.add_text)
         TextView add_text;
+
         public ContractViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

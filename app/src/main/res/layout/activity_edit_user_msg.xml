@@ -66,8 +66,7 @@
             android:id="@+id/head_img"
             android:layout_width="@dimen/d_50"
             android:layout_height="@dimen/d_50"
-            android:layout_marginLeft="@dimen/d_5"
-            android:src="@mipmap/ic_launcher_round" />
+            android:layout_marginLeft="@dimen/d_5" />
 
         <ImageView
             android:layout_width="@dimen/d_25"
@@ -167,7 +166,6 @@
             android:textSize="@dimen/d_16" />
 
         <ImageView
-            android:id="@+id/imageView6"
             android:layout_width="@dimen/d_25"
             android:layout_height="@dimen/d_25"
             android:layout_marginLeft="@dimen/d_5"
@@ -253,7 +251,6 @@
         android:textColor="@color/black">
 
         <TextView
-            android:id="@+id/textView"
             android:layout_width="@dimen/d_45"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/d_20"

@@ -47,8 +47,7 @@
                     android:id="@+id/head_img"
                     android:layout_width="46dp"
                     android:layout_height="46dp"
-                    android:layout_marginHorizontal="@dimen/d_16"
-                    app:srcCompat="@mipmap/ic_launcher_round" />
+                    android:layout_marginHorizontal="@dimen/d_16" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -97,8 +96,7 @@
                 <com.example.flymessagedome.view.CircleImageView
                     android:id="@+id/group_creator_head"
                     android:layout_width="@dimen/d_45"
-                    android:layout_height="@dimen/d_45"
-                    app:srcCompat="@mipmap/ic_launcher_round" />
+                    android:layout_height="@dimen/d_45" />
 
                 <ImageView
                     android:layout_width="@dimen/d_20"

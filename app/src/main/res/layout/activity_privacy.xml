@@ -99,7 +99,6 @@
             android:text="用户黑名单" />
 
         <ImageView
-            android:id="@+id/imageView2"
             android:layout_width="@dimen/d_20"
             android:layout_height="@dimen/d_20"
             app:srcCompat="@mipmap/right1" />

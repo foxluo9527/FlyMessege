@@ -37,7 +37,6 @@
     <ImageView
         android:id="@+id/file_type_img"
         android:layout_width="@dimen/d_50"
-        android:layout_height="@dimen/d_50"
-        app:srcCompat="@mipmap/ic_launcher" />
+        android:layout_height="@dimen/d_50"/>
 
 </LinearLayout>

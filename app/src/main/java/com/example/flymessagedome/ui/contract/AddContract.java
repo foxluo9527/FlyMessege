@@ -8,11 +8,10 @@ import java.util.ArrayList;
 
 public interface AddContract {
     interface View extends BaseContract.BaseView{
-        void initResult(SearchUserModel.ResultBean resultBean,PhoneInfo info);
-        void initChecked();
+        void initResult(SearchUserModel.ResultBean resultBean,PhoneInfo info,boolean last);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T>{
-        void checkPhone(PhoneInfo info,boolean last);
+        void checkPhone(ArrayList<PhoneInfo> info);
     }
 }

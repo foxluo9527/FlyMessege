@@ -5,43 +5,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context=".ui.activity.WebActivity">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorPrimary"
-        android:gravity="left|center_vertical"
-        android:orientation="horizontal">
-
+        android:background="#88303F9F"
+        android:layout_height="50dp">
         <ImageView
-            android:id="@+id/back_space"
-            android:layout_width="@dimen/d_50"
-            android:layout_height="@dimen/d_50"
-            android:padding="15dp"
-            android:onClick="doClick"
-            android:src="@mipmap/back" />
-
+            android:id="@+id/back"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:onClick="onViewClick"
+            android:src="@drawable/back"/>
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="8dp"
+            android:onClick="onViewClick"
+            android:layout_toRightOf="@id/back"
+            android:src="@drawable/close"/>
         <TextView
             android:id="@+id/title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:gravity="center"
-            android:text="加载中..." />
+            android:text="加载中..."
+            android:layout_centerInParent="true"/>
         <ImageView
-            android:id="@+id/more"
-            android:clickable="true"
-            android:onClick="doClick"
-            android:layout_width="@dimen/d_50"
-            android:layout_height="@dimen/d_50"
-            android:padding="12dp"
+            android:id="@+id/open"
+            android:layout_width="@dimen/d_30"
+            android:layout_height="@dimen/d_30"
+            android:src="@drawable/open"
+            android:padding="3dp"
             android:layout_centerVertical="true"
-            android:src="@mipmap/more"/>
-    </LinearLayout>
-
-    <WebView
-        android:id="@+id/web_view"
+            android:onClick="onViewClick"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/d_10"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical" />
 </LinearLayout>

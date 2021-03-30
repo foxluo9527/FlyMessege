@@ -203,8 +203,6 @@ public class GroupMsgActivity extends BaseActivity {
                         userBean=FlyMessageApplication.getInstances().getDaoSession().getUserBeanDao().load(groupCreatorModel.getGroup_creator().getU_id());
                         if (userBean!=null){
                             Glide.with(mContext).load(FlyMessageApplication.getProxy(mContext).getProxyUrl(userBean.getU_head_img()))
-                                    .error(R.mipmap.ic_launcher_round)
-                                    .placeholder(R.mipmap.ic_launcher_round)
                                     .into(group_creator_head);
                         }else {
                             new AsyncTask<Void,Void, Users>() {
@@ -221,8 +219,6 @@ public class GroupMsgActivity extends BaseActivity {
                                     if (users!=null&&users.code== Constant.SUCCESS){
                                         userBean=users.getUser();
                                         Glide.with(mContext).load(FlyMessageApplication.getProxy(mContext).getProxyUrl(userBean.getU_head_img()))
-                                                .error(R.mipmap.ic_launcher_round)
-                                                .placeholder(R.mipmap.ic_launcher_round)
                                                 .into(group_creator_head);
                                     }else if (users!=null){
                                         ToastUtils.showToast(users.msg);

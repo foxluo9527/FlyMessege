@@ -98,12 +98,13 @@ public class StringUtil {
         return content;
     }
     public static MsgFile getMsgFile(String content){
-        MsgFile msgFile=null;
+        MsgFile msgFile;
         if (content.contains("[")&&content.contains("]")){
             String fileContent=content.substring(content.indexOf("[")+1,content.indexOf("]"));
             if (fileContent.contains(",")) {
-                String[] params=fileContent.split(",",2);
+                String[] params=fileContent.split(",link");
                 if (params.length==2) {
+                    params[1]="link"+params[1];
                     if (params[0].contains(":")) {
                         msgFile=new MsgFile();
                         String[] fileParams=params[0].split(":",2);
@@ -117,7 +118,7 @@ public class StringUtil {
                             String tmp1,tmp2;
                             if (fileName.length()>20){
                                 tmp1=fileName.substring(0,10);
-                                tmp2=fileName.substring(fileName.length()-10,fileName.length());
+                                tmp2=fileName.substring(fileName.length()-10);
                                 fileName=tmp1+"..."+tmp2;
                             }
                             fileParams[1]=fileName+"."+fileType;

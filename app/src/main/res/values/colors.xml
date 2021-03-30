@@ -1,100 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- PhotoPicker 状态栏的颜色 -->
-    <color name="bga_pp_colorPrimaryDark">#999999</color>
     <!-- PhotoPicker Toolbar 的颜色 -->
-    <color name="bga_pp_colorPrimary">#bbbbbb</color>
     <!-- 图片选择器库里所有Activity界面的背景色 -->
-    <color name="bga_pp_activity_bg">#ffffffff</color>
 
     <color name="colorPrimary">#FBFBFB</color>
     <color name="colorPrimaryDark">#F4F4F4</color>
     <color name="colorAccent">#D81B60</color>
     <color name="blackBg">#99161616</color>
     <color name="lightGray">#EBEBEB</color>
-    <color name="darkGray">#969696</color>
     <color name="lightGrayBg">#12D5D5D5</color>
-    <color name="dark_gray">#C0C0C0</color>
     <color name="black_9">#999999</color>
     <color name="black_7">#777777</color>
     <color name="black_5">#555555</color>
     <color name="black_3">#333333</color>
     <color name="black_2">#222222</color>
-    <color name="black_1">#111111</color>
     <color name="black">#000000</color>
     <color name="black_7d">#7D7D7D</color>
 
     <color name="tab_check">#346af6</color>
     <!--    <color name="tab_check">#3BA9F6</color>-->
-    <color name="mine_bg">#2A9AFE</color>
     <color name="blue_1">#62B2F6</color>
     <color name="blue_2">#A3D9FB</color>
-    <color name="blue_2_F">#28B3F3</color>
-    <color name="reader_menu_bg_color">#191919</color>
     <color name="white">#ffffffff</color>
     <color name="light_white">#EEEEEE</color>
-    <color name="light_b">#bbbbbb</color>
-    <color name="light_c">#cccccc</color>
-    <color name="light_d">#dddddd</color>
     <color name="light_da">#AAdddddd</color>
 
     <!--通用背景色-->
-    <color name="common_bg">@color/white</color>
     <!--通用一级标题的颜色-->
-    <color name="common_h1">#212121</color>
     <!--通用二级标题的颜色-->
-    <color name="common_h2">#727272</color>
     <!--通用三级标题的颜色-->
-    <color name="common_h3">#B2B2B2</color>
     <!--通用触摸背景色-->
-    <color name="common_touch_bg">#E3E3E3</color>
     <!--通用背景色-->
-    <color name="common_gray_bg">#EEEEEE</color>
 
     <!--通用分割线细-->
-    <color name="common_divider_narrow">#F8F8FA</color>
-    <color name="common_divider_narrow_4">#AAF8F8FA</color>
-    <color name="common_divider_narrow_1">#F5F9FC</color>
-    <color name="common_divider_narrow_3">#AAF5F9FC</color>
-    <color name="common_divider_narrow_2">#FDFDFD</color>
-    <color name="common_divider_narrow_5">#AAFDFDFD</color>
-    <color name="common_divider_narrow_6">#f3f4f6</color>
-    <color name="black_fa">#E3E3E3</color>
     <!--通用分割线粗-->
-    <color name="common_divider_wide">@color/light_white</color>
-    <color name="tip">#88303F9F</color>
 
 
     <color name="red">#ff0000</color>
-    <color name="dark_red">#B93221</color>
-    <color name="light_red">#EC4A48</color>
     <color name="refuse_red">#FF4747</color>
     <color name="red_1">#FE7E75</color>
     <color name="yellow_1">#FBBB67</color>
-    <color name="yellow_2">#F8812C</color>
-    <color name="green_1">#54C37C</color>
-    <color name="green_2">#55A67B</color>
-
-    <color name="content_background">#f2f2f2</color>
-    <color name="dark_gray_bg">#F5F5F5</color>
-    <color name="none_color">#00000000</color>
 
     <color name="gray01">#dadde2</color>
     <color name="background">#F2F2F2</color>
-    <color name="albumback">#E1E0DE</color>
-    <color name="color_bai">#ffffffff</color>
-    <color name="chat_time">#ffffffff</color>
-    <color name="semi_transparent_w">#7fffffff</color>
-    <color name="transparent">#00000000</color>
-    <color name="color_hei">#ff000000</color>
-    <color name="calendar_select_1">#FF40db25</color>
-    <color name="calendar_select_2">#FFe69138</color>
-    <color name="calendar_select_3">#FFdf1356</color>
-    <color name="calendar_select_4">#FFedc56d</color>
-    <color name="calendar_select_5">#FFaacc44</color>
-    <color name="calendar_select_6">#FFbc13f0</color>
-    <color name="calendar_select_7">#FF13acf0</color>
-
-    <color name="dark_grey">#151515</color>
 
 </resources>

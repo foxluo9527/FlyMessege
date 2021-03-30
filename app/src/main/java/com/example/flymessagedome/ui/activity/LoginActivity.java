@@ -1,8 +1,10 @@
 package com.example.flymessagedome.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.SpannableString;
@@ -80,7 +82,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     public static void startActivity(Context context) {
         context.startActivity(new Intent(context, LoginActivity.class));
     }
-
+    public static void startActivity(Context context, Bundle bundle) {
+        Intent intent=new Intent(context, LoginActivity.class);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
     @Override
     public int getLayoutId() {
         return R.layout.activity_login;
@@ -95,7 +101,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     public void initDatas() {
         SharedPreferencesUtil.getInstance().putBoolean("isFirstUse",false);
         boolean isLogin = SharedPreferencesUtil.getInstance().getBoolean(Constant.IS_LOGIN, false);
-        boolean autoLogin=SharedPreferencesUtil.getInstance().getBoolean(Constant.AUTO_LOGIN, true);
+        boolean auto=true;
+        Bundle data=getIntent().getExtras();
+        if (data!=null){
+            auto=data.getBoolean("auto_login",true);
+        }
+        boolean autoLogin=SharedPreferencesUtil.getInstance().getBoolean(Constant.AUTO_LOGIN, true)&&auto;
         boolean rememberAccount=SharedPreferencesUtil.getInstance().getBoolean(Constant.REMEMBER_ACCOUNT, true);
         if (isLogin&&rememberAccount){
             String u_name=SharedPreferencesUtil.getInstance().getString(Constant.U_NAME);
@@ -116,6 +127,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         loginPresenter.attachView(this);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @OnClick({R.id.tv_forget_password, R.id.tv_login,R.id.tv_login_type,R.id.btn_send_code,R.id.tv_privacy,R.id.tv_register})
     public void onViewClicked(View view) {
         switch (view.getId()) {

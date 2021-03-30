@@ -54,7 +54,7 @@ public class AccountAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         User user=users.get(position);
-        Glide.with(context).load(proxyCacheServer.getProxyUrl(user.getU_head_img())).error(R.mipmap.ic_launcher).into(((AccountViewHolder)holder).head);
+        Glide.with(context).load(proxyCacheServer.getProxyUrl(user.getU_head_img())).error(R.drawable.icon).into(((AccountViewHolder)holder).head);
         ((AccountViewHolder)holder).name.setText(user.getU_name());
         ((AccountViewHolder)holder).nickName.setText(user.getU_nick_name());
         if (AccountActivity.onEditAccount){

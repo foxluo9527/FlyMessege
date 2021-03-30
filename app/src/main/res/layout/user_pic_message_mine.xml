@@ -30,8 +30,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="42dp"
             android:layout_marginEnd="@dimen/d_16"
-            android:layout_marginRight="@dimen/d_16"
-            android:src="@mipmap/ic_launcher_round" />
+            android:layout_marginRight="@dimen/d_16" />
 
         <TextView
             android:id="@+id/tv_send_time"
@@ -70,7 +69,7 @@
             android:layout_marginLeft="0dp"
             android:layout_marginTop="40dp"
             android:visibility="gone"
-            app:srcCompat="@drawable/ssdk_exception_icon" />
+            app:srcCompat="@drawable/send_error" />
     </RelativeLayout>
 
 </LinearLayout>

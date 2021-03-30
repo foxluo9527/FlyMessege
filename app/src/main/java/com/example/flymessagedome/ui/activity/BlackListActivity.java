@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.flymessagedome.R;
 import com.example.flymessagedome.base.BaseActivity;
@@ -36,6 +37,8 @@ public class BlackListActivity extends BaseActivity implements BGARefreshLayout.
     BGARefreshLayout mRefreshLayout;
     @BindView(R.id.blacklist_view)
     RecyclerView recyclerView;
+    @BindView(R.id.none)
+    TextView none;
     BlackListAdapter adapter;
     int nowPage=1;
     @Inject
@@ -67,12 +70,9 @@ public class BlackListActivity extends BaseActivity implements BGARefreshLayout.
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setNestedScrollingEnabled(false);
-        adapter.setOnRecyclerViewItemClickListener(new BlackListAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                showLoadingDialog(true,"移除黑名单中");
-                blackListPresenter.removeBlackList(blackListsBeans.get(position));
-            }
+        adapter.setOnRecyclerViewItemClickListener((view, position) -> {
+            showLoadingDialog(true,"移除黑名单中");
+            blackListPresenter.removeBlackList(blackListsBeans.get(position));
         });
         mRefreshLayout.beginRefreshing();
     }
@@ -108,6 +108,7 @@ public class BlackListActivity extends BaseActivity implements BGARefreshLayout.
 
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
+        none.setVisibility(View.GONE);
         if (NetworkUtils.isConnected(mContext)){
             nowPage=1;
             blackListPresenter.getBlackList(20,nowPage);
@@ -136,6 +137,7 @@ public class BlackListActivity extends BaseActivity implements BGARefreshLayout.
     @Override
     public void initBlackList(ArrayList<BlackListModel.BlackListsBean> blackListBeans) {
         blackListsBeans.addAll(blackListBeans);
+        none.setVisibility(blackListBeans.size()==0?View.VISIBLE:View.GONE);
         adapter.notifyDataSetChanged();
         mRefreshLayout.endRefreshing();
         mRefreshLayout.endLoadingMore();
@@ -151,6 +153,7 @@ public class BlackListActivity extends BaseActivity implements BGARefreshLayout.
         mRefreshLayout.endRefreshing();
         mRefreshLayout.endLoadingMore();
         ToastUtils.showToast(msg);
+        none.setVisibility(View.VISIBLE);
     }
 
     @Override

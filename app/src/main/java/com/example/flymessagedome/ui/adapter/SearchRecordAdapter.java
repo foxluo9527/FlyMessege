@@ -64,8 +64,8 @@ public class SearchRecordAdapter extends RecyclerView.Adapter {
         SearchRecordViewHolder viewHolder=(SearchRecordViewHolder)holder;
         Chat chat=chats.get(position);
         Glide.with(context).load(proxyCacheServer.getProxyUrl(chat.getChat_head()))
-                .placeholder(R.mipmap.ic_launcher_round)
-                .error(R.mipmap.ic_launcher_round)
+
+
                 .into(viewHolder.headImg);
         viewHolder.name.setText(TextSpanUtil.getInstant().setColor(chat.getChat_name(),
                 searchString,context.getApplicationContext().getColor(R.color.blue_1)));

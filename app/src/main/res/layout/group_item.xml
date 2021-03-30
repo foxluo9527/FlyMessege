@@ -13,8 +13,7 @@
         android:layout_width="@dimen/d_40"
         android:layout_height="@dimen/d_40"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/d_16"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        android:layout_marginLeft="@dimen/d_16"/>
 
     <TextView
         android:id="@+id/group_name"

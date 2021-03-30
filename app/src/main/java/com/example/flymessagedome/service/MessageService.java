@@ -52,6 +52,7 @@ import com.example.flymessagedome.model.GroupMemberModel;
 import com.example.flymessagedome.model.Users;
 import com.example.flymessagedome.ui.activity.GroupChatActivity;
 import com.example.flymessagedome.ui.activity.LoginActivity;
+import com.example.flymessagedome.ui.activity.MainActivity;
 import com.example.flymessagedome.ui.activity.UserChatActivity;
 import com.example.flymessagedome.utils.Constant;
 import com.example.flymessagedome.utils.HttpRequest;
@@ -105,11 +106,58 @@ public class MessageService extends Service {
     GroupMemberDao groupMemberDao=FlyMessageApplication.getInstances().getDaoSession().getGroupMemberDao();
     ChatDao chatDao=FlyMessageApplication.getInstances().getDaoSession().getChatDao();
     private MessageServiceBinder binder=new MessageServiceBinder();
+
+    private NotificationManager notificationManager;
+    private String notificationId   = "keep_app_live";
+    private String notificationName = "APP后台运行中";
+
     @Override
     public void onCreate() {
         super.onCreate();
         context=getApplicationContext();
         proxy=FlyMessageApplication.getProxy(context);
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        //创建NotificationChannel
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(notificationId, notificationName, NotificationManager.IMPORTANCE_DEFAULT);
+            //不震动
+            channel.enableVibration(false);
+            //静音
+            channel.setSound(null, null);
+            notificationManager.createNotificationChannel(channel);
+        }
+        //创建服务后,五秒内调用该方法
+        startForeground(Integer.MAX_VALUE-2, getNotification());
+    }
+    /**
+     * 获取通知(Android8.0后需要)
+     * @return
+     */
+    private Notification getNotification() {
+        Notification.Builder builder = new Notification.Builder(this)
+                .setSmallIcon(R.drawable.icon)
+                .setContentTitle("飞讯聊天")
+                .setContentIntent(getIntent())
+                .setContentText("后台运行中");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setChannelId(notificationId);
+        }
+        return builder.build();
+    }
+
+    /**
+     * 点击后,直接打开app(之前的页面),不跳转特定activity
+     * @return
+     */
+    private PendingIntent getIntent() {
+        Intent msgIntent = getApplicationContext().getPackageManager().getLaunchIntentForPackage(getPackageName());//获取启动Activity
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                getApplicationContext(),
+                1,
+                msgIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        return pendingIntent;
     }
 
     @Nullable
@@ -165,7 +213,7 @@ public class MessageService extends Service {
                             break;
                         }
                         Thread.sleep(HEART_BEAT_RATE);
-                    } catch (InterruptedException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -319,7 +367,7 @@ public class MessageService extends Service {
             return;
         }
         if (message.getM_type()==0){//用户消息
-            List<Message> messages=messageDao.loadAll();
+            List<Message> messages;
             messages=messageDao.queryBuilder()
                 .where(MessageDao.Properties.M_source_id.eq(message.getM_source_id()))
                 .where(MessageDao.Properties.M_type.eq(0))
@@ -356,12 +404,16 @@ public class MessageService extends Service {
             messageDao.insertOrReplace(message);
             remoteView.setTextViewText(R.id.tv_u_name,userBean.getU_nick_name()+"("+(messages.size()+1)+"条新消息)");
             remoteView.setTextViewText(R.id.tv_msg_content,content);
-            remoteView.setImageViewResource(R.id.notify_head_img,R.mipmap.ic_launcher);
+            remoteView.setImageViewResource(R.id.notify_head_img,R.drawable.icon);
             if (userChat.getChat_show_remind()&&SharedPreferencesUtil.getInstance().getBoolean("allowNotify",true)) {
                 Intent actionIntent=new Intent(this, UserChatActivity.class);
                 actionIntent.putExtra("userId",userBean.getU_id());
                 actionIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                PendingIntent intent = PendingIntent.getActivity(this, 0, actionIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                Intent mainIntent=new Intent(this, MainActivity.class);
+                Intent[] intents=new Intent[2];
+                intents[0]=mainIntent;
+                intents[1]=actionIntent;
+                PendingIntent intent = PendingIntent.getActivities(this, 0, intents, PendingIntent.FLAG_CANCEL_CURRENT);
                 int onChatUId=SharedPreferencesUtil.getInstance().getInt("onChatUserId",-1);
                 if (onChatUId!=message.getM_source_id()||!isRunningForeground(FlyMessageApplication.getInstances().getApplicationContext()))
                     notifyUserMessage(userBean.getU_head_img(), (int) message.getCId(),intent);
@@ -412,12 +464,16 @@ public class MessageService extends Service {
             messageDao.insertOrReplace(message);
             remoteView.setTextViewText(R.id.tv_u_name,groupBean.getG_name()+"("+(messages.size()+1)+"条新消息)");
             remoteView.setTextViewText(R.id.tv_msg_content,content);
-            remoteView.setImageViewResource(R.id.notify_head_img,R.mipmap.ic_launcher);
+            remoteView.setImageViewResource(R.id.notify_head_img,R.drawable.icon);
             if (userChat.getChat_show_remind()&&SharedPreferencesUtil.getInstance().getBoolean("allowNotify",true)){
                 Intent actionIntent=new Intent(this, GroupChatActivity.class);
                 actionIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 actionIntent.putExtra("groupId",groupBean.getG_id());
-                PendingIntent intent = PendingIntent.getActivity(this, 0, actionIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                Intent mainIntent=new Intent(this, MainActivity.class);
+                Intent[] intents=new Intent[2];
+                intents[0]=mainIntent;
+                intents[1]=actionIntent;
+                PendingIntent intent = PendingIntent.getActivities(this, 0, intents, PendingIntent.FLAG_CANCEL_CURRENT);
                 int onChatUId=SharedPreferencesUtil.getInstance().getInt("onChatGroupId",-1);
                 if (onChatUId!=message.getM_source_g_id()||!isRunningForeground(FlyMessageApplication.getInstances().getApplicationContext()))
                     notifyUserMessage(groupBean.getG_head_img(),(int) message.getCId(),intent);
@@ -433,12 +489,17 @@ public class MessageService extends Service {
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            if (resource.getHeight()>resource.getWidth()){
+                                resource=Bitmap.createBitmap(resource,0,(resource.getHeight()-resource.getWidth())/2,resource.getWidth(),resource.getWidth());
+                            }else if (resource.getWidth()>resource.getHeight()){
+                                resource=Bitmap.createBitmap(resource,(resource.getWidth()-resource.getHeight())/2,0,resource.getHeight(),resource.getHeight());
+                            }
                             remoteView.setImageViewBitmap(R.id.notify_head_img,resource);
                             NotificationCompat.Builder builder=new NotificationCompat.Builder(getApplicationContext(),notificationChannelID)
                                     .setSmallIcon(R.drawable.icon)
                                     .setOngoing(false)
                                     .setContent(remoteView)
-                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)//设置最大优先级
+                                    .setPriority(NotificationCompat.PRIORITY_LOW)
                                     .setAutoCancel(true)
                                     .setContentIntent(pendingIntent);
                             if (SharedPreferencesUtil.getInstance().getBoolean("msgVoice",true)){

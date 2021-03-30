@@ -102,7 +102,6 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView17"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/d_15"

@@ -56,7 +56,7 @@ public class HeadsAdapter extends RecyclerView.Adapter {
                 listener.onItemClick(v,position);
             }
         });
-        Glide.with(context).load(proxyCacheServer.getProxyUrl(headsBean.getHead_img_link())).error(R.mipmap.ic_launcher).into(((HeadViewHolder)holder).head);
+        Glide.with(context).load(proxyCacheServer.getProxyUrl(headsBean.getHead_img_link())).error(R.drawable.icon).into(((HeadViewHolder)holder).head);
         ((HeadViewHolder)holder).time.setText(new SimpleDateFormat("yyyy-MM-dd").format(headsBean.getTime()));
     }
 

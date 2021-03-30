@@ -15,7 +15,6 @@ import com.danikula.videocache.HttpProxyCacheServer;
 import com.example.flymessagedome.FlyMessageApplication;
 import com.example.flymessagedome.R;
 import com.example.flymessagedome.bean.FriendsBean;
-import com.example.flymessagedome.model.FriendGetModel;
 import com.example.flymessagedome.utils.StringUtil;
 import com.example.flymessagedome.view.CircleImageView;
 
@@ -30,62 +29,63 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class FriendAdapter extends RecyclerView.Adapter {
-    public ArrayList<FriendGroupMap> friendGroupMaps=new ArrayList<>();
+    public ArrayList<FriendGroupMap> friendGroupMaps = new ArrayList<>();
     ArrayList<FriendsBean> friendsBeans;
     Context context;
     private OnRecyclerViewItemClickListener listener;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
     private HttpProxyCacheServer proxyCacheServer;
-    public FriendAdapter(ArrayList<FriendsBean> friendsBeans,Context context){
+
+    public FriendAdapter(ArrayList<FriendsBean> friendsBeans, Context context) {
         this.context = context;
-        this.friendsBeans=friendsBeans;
+        this.friendsBeans = friendsBeans;
         mLayoutInflater = LayoutInflater.from(context);
-        proxyCacheServer=FlyMessageApplication.getProxy(context);
+        proxyCacheServer = FlyMessageApplication.getProxy(context);
         initFriendMsg(friendsBeans);
     }
 
-    public void initFriendMsg(ArrayList<FriendsBean> friendsBeans){
-        ArrayList<Character> groups=new ArrayList<>();
-        friendGroupMaps=new ArrayList<>();
-        for (FriendsBean friend:
+    public void initFriendMsg(ArrayList<FriendsBean> friendsBeans) {
+        ArrayList<Character> groups = new ArrayList<>();
+        friendGroupMaps = new ArrayList<>();
+        for (FriendsBean friend :
                 friendsBeans) {
             String name;
             if (!TextUtils.isEmpty(friend.getF_remarks_name()))
-                name=friend.getF_remarks_name();
+                name = friend.getF_remarks_name();
             else {
-                if (friend.getFriendUser()!=null)
-                    name=friend.getFriendUser().getU_nick_name();
+                if (friend.getFriendUser() != null)
+                    name = friend.getFriendUser().getU_nick_name();
                 else
-                    name="";
+                    name = "";
             }
             String topKey;
-            if (TextUtils.isEmpty(name)||StringUtil.getFirstLetter(name.charAt(0))==null)
-                topKey="null";
+            if (TextUtils.isEmpty(name) || StringUtil.getFirstLetter(name.charAt(0)) == null)
+                topKey = "null";
             else
-                topKey= StringUtil.getFirstLetter(name.charAt(0)).toString();
-            if (topKey.equals("null")){
-                friendGroupMaps.add(new FriendGroupMap(friend,"#",false));
-            }else {
-                friendGroupMaps.add(new FriendGroupMap(friend,topKey,false));
+                topKey = StringUtil.getFirstLetter(name.charAt(0)).toString();
+            if (topKey.equals("null")) {
+                friendGroupMaps.add(new FriendGroupMap(friend, "#", false));
+            } else {
+                friendGroupMaps.add(new FriendGroupMap(friend, topKey, false));
             }
         }
-        for (FriendGroupMap friendGroupMap:
-             friendGroupMaps) {
-            if (!groups.contains(friendGroupMap.getTopKey().charAt(0))){
+        for (FriendGroupMap friendGroupMap :
+                friendGroupMaps) {
+            if (!groups.contains(friendGroupMap.getTopKey().charAt(0))) {
                 groups.add(friendGroupMap.getTopKey().charAt(0));
             }
         }
-        char[] letterGroups=new char[groups.size()];
-        int index=0;
-        for (Character c:
-             groups) {
-            letterGroups[index]=c;
+        char[] letterGroups = new char[groups.size()];
+        int index = 0;
+        for (Character c :
+                groups) {
+            letterGroups[index] = c;
             index++;
         }
         Arrays.sort(letterGroups);
         Map<Character, Integer> groupOrder = new HashMap<>(letterGroups.length);
-        for(int i=0;i<groups.size();i++){
-            groupOrder.put(letterGroups[i],i);
+        for (int i = 0; i < groups.size(); i++) {
+            groupOrder.put(letterGroups[i], i);
         }
         Comparator<FriendGroupMap> orderlyGroupComparator = (o1, o2) -> {
             int diff = groupOrder.get(o1.getTopKey().charAt(0)).compareTo(groupOrder.get(o2.getTopKey().charAt(0)));
@@ -93,26 +93,23 @@ public class FriendAdapter extends RecyclerView.Adapter {
         };
         try {
             Collections.sort(friendGroupMaps, orderlyGroupComparator);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public interface OnRecyclerViewItemClickListener {
-        void onItemClick(View view, int position);
-        void onItemLongClick(View view, int position);
+    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
+        listener = onRecyclerViewItemClickListener;
     }
-    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener){
-        listener=onRecyclerViewItemClickListener;
-    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        if (viewType==1){
+        if (viewType == 1) {
             view = mLayoutInflater.inflate(R.layout.friend_list_first_item, null, false);
             return new TopFriendViewHolder(view);
-        }else {
+        } else {
             view = mLayoutInflater.inflate(R.layout.friend_list_item, null, false);
             return new NormalFriendViewHolder(view);
         }
@@ -120,63 +117,55 @@ public class FriendAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        FriendGroupMap map=friendGroupMaps.get(position);
-        if (map.friendsBean.getFriendUser()==null){
+        FriendGroupMap map = friendGroupMaps.get(position);
+        if (map.friendsBean.getFriendUser() == null) {
             return;
         }
-        proxyCacheServer= FlyMessageApplication.getProxy(context);
-        if (holder instanceof TopFriendViewHolder){
-            ((TopFriendViewHolder)holder).topTv.setText(friendGroupMaps.get(position).getTopKey());
-            ((TopFriendViewHolder)holder).name.setText(friendGroupMaps.get(position).friendsBean.getF_remarks_name());
+        proxyCacheServer = FlyMessageApplication.getProxy(context);
+        if (holder instanceof TopFriendViewHolder) {
+            ((TopFriendViewHolder) holder).topTv.setText(friendGroupMaps.get(position).getTopKey());
+            ((TopFriendViewHolder) holder).name.setText(friendGroupMaps.get(position).friendsBean.getF_remarks_name());
             if (friendGroupMaps.get(position).friendsBean.isIsOnline())
-                ((TopFriendViewHolder)holder).state.setText("[在线]"+friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
+                ((TopFriendViewHolder) holder).state.setText("[在线]" + friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
             else
-                ((TopFriendViewHolder)holder).state.setText("[离线]"+friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
-            String headUrl=friendGroupMaps.get(position).friendsBean.getFriendUser().getU_head_img();
-            if (headUrl.contains("http")){
-                headUrl=proxyCacheServer.getProxyUrl(headUrl);
+                ((TopFriendViewHolder) holder).state.setText("[离线]" + friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
+            String headUrl = friendGroupMaps.get(position).friendsBean.getFriendUser().getU_head_img();
+            if (headUrl.contains("http")) {
+                headUrl = proxyCacheServer.getProxyUrl(headUrl);
             }
-            Glide.with(context).load(headUrl).placeholder(R.mipmap.ic_launcher_round).into( ((TopFriendViewHolder)holder).head);
-            if (listener!=null){
-                ((TopFriendViewHolder)holder).main.setOnLongClickListener(new View.OnLongClickListener() {
+            Glide.with(context).load(headUrl).into(((TopFriendViewHolder) holder).head);
+            if (listener != null) {
+                ((TopFriendViewHolder) holder).main.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        listener.onItemLongClick(v,position);
+                        listener.onItemLongClick(v, position);
                         return false;
                     }
                 });
-                ((TopFriendViewHolder)holder).main.setOnClickListener(new View.OnClickListener() {
+                ((TopFriendViewHolder) holder).main.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        listener.onItemClick(v,position);
+                        listener.onItemClick(v, position);
                     }
                 });
             }
-        }else {
-            ((NormalFriendViewHolder)holder).name.setText(friendGroupMaps.get(position).friendsBean.getF_remarks_name());
+        } else {
+            ((NormalFriendViewHolder) holder).name.setText(friendGroupMaps.get(position).friendsBean.getF_remarks_name());
             if (friendGroupMaps.get(position).friendsBean.isIsOnline())
-                ((NormalFriendViewHolder)holder).state.setText("[在线]"+friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
+                ((NormalFriendViewHolder) holder).state.setText("[在线]" + friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
             else
-                ((NormalFriendViewHolder)holder).state.setText("[离线]"+friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
-            String headUrl=friendGroupMaps.get(position).friendsBean.getFriendUser().getU_head_img();
-            if (headUrl.contains("http")){
-                headUrl=proxyCacheServer.getProxyUrl(headUrl);
+                ((NormalFriendViewHolder) holder).state.setText("[离线]" + friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
+            String headUrl = friendGroupMaps.get(position).friendsBean.getFriendUser().getU_head_img();
+            if (headUrl.contains("http")) {
+                headUrl = proxyCacheServer.getProxyUrl(headUrl);
             }
-            Glide.with(context).load(headUrl).placeholder(R.mipmap.ic_launcher_round).into( ((NormalFriendViewHolder)holder).head);
-            if (listener!=null){
-                ((NormalFriendViewHolder)holder).main.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        listener.onItemLongClick(v,position);
-                        return false;
-                    }
+            Glide.with(context).load(headUrl).into(((NormalFriendViewHolder) holder).head);
+            if (listener != null) {
+                ((NormalFriendViewHolder) holder).main.setOnLongClickListener(v -> {
+                    listener.onItemLongClick(v, position);
+                    return false;
                 });
-                ((NormalFriendViewHolder)holder).main.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        listener.onItemClick(v,position);
-                    }
-                });
+                ((NormalFriendViewHolder) holder).main.setOnClickListener(v -> listener.onItemClick(v, position));
             }
         }
     }
@@ -188,15 +177,22 @@ public class FriendAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (position==0){
+        if (position == 0) {
             return 1;
-        }else if (!friendGroupMaps.get(position).getTopKey().equals(friendGroupMaps.get(position-1).getTopKey())){
+        } else if (!friendGroupMaps.get(position).getTopKey().equals(friendGroupMaps.get(position - 1).getTopKey())) {
             return 1;
-        }else {
+        } else {
             return 0;
         }
     }
-    static class NormalFriendViewHolder extends RecyclerView.ViewHolder{
+
+    public interface OnRecyclerViewItemClickListener {
+        void onItemClick(View view, int position);
+
+        void onItemLongClick(View view, int position);
+    }
+
+    static class NormalFriendViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.f_head)
         CircleImageView head;
         @BindView(R.id.f_name)
@@ -205,12 +201,14 @@ public class FriendAdapter extends RecyclerView.Adapter {
         TextView state;
         @BindView(R.id.main_view)
         View main;
+
         public NormalFriendViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
     }
-    static class TopFriendViewHolder extends RecyclerView.ViewHolder{
+
+    static class TopFriendViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.f_group)
         TextView topTv;
         @BindView(R.id.f_head)
@@ -221,16 +219,19 @@ public class FriendAdapter extends RecyclerView.Adapter {
         TextView state;
         @BindView(R.id.main_view)
         View main;
+
         public TopFriendViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
     }
-    public class FriendGroupMap{
+
+    public class FriendGroupMap {
         FriendsBean friendsBean;
         String topKey;
         boolean isTop;
         int position;
+
         public FriendGroupMap() {
         }
 

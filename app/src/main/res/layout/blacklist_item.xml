@@ -13,7 +13,7 @@
         android:layout_height="@dimen/d_40"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/d_16"
-        android:src="@mipmap/ic_launcher_round" />
+        />
 
     <RelativeLayout
         android:layout_width="match_parent"

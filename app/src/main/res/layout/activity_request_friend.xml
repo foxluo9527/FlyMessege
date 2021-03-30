@@ -81,7 +81,6 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/d_16"

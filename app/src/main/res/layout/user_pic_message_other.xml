@@ -29,8 +29,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="42dp"
-            android:src="@mipmap/ic_launcher_round" />
+            android:layout_marginTop="42dp" />
 
         <TextView
             android:id="@+id/tv_send_time"

@@ -76,14 +76,14 @@ public class RecordMessageAdapter extends RecyclerView.Adapter {
         if (message.getM_source_id()!= LoginActivity.loginUser.getU_id()){
             viewHolder.name.setText(uName);
             Glide.with(context).load(proxyCacheServer.getProxyUrl(uHead))
-                    .placeholder(R.mipmap.ic_launcher_round)
-                    .error(R.mipmap.ic_launcher_round)
+
+
                     .into(viewHolder.headImg);
         }else {
             viewHolder.name.setText(myName);
             Glide.with(context).load(proxyCacheServer.getProxyUrl(LoginActivity.loginUser.getU_head_img()))
-                    .placeholder(R.mipmap.ic_launcher_round)
-                    .error(R.mipmap.ic_launcher_round)
+
+
                     .into(viewHolder.headImg);
         }
         viewHolder.m_content.setText(TextSpanUtil.getInstant().setColor(message.getM_content()+" ",
