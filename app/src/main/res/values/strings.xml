@@ -1,6 +1,40 @@
 <resources>
-    <string name="app_name">飞讯聊天</string>
+
     <string name="default_file_name">flymessage</string>
+    <string name="email">mailto:1061297065@qq.com</string>
+    <string name="qq_package">com.tencent.mobileqq</string>
+    <string name="qq_contract"><![CDATA[mqqwpa://im/chat?chat_type=wpa&uin=1061297065&version=1]]></string>
+    <string name="tel_contract">tel:17628648573</string>
+    <string name="privacy_file_path">file:///android_asset/privacy.html</string>
+
+
+    <string name="app_name">飞讯聊天</string>
+    <string name="already_lastest">已是最新版本</string>
+    <string name="new_version">新版本:V</string>
+    <string name="app_version">飞讯 V</string>
+    <string name="get_one_failed">获取每日一句失败</string>
+    <string name="pass_login"><![CDATA[密码登录>>]]></string>
+    <string name="code_login"><![CDATA[短信验证码登录>>]]></string>
+    <string name="input_phone">输入手机号</string>
+    <string name="input_user_name">输入手机号/用户名</string>
+    <string name="please_input_uname">请输入用户名</string>
+    <string name="please_input_pass">请输入密码</string>
+    <string name="please_input_phone">请输入手机号</string>
+    <string name="please_input_right_phone">请输入正确的手机号</string>
+    <string name="please_input_code">请输入验证码</string>
+    <string name="please_input_right_code">请输入6位数字验证码</string>
+    <string name="login_time_out">登录过期，请重新登录</string>
+    <string name="get">获取</string>
+    <string name="and">与</string>
+    <string name="protocol">服务条款</string>
+    <string name="privacy">隐私协议</string>
+    <string name="cancel">取消</string>
+    <string name="edit">编辑</string>
+    <string name="sure_logout">确认退出登录?</string>
+    <string name="sure">确定</string>
+    <string name="feedback">飞讯聊天使用反馈</string>
+    <string name="feedback_uname">用户名:</string>
+    <string name="feedback_content">\n反馈内容:</string>
 
     <!-- Preference Titles -->
 

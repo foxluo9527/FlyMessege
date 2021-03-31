@@ -3,7 +3,7 @@ package com.example.flymessagedome.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,7 +13,6 @@ import android.text.SpannedString;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -42,9 +41,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+@SuppressLint("NonConstantResourceId")
 public class LoginActivity extends BaseActivity implements LoginContract.View {
-    public static User loginUser=null;
-
+    public static User loginUser = null;
     @BindView(R.id.et_user_name)
     EditText etUserName;
     @BindView(R.id.et_password)
@@ -63,17 +62,17 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @Inject
     LoginPresenter loginPresenter;
 
-    Handler setCountDown=new Handler(){
+    Handler setCountDown = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            int s=msg.what;
-            if (btnSendCode!=null){
-                if (s==0){
+            int s = msg.what;
+            if (btnSendCode != null) {
+                if (s == 0) {
                     btnSendCode.setEnabled(true);
-                    btnSendCode.setText("获取");
-                }else {
-                    btnSendCode.setText(s+"s");
+                    btnSendCode.setText(R.string.get);
+                } else {
+                    btnSendCode.setText(s + "s");
                 }
             }
         }
@@ -82,11 +81,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     public static void startActivity(Context context) {
         context.startActivity(new Intent(context, LoginActivity.class));
     }
-    public static void startActivity(Context context, Bundle bundle) {
-        Intent intent=new Intent(context, LoginActivity.class);
-        intent.putExtras(bundle);
-        context.startActivity(intent);
-    }
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_login;
@@ -99,24 +94,19 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     @Override
     public void initDatas() {
-        SharedPreferencesUtil.getInstance().putBoolean("isFirstUse",false);
+        SharedPreferencesUtil.getInstance().putBoolean("isFirstUse", false);
         boolean isLogin = SharedPreferencesUtil.getInstance().getBoolean(Constant.IS_LOGIN, false);
-        boolean auto=true;
-        Bundle data=getIntent().getExtras();
-        if (data!=null){
-            auto=data.getBoolean("auto_login",true);
-        }
-        boolean autoLogin=SharedPreferencesUtil.getInstance().getBoolean(Constant.AUTO_LOGIN, true)&&auto;
-        boolean rememberAccount=SharedPreferencesUtil.getInstance().getBoolean(Constant.REMEMBER_ACCOUNT, true);
-        if (isLogin&&rememberAccount){
-            String u_name=SharedPreferencesUtil.getInstance().getString(Constant.U_NAME);
-            String u_pass=SharedPreferencesUtil.getInstance().getString(Constant.U_PASS);
-            if (u_name!=null&&u_pass!=null){
+        boolean autoLogin = SharedPreferencesUtil.getInstance().getBoolean(Constant.AUTO_LOGIN, true);
+        boolean rememberAccount = SharedPreferencesUtil.getInstance().getBoolean(Constant.REMEMBER_ACCOUNT, true);
+        if (isLogin && rememberAccount) {
+            String u_name = SharedPreferencesUtil.getInstance().getString(Constant.U_NAME);
+            String u_pass = SharedPreferencesUtil.getInstance().getString(Constant.U_PASS);
+            if (u_name != null && u_pass != null) {
                 etUserName.setText(u_name);
                 etPassword.setText(u_pass);
-                if (autoLogin){
-                    showLoadingDialog(false,Constant.ON_LOGIN);
-                    loginPresenter.login(u_name,u_pass);
+                if (autoLogin) {
+                    showLoadingDialog(false, Constant.ON_LOGIN);
+                    loginPresenter.login(u_name, u_pass);
                 }
             }
         }
@@ -128,31 +118,31 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     @SuppressLint("NonConstantResourceId")
-    @OnClick({R.id.tv_forget_password, R.id.tv_login,R.id.tv_login_type,R.id.btn_send_code,R.id.tv_privacy,R.id.tv_register})
+    @OnClick({R.id.tv_forget_password, R.id.tv_login, R.id.tv_login_type, R.id.btn_send_code, R.id.tv_privacy, R.id.tv_protocol, R.id.tv_register})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_forget_password:
-                Intent intent= new Intent(LoginActivity.this,WebActivity.class);
-                intent.putExtra("URLString",Constant.FORGET_PASS_URL);
+                Intent intent = new Intent(LoginActivity.this, WebActivity.class);
+                intent.putExtra("URLString", Constant.FORGET_PASS_URL);
                 startActivity(intent);
                 break;
             case R.id.tv_register:
-                Intent intent1= new Intent(LoginActivity.this,WebActivity.class);
-                intent1.putExtra("URLString",Constant.REGISTER_URL);
+                Intent intent1 = new Intent(LoginActivity.this, WebActivity.class);
+                intent1.putExtra("URLString", Constant.REGISTER_URL);
                 startActivity(intent1);
                 break;
             case R.id.tv_login_type:
-                int passViewVisibility=passLoginView.getVisibility();
-                int codeViewVisibility=codeLoginView.getVisibility();
+                int passViewVisibility = passLoginView.getVisibility();
+                int codeViewVisibility = codeLoginView.getVisibility();
                 passLoginView.setVisibility(codeViewVisibility);
                 codeLoginView.setVisibility(passViewVisibility);
-                SpannableString ss=null;
-                if (passViewVisibility==View.VISIBLE){
-                    tvLoginType.setText("密码登录>>");
-                    ss = new SpannableString("输入手机号");
-                }else {
-                    tvLoginType.setText("短信验证码登录>>");
-                    ss = new SpannableString("输入手机号/用户名");
+                SpannableString ss;
+                if (passViewVisibility == View.VISIBLE) {
+                    tvLoginType.setText(R.string.pass_login);
+                    ss = new SpannableString(getString(R.string.input_phone));
+                } else {
+                    tvLoginType.setText(R.string.code_login);
+                    ss = new SpannableString(getString(R.string.input_user_name));
                 }
                 AbsoluteSizeSpan ass = new AbsoluteSizeSpan(15, true);
                 ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -160,55 +150,60 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                 break;
             case R.id.tv_login:
                 String userName = etUserName.getText().toString();
-                if (isVisible(passLoginView)){
+                if (isVisible(passLoginView)) {
                     String password = etPassword.getText().toString();
-                    if (TextUtils.isEmpty(userName)){
-                        ToastUtils.showToast("请输入用户名");
+                    if (TextUtils.isEmpty(userName)) {
+                        ToastUtils.showToast(getString(R.string.please_input_uname));
                         return;
                     }
-                    if (TextUtils.isEmpty(password)){
-                        ToastUtils.showToast("请输入密码");
+                    if (TextUtils.isEmpty(password)) {
+                        ToastUtils.showToast(getString(R.string.please_input_pass));
                         return;
                     }
-                    showLoadingDialog(false,Constant.ON_LOGIN);
-                    loginPresenter.login(userName,password);
-                }else {
-                    String code=etCode.getText().toString();
-                    if (TextUtils.isEmpty(userName)){
-                        ToastUtils.showToast("请输入手机号");
+                    showLoadingDialog(false, Constant.ON_LOGIN);
+                    loginPresenter.login(userName, password);
+                } else {
+                    String code = etCode.getText().toString();
+                    if (TextUtils.isEmpty(userName)) {
+                        ToastUtils.showToast(getString(R.string.please_input_phone));
                         return;
-                    }else if (!CommUtil.isMobileNO(userName)){
-                        ToastUtils.showToast("请输入正确的手机号");
-                        return;
-                    }
-                    if (TextUtils.isEmpty(code)){
-                        ToastUtils.showToast("请输入验证码");
-                        return;
-                    }else if (code.length()!=6){
-                        ToastUtils.showToast("请输入6位数字验证码");
+                    } else if (!CommUtil.isMobileNO(userName)) {
+                        ToastUtils.showToast(getString(R.string.please_input_right_phone));
                         return;
                     }
-                    showLoadingDialog(false,Constant.ON_LOGIN);
-                    loginPresenter.codeLogin(userName,code);
+                    if (TextUtils.isEmpty(code)) {
+                        ToastUtils.showToast(getString(R.string.please_input_code));
+                        return;
+                    } else if (code.length() != 6) {
+                        ToastUtils.showToast(getString(R.string.please_input_right_code));
+                        return;
+                    }
+                    showLoadingDialog(false, Constant.ON_LOGIN);
+                    loginPresenter.codeLogin(userName, code);
                 }
                 break;
             case R.id.btn_send_code:
                 String phone = etUserName.getText().toString();
-                if (TextUtils.isEmpty(phone)){
-                    ToastUtils.showToast("请输入手机号");
+                if (TextUtils.isEmpty(phone)) {
+                    ToastUtils.showToast(getString(R.string.please_input_phone));
                     return;
-                }else if (!CommUtil.isMobileNO(phone)){
-                    ToastUtils.showToast("请输入正确的手机号");
+                } else if (!CommUtil.isMobileNO(phone)) {
+                    ToastUtils.showToast(getString(R.string.please_input_right_phone));
                     return;
                 }
                 btnSendCode.setEnabled(false);
-                showLoadingDialog(false,Constant.ON_SENDING_CODE);
+                showLoadingDialog(false, Constant.ON_SENDING_CODE);
                 loginPresenter.sendCode(phone);
                 break;
             case R.id.tv_privacy:
-                Intent intent2= new Intent(LoginActivity.this,WebActivity.class);
-                intent2.putExtra("URLString",Constant.protocolUrl);
-                startActivity(intent2);
+                Intent privacyIntent = new Intent(mContext, WebActivity.class);
+                privacyIntent.putExtra("URLString", Uri.parse(getString(R.string.privacy_file_path)).toString());
+                startActivity(privacyIntent);
+                break;
+            case R.id.tv_protocol:
+                Intent protocolIntent = new Intent(mContext, WebActivity.class);
+                protocolIntent.putExtra("URLString", Constant.protocolUrl);
+                startActivity(protocolIntent);
                 break;
 
         }
@@ -217,13 +212,13 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @Override
     public void showError() {
         dismissLoadingDialog();
-        toastServerEx(NetworkUtils.isConnected(this),null);
+        toastServerEx(NetworkUtils.isConnected(this), null);
     }
 
     @Override
     public void showError(String msg) {
         dismissLoadingDialog();
-        toastServerEx(NetworkUtils.isConnected(this),msg);
+        toastServerEx(NetworkUtils.isConnected(this), msg);
     }
 
     @Override
@@ -234,7 +229,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @Override
     public void tokenExceed() {
         dismissLoadingDialog();
-        ToastUtils.showToast("登录过期，请重新登录");
+        ToastUtils.showToast(getString(R.string.login_time_out));
         SharedPreferencesUtil.getInstance().removeAll();
         ActivityCollector.finishAll();
     }
@@ -242,10 +237,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @Override
     public void loginSuccess(Login login) {
         dismissLoadingDialog();
-        SharedPreferencesUtil.getInstance().putBoolean(Constant.IS_LOGIN,true);
-        if (login.loginUser!=null){
-            loginUser=login.loginUser;
-            UserDao userDao= FlyMessageApplication.getInstances().getDaoSession().getUserDao();
+        SharedPreferencesUtil.getInstance().putBoolean(Constant.IS_LOGIN, true);
+        if (login.loginUser != null) {
+            loginUser = login.loginUser;
+            UserDao userDao = FlyMessageApplication.getInstances().getDaoSession().getUserDao();
             userDao.insertOrReplace(loginUser);
         }
         MainActivity.startActivity(mContext);
@@ -254,15 +249,15 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     @Override
     public void sendLoginCodeSuccess() {
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 super.run();
-                for (int s=60;s>=0;s--) {
-                    Message msg=new Message();
-                    msg.what=s;
+                for (int s = 60; s >= 0; s--) {
+                    Message msg = new Message();
+                    msg.what = s;
                     setCountDown.sendMessage(msg);
-                    if (s==60)
+                    if (s == 60)
                         dismissLoadingDialog();
                     try {
                         sleep(1000);
@@ -278,6 +273,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     public void sendLoginCodeFailed() {
         dismissLoadingDialog();
         btnSendCode.setEnabled(true);
-        btnSendCode.setText("获取");
+        btnSendCode.setText(R.string.get);
     }
 }

@@ -132,15 +132,13 @@ public class ChangePassActivity extends BaseActivity {
                         if (base.code== Constant.SUCCESS){
                             AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                             dialog.setMessage("密码已修改请重新登录")
-                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            MainActivity.serviceBinder.closeConnect();
-                                            ActivityCollector.finishAll();
-                                            LoginActivity.startActivity(mContext);
-                                            SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
-                                            dialog.cancel();//取消弹出框
-                                        }})
+                                    .setPositiveButton("确定", (dialog1, which) -> {
+                                        MainActivity.serviceBinder.closeConnect();
+                                        ActivityCollector.finishAll();
+                                        SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
+                                        LoginActivity.startActivity(mContext);
+                                        dialog1.cancel();//取消弹出框
+                                    })
                                     .setCancelable(false)
                                     .create().show();
                         }

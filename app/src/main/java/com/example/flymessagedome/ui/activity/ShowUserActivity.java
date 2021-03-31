@@ -111,7 +111,8 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
                 @Override
                 protected void onPostExecute(Users user) {
                     if (user == null || user.code != Constant.SUCCESS) {
-                        ToastUtils.showToast(user.msg);
+                        if (user != null)
+                            ToastUtils.showToast(user.msg);
                         finish();
                         return;
                     }

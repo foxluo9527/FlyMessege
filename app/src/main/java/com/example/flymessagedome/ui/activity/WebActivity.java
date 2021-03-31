@@ -1,6 +1,5 @@
 package com.example.flymessagedome.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -25,6 +24,7 @@ import com.just.agentweb.WebViewClient;
 public class WebActivity extends BaseActivity {
     private AgentWeb mAgentWeb;
     private String url;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,12 +68,12 @@ public class WebActivity extends BaseActivity {
 
     @Override
     public void configViews() {
-        url=getIntent().getStringExtra("URLString");
+        url = getIntent().getStringExtra("URLString");
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent((LinearLayout) findViewById(R.id.main), new LinearLayout.LayoutParams(-1, -1))
                 .useDefaultIndicator()
                 .setWebChromeClient(mWebChromeClient)
-                .setWebViewClient(new WebViewClient(){
+                .setWebViewClient(new WebViewClient() {
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
@@ -117,7 +117,7 @@ public class WebActivity extends BaseActivity {
             }
         } else if (id == R.id.close) {
             finish();
-        }else if (id==R.id.open){
+        } else if (id == R.id.open) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(url));
             startActivity(intent);

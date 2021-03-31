@@ -66,11 +66,6 @@ public class AddFriendActivity extends BaseActivity implements EasyPermissions.P
     }
     @Override
     public void initDatas() {
-        if (LoginActivity.loginUser==null){
-            ActivityCollector.finishAll();
-            LoginActivity.startActivity(FlyMessageApplication.getAppContext());
-            return;
-        }
         my_name.setText("我的飞讯名:"+LoginActivity.loginUser.getU_name().toString());
     }
 

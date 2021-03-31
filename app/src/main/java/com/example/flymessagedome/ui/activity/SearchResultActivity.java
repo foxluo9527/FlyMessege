@@ -210,6 +210,7 @@ public class SearchResultActivity extends BaseActivity implements SearchContract
             ToastUtils.showToast("获取用户登录信息失败，请重新登录");
             SharedPreferencesUtil.getInstance().removeAll();
             ActivityCollector.finishAll();
+            SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
             LoginActivity.startActivity(mContext);
         }
     }

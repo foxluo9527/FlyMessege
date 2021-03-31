@@ -42,6 +42,7 @@
                     android:background="@drawable/login_et_bg">
 
                     <EditText
+                        android:singleLine="true"
                         android:id="@+id/et_user_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -64,6 +65,7 @@
                     android:background="@drawable/login_et_bg">
 
                     <EditText
+                        android:singleLine="true"
                         android:id="@+id/et_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -201,11 +203,29 @@
 
         <TextView
             android:clickable="true"
+            android:id="@+id/tv_protocol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/privacy"
+            android:layout_marginLeft="2dp"
+            android:textColor="@drawable/login_text_touch"
+            android:textSize="@dimen/s_14" />
+        <TextView
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/and"
+            android:layout_marginHorizontal="2dp"
+            android:textSize="@dimen/s_14" />
+        <TextView
+            android:clickable="true"
             android:id="@+id/tv_privacy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="隐私与服务条款"
+            android:text="@string/protocol"
             android:textColor="@drawable/login_text_touch"
             android:textSize="@dimen/s_14" />
     </LinearLayout>

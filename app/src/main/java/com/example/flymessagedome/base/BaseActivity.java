@@ -29,6 +29,7 @@ import com.example.flymessagedome.ui.activity.LoginActivity;
 import com.example.flymessagedome.ui.activity.MainActivity;
 import com.example.flymessagedome.utils.ActivityCollector;
 import com.example.flymessagedome.utils.AppUtils;
+import com.example.flymessagedome.utils.Constant;
 import com.example.flymessagedome.utils.NetworkType;
 import com.example.flymessagedome.utils.SharedPreferencesUtil;
 import com.example.flymessagedome.utils.ToastUtils;
@@ -174,9 +175,8 @@ public abstract class BaseActivity extends AppCompatActivity implements NetState
         MainActivity.serviceBinder.closeConnect();
         LoginActivity.loginUser = null;
         ActivityCollector.finishAll();
-        Bundle data=new Bundle();
-        data.putBoolean("auto_login",false);
-        LoginActivity.startActivity(this,data);
+        SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
+        LoginActivity.startActivity(this);
     }
 
     /**

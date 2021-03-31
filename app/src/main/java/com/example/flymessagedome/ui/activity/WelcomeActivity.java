@@ -134,7 +134,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
     @Override
     public void showError() {
         if (!this.isDestroyed())
-            showError("获取每日一句失败");
+            showError(getString(R.string.get_one_failed));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)

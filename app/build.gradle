@@ -8,8 +8,8 @@ android {
         applicationId "com.example.flymessagedome"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 3
-        versionName "1.0.3"
+        versionCode 4
+        versionName "1.0.4"
         multiDexEnabled true
         /** 腾讯bugly */
         /*ndk {
@@ -45,6 +45,13 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //视频通话
+//    implementation 'org.webrtc:google-webrtc:1.0.26131'
+    //socket.io
+//    implementation('io.socket:socket.io-client:0.8.3') {
+        // excluding org.json which is provided by Android
+//        exclude group: 'org.json', module: 'json'
+//    }
     //分包
     implementation 'com.android.support:multidex:1.0.3'
     //腾讯bug管理平台

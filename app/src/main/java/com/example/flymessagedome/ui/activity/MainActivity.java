@@ -104,6 +104,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        if (!SharedPreferencesUtil.getInstance().getBoolean(Constant.IS_LOGIN,false)){
+            LoginActivity.startActivity(this);
+            finish();
+            overridePendingTransition(0,0);
+        }
         super.onCreate(savedInstanceState);
         Beta.checkAppUpgrade(false,false);
     }
@@ -207,6 +212,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             ToastUtils.showToast("获取用户登录信息失败，请重新登录");
             SharedPreferencesUtil.getInstance().removeAll();
             ActivityCollector.finishAll();
+            SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, true);
             LoginActivity.startActivity(this);
         }
     }

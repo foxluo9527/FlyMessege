@@ -81,7 +81,6 @@ public class FlyMessageApplication extends MultiDexApplication {
          * false表示不会自动检查升级,需要手动调用Beta.checkUpgrade()方法;
          */
         Beta.autoCheckUpgrade = false;
-
         /**
          * 设置升级检查周期为60s(默认检查周期为0s)，60s内SDK不重复向后台请求策略);
          */
@@ -102,7 +101,7 @@ public class FlyMessageApplication extends MultiDexApplication {
          */
         Beta.smallIconId = R.drawable.icon;
 
-        Bugly.init(getApplicationContext(), "cf62b927ee", false);
+        Bugly.init(getApplicationContext(), "cf62b927ee", true);
     }
 
     public AppComponent getAppComponent() {

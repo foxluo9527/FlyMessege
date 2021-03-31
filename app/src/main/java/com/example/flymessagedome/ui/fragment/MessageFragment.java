@@ -305,6 +305,7 @@ public class MessageFragment extends BaseFragment implements ChatContract.View, 
             ToastUtils.showToast("获取用户登录信息失败，请重新登录");
             SharedPreferencesUtil.getInstance().removeAll();
             ActivityCollector.finishAll();
+            SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
             LoginActivity.startActivity(mContext);
         }
     }
@@ -328,22 +329,6 @@ public class MessageFragment extends BaseFragment implements ChatContract.View, 
     @Override
     public void tokenExceed() {
 
-    }
-    /**
-     * 动态设置ListView的高度
-     * @param listView
-     */
-    private void setListViewHeightBasedOnChildren(ListView listView) {
-        if(listView == null) return;
-
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            // pre-condition 
-            return;
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = ImageUtils.dip2px(MessageFragment.this.mContext,61) * listAdapter.getCount();
-        listView.setLayoutParams(params);
     }
 
     @Override

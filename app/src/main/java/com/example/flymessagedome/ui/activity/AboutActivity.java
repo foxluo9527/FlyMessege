@@ -14,7 +14,6 @@ import com.example.flymessagedome.R;
 import com.example.flymessagedome.base.BaseActivity;
 import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.utils.Constant;
-import com.example.flymessagedome.utils.ToastUtils;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.UpgradeInfo;
 
@@ -52,20 +51,30 @@ public class AboutActivity extends BaseActivity {
             case R.id.check_update:
                 Beta.checkAppUpgrade(true, false);
                 break;
+            case R.id.privacy:
+                Intent privacyIntent = new Intent(mContext, WebActivity.class);
+                privacyIntent.putExtra("URLString", Uri.parse(getString(R.string.privacy_file_path)).toString());
+                startActivity(privacyIntent);
+                break;
             case R.id.protocol:
-                Intent intent2 = new Intent(mContext, WebActivity.class);
-                intent2.putExtra("URLString", Constant.protocolUrl);
-                startActivity(intent2);
+                Intent protocolIntent = new Intent(mContext, WebActivity.class);
+                protocolIntent.putExtra("URLString", Constant.protocolUrl);
+                startActivity(protocolIntent);
                 break;
             case R.id.back_msg:
-                if (checkApkExist(mContext, "com.tencent.mobileqq")) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin=1061297065&version=1")));
+                Intent feedback = new Intent(Intent.ACTION_SENDTO);
+                feedback.setData(Uri.parse(getString(R.string.email)));
+                feedback.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback));
+                feedback.putExtra(Intent.EXTRA_TEXT, getString(R.string.feedback_uname) + LoginActivity.loginUser.getU_name() + getString(R.string.feedback_content));
+                if (feedback.resolveActivity(getPackageManager()) != null) {
+                    startActivity(feedback);
+                } else if (checkApkExist(mContext, getString(R.string.qq_package))) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.qq_contract))));
                 } else {
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_DIAL);
-                    intent.setData(Uri.parse("tel:17628648573"));
+                    intent.setData(Uri.parse(getString(R.string.tel_contract)));
                     startActivity(intent);
-                    ToastUtils.showToast("本机未安装QQ应用");
                 }
                 break;
         }
@@ -77,7 +86,7 @@ public class AboutActivity extends BaseActivity {
         try {
             ApplicationInfo info = context.getPackageManager().getApplicationInfo(packageName,
                     PackageManager.GET_UNINSTALLED_PACKAGES);
-            return true;
+            return info != null;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
@@ -87,17 +96,17 @@ public class AboutActivity extends BaseActivity {
     @Override
     public void initDatas() {
         versionString = getAppVersionName();
-        version.setText("飞讯 V" + versionString);
+        version.setText(getString(R.string.app_version) + versionString);
         /***** 获取升级信息 *****/
         UpgradeInfo upgradeInfo = Beta.getUpgradeInfo();
 
         if (upgradeInfo == null) {
-            update_msg.setText("已是最新版本");
+            update_msg.setText(R.string.already_lastest);
             return;
         } else if (upgradeInfo.versionName.equals(versionString))
-            update_msg.setText("已是最新版本");
+            update_msg.setText(R.string.already_lastest);
         else
-            update_msg.setText("新版本:V" + upgradeInfo.versionName);
+            update_msg.setText(getString(R.string.new_version) + upgradeInfo.versionName);
     }
 
     @Override

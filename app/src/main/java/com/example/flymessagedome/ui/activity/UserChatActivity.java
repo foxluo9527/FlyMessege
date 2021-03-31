@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -101,10 +102,12 @@ import static com.example.flymessagedome.utils.Constant.RC_CHOOSE_FILE;
 import static com.example.flymessagedome.utils.Constant.RC_CHOOSE_PHOTO;
 import static com.example.flymessagedome.utils.DataCleanManager.getFormatSize;
 
+@SuppressLint("NonConstantResourceId")
 public class UserChatActivity extends BaseActivity implements UserMessageContart.View
         , EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener
-        , EasyPermissions.PermissionCallbacks {
+        , EasyPermissions.PermissionCallbacks,MessageAdapter.OnRecyclerViewItemClickListener {
     private static final String TAG = "FlyMessage";
+
     @BindView(R.id.send_voice)
     ImageViewCheckBox send_voice;
     @BindView(R.id.send_pic)
@@ -162,11 +165,11 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     MessageAdapter messageAdapter;
     UserBean user;
     private ArrayList<Message> messages;
-    private ArrayList<MessageAdapter.photoMap> photoMaps = new ArrayList<>();
-    private ArrayList<String> showPhotoUrls = new ArrayList<>();
+    private final ArrayList<MessageAdapter.photoMap> photoMaps = new ArrayList<>();
+    private final ArrayList<String> showPhotoUrls = new ArrayList<>();
     public ArrayList<Integer> choiceIndex = new ArrayList<>();
     public ArrayList<DownloadTaskBean> downloadTasks = new ArrayList<>();
-    public static boolean choice[];
+    public static boolean[] choice;
     public static boolean[] viocePlay;
     private boolean playStateChanged = false;
     private String content = null;
@@ -193,6 +196,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
         return R.layout.activity_chat;
     }
 
+    @SuppressLint("HandlerLeak")
     Handler onRecordHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull android.os.Message msg) {
@@ -202,6 +206,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
             }
         }
     };
+    @SuppressLint("HandlerLeak")
     Handler voicePlayDownHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull android.os.Message msg) {
@@ -385,26 +390,8 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                 super.onScrolledToBottom();
             }
         });
-        msgTv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    photoView.setVisibility(View.GONE);
-                    voiceView.setVisibility(View.GONE);
-                    emojisView.setVisibility(View.GONE);
-                    send_pic.setChecked(false);
-                    send_voice.setChecked(false);
-                    send_file.setChecked(false);
-                    take_photo.setChecked(false);
-                    recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
-                } else {
-                    CommUtil.closeKeybord(msgTv, UserChatActivity.this);
-                }
-            }
-        });
-        msgTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        msgTv.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
                 photoView.setVisibility(View.GONE);
                 voiceView.setVisibility(View.GONE);
                 emojisView.setVisibility(View.GONE);
@@ -413,7 +400,19 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                 send_file.setChecked(false);
                 take_photo.setChecked(false);
                 recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
+            } else {
+                CommUtil.closeKeybord(msgTv, UserChatActivity.this);
             }
+        });
+        msgTv.setOnClickListener(v -> {
+            photoView.setVisibility(View.GONE);
+            voiceView.setVisibility(View.GONE);
+            emojisView.setVisibility(View.GONE);
+            send_pic.setChecked(false);
+            send_voice.setChecked(false);
+            send_file.setChecked(false);
+            take_photo.setChecked(false);
+            recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
         });
         msgTv.addTextChangedListener(new TextWatcher() {
             @Override
@@ -514,8 +513,6 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     //在这里处理任务执行中的状态，如进度进度条的刷新
     @Download.onTaskRunning
     protected void running(DownloadTask task) {
-        int p = task.getPercent();    //任务进度百分比
-        String speed = task.getConvertSpeed();//转换单位后的下载速度，单位转换需要在配置文件中打开
         for (DownloadTaskBean downloadTask :
                 downloadTasks) {
             if (downloadTask.getUrl().equals(task.getKey())) {
@@ -531,6 +528,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
 
     @Download.onTaskFail
     void taskFail(DownloadTask task, Exception e) {
+        e.printStackTrace();
         for (DownloadTaskBean downloadTask :
                 downloadTasks) {
             if (downloadTask.getUrl().equals(task.getKey())) {
@@ -583,28 +581,22 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
         if (item.getGroupId() == 0 && item.getOrder() == 0) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
             dialog.setMessage("是否删除此条消息")
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();//取消弹出框
-                            if (lastPlayMid == messages.get(item.getItemId()).getM_id() && messages.get(item.getItemId()).getM_content_type() == 3) {
-                                for (int i = 0; i < messages.size(); i++) {
-                                    if (messages.get(i).getM_id() == lastPlayMid) {
-                                        if (viocePlay[i]) {
-                                            AudioPlayManager.getInstance().stop();
-                                        }
-                                        break;
+                    .setPositiveButton("确定", (dialog1, which) -> {
+                        dialog1.cancel();//取消弹出框
+                        if (lastPlayMid == messages.get(item.getItemId()).getM_id() && messages.get(item.getItemId()).getM_content_type() == 3) {
+                            for (int i = 0; i < messages.size(); i++) {
+                                if (messages.get(i).getM_id() == lastPlayMid) {
+                                    if (viocePlay[i]) {
+                                        AudioPlayManager.getInstance().stop();
                                     }
+                                    break;
                                 }
                             }
-                            userMessagePresenter.delMessage(user, item.getItemId());
                         }
+                        userMessagePresenter.delMessage(user, item.getItemId());
                     })
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();//取消弹出框
-                        }
+                    .setNegativeButton("取消", (dialog12, which) -> {
+                        dialog12.cancel();//取消弹出框
                     })
                     .create().show();
         } else if (item.getGroupId() == 0 && item.getOrder() == 1) {
@@ -664,11 +656,8 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                             }
                         }
                     })
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();//取消弹出框
-                        }
+                    .setNegativeButton("取消", (dialog13, which) -> {
+                        dialog13.cancel();//取消弹出框
                     })
                     .create().show();
         } else if (item.getGroupId() == 0 && item.getOrder() == 2) {
@@ -737,7 +726,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                 new Thread(refreshUserMsgRunnable).start();
             }
         }
-        setEmojiconFragment(false);
+        setEmojiIconFragment();
         initEvent();
     }
 
@@ -747,6 +736,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
         userMessagePresenter.getMessages(user, true);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void initEntryTextToView(String text) {
         if (!TextUtils.isEmpty(text) && msgTv != null) {
@@ -802,10 +792,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     protected void receiveUserMessage() {
         super.receiveUserMessage();
         int onChatUId = SharedPreferencesUtil.getInstance().getInt("onChatUserId", -1);
-        if (user != null && MessageService.isRunningForeground(this) && onChatUId == user.getU_id())
-            userMessagePresenter.getMessages(user, true);
-        else
-            userMessagePresenter.getMessages(user, false);
+        userMessagePresenter.getMessages(user, user != null && MessageService.isRunningForeground(this) && onChatUId == user.getU_id());
     }
 
     Runnable refreshUserMsgRunnable = new Runnable() {
@@ -828,10 +815,10 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
         userMessagePresenter.context = this;
     }
 
-    private void setEmojiconFragment(boolean useSystemDefault) {
+    private void setEmojiIconFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.emojicons, EmojiconsFragment.newInstance(useSystemDefault))
+                .replace(R.id.emojicons, EmojiconsFragment.newInstance(false))
                 .commit();
     }
 
@@ -923,209 +910,45 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
             ToastUtils.showToast("获取用户登录信息失败，请重新登录");
             SharedPreferencesUtil.getInstance().removeAll();
             ActivityCollector.finishAll();
+            SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
             LoginActivity.startActivity(mContext);
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void initMessage(ArrayList<Message> messages) {
         this.messages = messages;
         dismissLoadingDialog();
         viocePlay = new boolean[messages.size()];
-        messageAdapter = new MessageAdapter(this, messages, photoMaps);
-        StaggeredGridLayoutManager msgGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(msgGridLayoutManager);
-        ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-        recyclerView.setAdapter(messageAdapter);
-        if (mPositionId == -1)
-            recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
-        else {
-            int position = -1;
-            boolean hadPosition = false;
-            for (Message m :
-                    messages) {
-                position++;
-                if (m.getM_id() == mPositionId) {
-                    hadPosition = true;
-                    break;
+        try {
+            messageAdapter = new MessageAdapter(this, messages, photoMaps);
+            StaggeredGridLayoutManager msgGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+            recyclerView.setLayoutManager(msgGridLayoutManager);
+            ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+            recyclerView.setAdapter(messageAdapter);
+            if (mPositionId == -1)
+                recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
+            else {
+                int position = -1;
+                boolean hadPosition = false;
+                for (Message m :
+                        messages) {
+                    position++;
+                    if (m.getM_id() == mPositionId) {
+                        hadPosition = true;
+                        break;
+                    }
                 }
+                if (hadPosition) {
+                    recyclerView.scrollToPosition(position);
+                }
+                mPositionId = -1;
             }
-            if (hadPosition) {
-                recyclerView.scrollToPosition(position);
-            }
-            mPositionId = -1;
+            messageAdapter.setOnRecyclerViewItemClickListener(this);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        messageAdapter.setOnRecyclerViewItemClickListener(new MessageAdapter.OnRecyclerViewItemClickListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public void onItemClick(View view, int position) {
-                switch (view.getId()) {
-                    case R.id.l_u_head_img:
-                        Intent showIntent = new Intent(mContext, ShowUserActivity.class);
-                        showIntent.putExtra("userName", user.getU_name());
-                        startActivity(showIntent);
-                        break;
-                    case R.id.r_u_head_img:
-                        startActivity(new Intent(mContext, LoginUserMsgActivity.class));
-                        break;
-                    case R.id.msg_pic:
-                        int photoIndex = 0;
-                        showPhotoUrls.clear();
-                        for (MessageAdapter.photoMap photoMap : photoMaps) {
-                            showPhotoUrls.add(photoMap.getUrl());
-                        }
-                        for (MessageAdapter.photoMap photoMap :
-                                photoMaps) {
-                            if (photoMap.getPosition() == position) {
-                                showPhotoPosition = photoIndex;
-                                photoPreviewWrapper();
-                                break;
-                            }
-                            photoIndex++;
-                        }
-                        break;
-                    case R.id.file_msg_view:
-                        StringUtil.MsgFile msgFile = StringUtil.getMsgFile(messages.get(position).getM_content());
-                        if (!msgFile.getLink().contains("http")) {
-                            FileUtil.openFile(mContext, new File(msgFile.getLink()));
-                            resultRefresh = false;
-                        } else if (msgFile.getFileType().equals("ppt") || msgFile.getFileType().equals("word")
-                                || msgFile.getFileType().equals("excel")
-                                || msgFile.getFileType().equals("pdf")) {
-                            Intent intent = new Intent(mContext, WebActivity.class);
-                            intent.putExtra("URLString", Constant.ONLINE_OPEN_OFFICE_FILE + msgFile.getLink());
-                            startActivity(intent);
-                            resultRefresh = false;
-                        } else if (msgFile.getFileType().equals("video") || msgFile.getFileType().equals("music") || msgFile.getFileType().equals("gif")) {
-                            Intent intent = new Intent(mContext, WebActivity.class);
-                            intent.putExtra("URLString", msgFile.getLink());
-                            startActivity(intent);
-                            resultRefresh = false;
-                        } else {
-                            if (messages.get(position).getDownloadState() != 4) {
-                                AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-                                dialog.setMessage("是否下载此文件")
-                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.cancel();//取消弹出框
-                                                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(messages.get(position).getM_content());
-                                                if (messages.get(position).getDownloadState() == 0) {
-                                                    long taskId = Aria.download(this)
-                                                            .load(msgFile.getLink())     //读取下载地址
-                                                            .ignoreCheckPermissions()
-                                                            .ignoreFilePathOccupy()
-                                                            .setFilePath(Constant.DownloadPath + msgFile.getFilename()) //设置文件保存的完整路径
-                                                            .create();
-                                                    downloadTasks.add(new DownloadTaskBean(taskId, messages.get(position).getM_id(), msgFile.getLink()));
-                                                }
-                                            }
-                                        })
-                                        .setNegativeButton("取消", (dialog1, which) -> {
-                                            dialog1.cancel();//取消弹出框
-                                        })
-                                        .create().show();
-                            } else if (messages.get(position).getDownloadState() == 2) {
-                                long taskId = Aria.download(this)
-                                        .load(msgFile.getLink())     //读取下载地址
-                                        .ignoreCheckPermissions()
-                                        .ignoreFilePathOccupy()
-                                        .setFilePath(Constant.DownloadPath + msgFile.getFilename()) //设置文件保存的完整路径
-                                        .create();
-                                ToastUtils.showToast("下载开始");
-                                downloadTasks.add(new DownloadTaskBean(taskId, messages.get(position).getM_id(), msgFile.getLink()));
-                            } else if (messages.get(position).getDownloadState() == 3) {
-                                boolean hadAdded = false;
-                                for (DownloadTaskBean downloadTask :
-                                        downloadTasks) {
-                                    if (downloadTask.getMessageId() == messages.get(position).getM_id()) {
-                                        Aria.download(this)
-                                                .load(downloadTask.getDownloadId())     //读取任务id
-                                                .resume();    // 恢复任务
-                                        break;
-                                    }
-                                }
-                                if (!hadAdded) {
-                                    long taskId = Aria.download(this)
-                                            .load(msgFile.getLink())     //读取下载地址
-                                            .ignoreCheckPermissions()
-                                            .ignoreFilePathOccupy()
-                                            .setFilePath(Constant.DownloadPath + msgFile.getFilename()) //设置文件保存的完整路径
-                                            .create();
-                                    ToastUtils.showToast("下载开始");
-                                    downloadTasks.add(new DownloadTaskBean(taskId, messages.get(position).getM_id(), msgFile.getLink()));
-                                }
-                            }
-                        }
-                        break;
-                    case R.id.send_failed_img:
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-                        dialog.setMessage("重新发送此条消息")
-                                .setPositiveButton("确定", (dialog13, which) -> {
-                                    dialog13.cancel();//取消弹出框
-                                    showLoadingDialog(true, "消息发送中");
-                                    userMessagePresenter.reSendMessage(messages.get(position), user);
-                                })
-                                .setNegativeButton("取消", (dialog12, which) -> dialog12.cancel())
-                                .create().show();
-                        break;
-                    case R.id.voice_msg_view:
-                        String state = AudioPlayManager.getInstance().getPlayStatus().toString();
-                        String link = StringUtil.getMsgFile(messages.get(position).getM_content()).getLink();
-                        Log.e(TAG, link);
-                        Log.e(TAG, state);
-                        if (lastPlayMid == 0 || state.equals("FREE")) {
-                            lastPlayMid = messages.get(position).getM_id();
-                            playVoice(link, false);
-                            viocePlay[position] = true;
-                            playStateChanged = false;
-                        } else if (lastPlayMid == messages.get(position).getM_id()) {
-                            lastPlayMid = messages.get(position).getM_id();
-                            if (state.equals("FREE")) {
-                                playVoice(link, false);
-                                viocePlay[position] = true;
-                                playStateChanged = true;
-                            } else {
-                                playVoice(null, true);
-                                viocePlay[position] = false;
-                            }
-                            playStateChanged = false;
-                        } else {
-                            playVoice(null, true);
-                            playVoice(link, false);
-                            for (int i = 0; i < messages.size(); i++) {
-                                if (messages.get(i).getM_id() == lastPlayMid) {
-                                    viocePlay[i] = false;
-                                    messageAdapter.notifyItemChanged(i);
-                                    break;
-                                }
-                            }
-                            lastPlayMid = messages.get(position).getM_id();
-                            viocePlay[position] = true;
-                            playStateChanged = true;
-                        }
-                        messageAdapter.notifyItemChanged(position);
-                        break;
-                }
-            }
-
-            @Override
-            public void onItemMenuClick(View view, int position, int itemId) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-                switch (itemId) {
-                    case 2:
-                        //删除
-                        dialog.setMessage("是否删除此条消息")
-                                .setPositiveButton("确定", (dialog14, which) -> {
-                                    dialog14.cancel();
-                                    userMessagePresenter.delMessage(user, position);
-                                })
-                                .setNegativeButton("取消", (dialog15, which) -> dialog15.cancel())
-                                .create().show();
-                        break;
-                }
-            }
-        });
     }
 
     @Override
@@ -1155,6 +978,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
             ToastUtils.showToast("获取用户登录信息失败，请重新登录");
             SharedPreferencesUtil.getInstance().removeAll();
             ActivityCollector.finishAll();
+            SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
             LoginActivity.startActivity(mContext);
         }
     }
@@ -1181,6 +1005,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
         if (requestCode == Constant.REQUEST_CODE_PERMISSION_CHOICE_PHOTO) {
@@ -1201,7 +1026,173 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
         }
     }
 
-    public abstract class OnVerticalScrollListener extends RecyclerView.OnScrollListener {
+    @Override
+    public void onItemClick(View view, int position) {
+        switch (view.getId()) {
+            case R.id.l_u_head_img:
+                Intent showIntent = new Intent(mContext, ShowUserActivity.class);
+                showIntent.putExtra("userName", user.getU_name());
+                startActivity(showIntent);
+                break;
+            case R.id.r_u_head_img:
+                startActivity(new Intent(mContext, LoginUserMsgActivity.class));
+                break;
+            case R.id.msg_pic:
+                int photoIndex = 0;
+                showPhotoUrls.clear();
+                for (MessageAdapter.photoMap photoMap : photoMaps) {
+                    showPhotoUrls.add(photoMap.getUrl());
+                }
+                for (MessageAdapter.photoMap photoMap :
+                        photoMaps) {
+                    if (photoMap.getPosition() == position) {
+                        showPhotoPosition = photoIndex;
+                        photoPreviewWrapper();
+                        break;
+                    }
+                    photoIndex++;
+                }
+                break;
+            case R.id.file_msg_view:
+                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(messages.get(position).getM_content());
+                if (!msgFile.getLink().contains("http")) {
+                    FileUtil.openFile(mContext, new File(msgFile.getLink()));
+                    resultRefresh = false;
+                } else if (msgFile.getFileType().equals("ppt") || msgFile.getFileType().equals("word")
+                        || msgFile.getFileType().equals("excel")
+                        || msgFile.getFileType().equals("pdf")) {
+                    Intent intent = new Intent(mContext, WebActivity.class);
+                    intent.putExtra("URLString", Constant.ONLINE_OPEN_OFFICE_FILE + msgFile.getLink());
+                    startActivity(intent);
+                    resultRefresh = false;
+                } else if (msgFile.getFileType().equals("video") || msgFile.getFileType().equals("music") || msgFile.getFileType().equals("gif")) {
+                    Intent intent = new Intent(mContext, WebActivity.class);
+                    intent.putExtra("URLString", msgFile.getLink());
+                    startActivity(intent);
+                    resultRefresh = false;
+                } else {
+                    if (messages.get(position).getDownloadState() != 4) {
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+                        dialog.setMessage("是否下载此文件")
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();//取消弹出框
+                                        StringUtil.MsgFile msgFile = StringUtil.getMsgFile(messages.get(position).getM_content());
+                                        if (messages.get(position).getDownloadState() == 0) {
+                                            long taskId = Aria.download(this)
+                                                    .load(msgFile.getLink())     //读取下载地址
+                                                    .ignoreCheckPermissions()
+                                                    .ignoreFilePathOccupy()
+                                                    .setFilePath(Constant.DownloadPath + msgFile.getFilename()) //设置文件保存的完整路径
+                                                    .create();
+                                            downloadTasks.add(new DownloadTaskBean(taskId, messages.get(position).getM_id(), msgFile.getLink()));
+                                        }
+                                    }
+                                })
+                                .setNegativeButton("取消", (dialog1, which) -> {
+                                    dialog1.cancel();//取消弹出框
+                                })
+                                .create().show();
+                    } else if (messages.get(position).getDownloadState() == 2) {
+                        long taskId = Aria.download(this)
+                                .load(msgFile.getLink())     //读取下载地址
+                                .ignoreCheckPermissions()
+                                .ignoreFilePathOccupy()
+                                .setFilePath(Constant.DownloadPath + msgFile.getFilename()) //设置文件保存的完整路径
+                                .create();
+                        ToastUtils.showToast("下载开始");
+                        downloadTasks.add(new DownloadTaskBean(taskId, messages.get(position).getM_id(), msgFile.getLink()));
+                    } else if (messages.get(position).getDownloadState() == 3) {
+                        boolean hadAdded = false;
+                        for (DownloadTaskBean downloadTask :
+                                downloadTasks) {
+                            if (downloadTask.getMessageId() == messages.get(position).getM_id()) {
+                                Aria.download(this)
+                                        .load(downloadTask.getDownloadId())     //读取任务id
+                                        .resume();    // 恢复任务
+                                break;
+                            }
+                        }
+                        if (!hadAdded) {
+                            long taskId = Aria.download(this)
+                                    .load(msgFile.getLink())     //读取下载地址
+                                    .ignoreCheckPermissions()
+                                    .ignoreFilePathOccupy()
+                                    .setFilePath(Constant.DownloadPath + msgFile.getFilename()) //设置文件保存的完整路径
+                                    .create();
+                            ToastUtils.showToast("下载开始");
+                            downloadTasks.add(new DownloadTaskBean(taskId, messages.get(position).getM_id(), msgFile.getLink()));
+                        }
+                    }
+                }
+                break;
+            case R.id.send_failed_img:
+                AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+                dialog.setMessage("重新发送此条消息")
+                        .setPositiveButton("确定", (mDialog, which) -> {
+                            mDialog.cancel();//取消弹出框
+                            showLoadingDialog(true, "消息发送中");
+                            userMessagePresenter.reSendMessage(messages.get(position), user);
+                        })
+                        .setNegativeButton("取消", (mDialog, which) -> mDialog.cancel())
+                        .create().show();
+                break;
+            case R.id.voice_msg_view:
+                String state = AudioPlayManager.getInstance().getPlayStatus().toString();
+                String link = StringUtil.getMsgFile(messages.get(position).getM_content()).getLink();
+                Log.e(TAG, link);
+                Log.e(TAG, state);
+                if (lastPlayMid == 0 || state.equals("FREE")) {
+                    lastPlayMid = messages.get(position).getM_id();
+                    playVoice(link, false);
+                    viocePlay[position] = true;
+                    playStateChanged = false;
+                } else if (lastPlayMid == messages.get(position).getM_id()) {
+                    lastPlayMid = messages.get(position).getM_id();
+                    if (state.equals("FREE")) {
+                        playVoice(link, false);
+                        viocePlay[position] = true;
+                        playStateChanged = true;
+                    } else {
+                        playVoice(null, true);
+                        viocePlay[position] = false;
+                    }
+                    playStateChanged = false;
+                } else {
+                    playVoice(null, true);
+                    playVoice(link, false);
+                    for (int i = 0; i < messages.size(); i++) {
+                        if (messages.get(i).getM_id() == lastPlayMid) {
+                            viocePlay[i] = false;
+                            messageAdapter.notifyItemChanged(i);
+                            break;
+                        }
+                    }
+                    lastPlayMid = messages.get(position).getM_id();
+                    viocePlay[position] = true;
+                    playStateChanged = true;
+                }
+                messageAdapter.notifyItemChanged(position);
+                break;
+        }
+    }
+
+    @Override
+    public void onItemMenuClick(View view, int position, int itemId) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+        if (itemId == 2) {//删除
+            dialog.setMessage("是否删除此条消息")
+                    .setPositiveButton("确定", (dialog14, which) -> {
+                        dialog14.cancel();
+                        userMessagePresenter.delMessage(user, position);
+                    })
+                    .setNegativeButton("取消", (dialog15, which) -> dialog15.cancel())
+                    .create().show();
+        }
+    }
+
+    public abstract static class OnVerticalScrollListener extends RecyclerView.OnScrollListener {
         @Override
         public final void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             if (!recyclerView.canScrollVertically(-1)) {
@@ -1323,7 +1314,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                 }
             }
             Intent photoPickerIntent = new BGAPhotoPickerActivity.IntentBuilder(this)
-                    .cameraFileDir(true ? takePhotoDir : null) // 拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话则不开启图库里的拍照功能
+                    .cameraFileDir(takePhotoDir) // 拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话则不开启图库里的拍照功能
                     .maxChooseCount(20) // 图片选择张数的最大值
                     .selectedPhotos(checkPhotos) // 当前已选中的图片路径集合
                     .pauseOnScroll(false) // 滚动列表时是否暂停加载图片
@@ -1349,6 +1340,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @AfterPermissionGranted(Constant.REQUEST_CODE_PERMISSION_RECORD_AUDIO)
     private void takeAudio() {
         String[] perms = {Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -1524,7 +1516,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
             }
         } else if (requestCode == RC_CHOOSE_FILE) {
             send_file.setChecked(false);
-            if (resultCode != RESULT_OK){
+            if (resultCode != RESULT_OK) {
                 return;
             }
             Uri uri = data.getData();
