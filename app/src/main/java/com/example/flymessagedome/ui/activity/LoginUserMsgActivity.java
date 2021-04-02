@@ -3,7 +3,6 @@ package com.example.flymessagedome.ui.activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import android.Manifest;
@@ -17,7 +16,6 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -35,18 +33,14 @@ import com.example.flymessagedome.base.BaseActivity;
 import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.component.DaggerMessageComponent;
 import com.example.flymessagedome.ui.contract.MineContract;
-import com.example.flymessagedome.ui.fragment.MineFragment;
 import com.example.flymessagedome.ui.presenter.MineFragmentPresenter;
-import com.example.flymessagedome.utils.ActivityCollector;
 import com.example.flymessagedome.utils.Constant;
 import com.example.flymessagedome.utils.ImageUtils;
-import com.example.flymessagedome.utils.SharedPreferencesUtil;
 import com.example.flymessagedome.utils.ToastUtils;
 import com.example.flymessagedome.view.CircleImageView;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -76,8 +70,8 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
     CircleImageView headImg;
     @BindView(R.id.main_view)
     ImageView mainView;
-    @BindView(R.id.sgin)
-    TextView sgin;
+    @BindView(R.id.sign)
+    TextView sign;
 
     @Inject
     MineFragmentPresenter mineFragmentPresenter;
@@ -94,21 +88,21 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @OnClick({R.id.back,R.id.u_head_img,R.id.sgin_view,R.id.msg_view,R.id.change_msg,R.id.show_bg_view,R.id.my_qr_code,R.id.more})
+    @OnClick({R.id.back,R.id.u_head_img,R.id.sign_view,R.id.msg_view,R.id.change_msg,R.id.show_bg_view,R.id.my_qr_code,R.id.more})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.back:
                 finish();
                 break;
             case R.id.msg_view:
-                Intent showMsgIntent=new Intent(mContext,ShowUserMsgActivity.class);
-                showMsgIntent.putExtra("userId",LoginActivity.loginUser.getU_id());
-                startActivity(showMsgIntent);
+                Intent showMsigntent=new Intent(mContext,ShowUserMsgActivity.class);
+                showMsigntent.putExtra("userId",LoginActivity.loginUser.getU_id());
+                startActivity(showMsigntent);
                 break;
             case R.id.show_bg_view:
                 showBGPopupMenu(mContext);
                 break;
-            case R.id.sgin_view:
+            case R.id.sign_view:
                 startActivity(new Intent(mContext,AddSignActivity.class));
                 break;
             case R.id.change_msg:
@@ -150,7 +144,7 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
             }
         }
         position.setText(LoginActivity.loginUser.getU_position());
-        sgin.setText(LoginActivity.loginUser.getU_sign());
+        sign.setText(LoginActivity.loginUser.getU_sign());
         Glide.with(mContext)
                 .load(FlyMessageApplication.getProxy(mContext).getProxyUrl(LoginActivity.loginUser.getU_head_img()))
                 .into(headImg);
@@ -331,9 +325,9 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
                         break;
                     case R.id.show_msg_item:
                         popupWindow.dismiss();
-                        Intent showMsgIntent=new Intent(mContext,ShowUserMsgActivity.class);
-                        showMsgIntent.putExtra("userId",LoginActivity.loginUser.getU_id());
-                        startActivity(showMsgIntent);
+                        Intent showMsigntent=new Intent(mContext,ShowUserMsgActivity.class);
+                        showMsigntent.putExtra("userId",LoginActivity.loginUser.getU_id());
+                        startActivity(showMsigntent);
                         break;
                     case R.id.change_msg_item:
                         popupWindow.dismiss();

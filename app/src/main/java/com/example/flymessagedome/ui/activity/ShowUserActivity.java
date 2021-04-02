@@ -66,8 +66,8 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
     CircleImageView headImg;
     @BindView(R.id.main_view)
     ImageView mainView;
-    @BindView(R.id.sgin)
-    TextView sgin;
+    @BindView(R.id.sign)
+    TextView sign;
     @BindView(R.id.add_fri_btn)
     Button add_fri;
 
@@ -143,7 +143,7 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
                             .asDrawable()
                             .load(FlyMessageApplication.getProxy(mContext).getProxyUrl(userBean.getU_bg_img()))
                             .into(mainView);
-                    sgin.setText(userBean.getU_sign());
+                    sign.setText(userBean.getU_sign());
                     if (userBean.getU_sex() == null) {
                         sex.setVisibility(View.GONE);
                     } else if (userBean.getU_sex().equals("男")) {
@@ -185,7 +185,7 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
                     .asDrawable()
                     .load(FlyMessageApplication.getProxy(mContext).getProxyUrl(userBean.getU_bg_img()))
                     .into(mainView);
-            sgin.setText(userBean.getU_sign());
+            sign.setText(userBean.getU_sign());
             if (userBean.getU_sex() == null) {
                 sex.setVisibility(View.GONE);
             } else if (userBean.getU_sex().equals("男")) {
@@ -230,9 +230,9 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
                 startActivity(rq_intent);
                 break;
             case R.id.msg_view:
-                Intent showMsgIntent = new Intent(mContext, ShowUserMsgActivity.class);
-                showMsgIntent.putExtra("userId", userBean.getU_id());
-                startActivity(showMsgIntent);
+                Intent showMsigntent = new Intent(mContext, ShowUserMsgActivity.class);
+                showMsigntent.putExtra("userId", userBean.getU_id());
+                startActivity(showMsigntent);
                 break;
             case R.id.u_head_img:
                 showHeadImg();
@@ -268,9 +268,9 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
             fri_state.setText("添加好友");
         }
         if (inBlackList) {
-            black_list_state.setText("移出黑名单");
+            black_list_state.setText(R.string.move_out_blacklist);
         } else {
-            black_list_state.setText("加入黑名单");
+            black_list_state.setText(R.string.move_into_blacklist);
         }
         //获取屏幕宽高
         int weight = getResources().getDisplayMetrics().widthPixels;

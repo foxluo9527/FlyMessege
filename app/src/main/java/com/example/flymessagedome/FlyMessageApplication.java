@@ -15,6 +15,7 @@ import com.example.flymessagedome.component.DaggerAppComponent;
 import com.example.flymessagedome.module.AppModule;
 import com.example.flymessagedome.module.FlyMessageApiModule;
 import com.example.flymessagedome.utils.AppUtils;
+import com.example.flymessagedome.utils.LocationService;
 import com.example.flymessagedome.utils.SharedPreferencesUtil;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
@@ -35,6 +36,7 @@ public class FlyMessageApplication extends MultiDexApplication {
         initComponent();
         initPrefs();
         initBugly();
+        LocationService.get().init(this);
         changeDefaultDarkModel(SharedPreferencesUtil.getInstance().getBoolean("withSystemDark", true));
     }
 

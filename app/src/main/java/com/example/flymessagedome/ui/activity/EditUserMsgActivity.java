@@ -3,8 +3,6 @@ package com.example.flymessagedome.ui.activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.app.Activity;
@@ -16,7 +14,6 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.text.Editable;
@@ -40,7 +37,6 @@ import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.component.DaggerMessageComponent;
 import com.example.flymessagedome.ui.contract.EditUserContract;
 import com.example.flymessagedome.ui.contract.MineContract;
-import com.example.flymessagedome.ui.fragment.MineFragment;
 import com.example.flymessagedome.ui.presenter.EditUserPresenter;
 import com.example.flymessagedome.ui.presenter.MineFragmentPresenter;
 import com.example.flymessagedome.utils.Constant;
@@ -77,8 +73,8 @@ import static com.example.flymessagedome.utils.Constant.RC_CHOOSE_HEAD_IMG;
 public class EditUserMsgActivity extends BaseActivity implements EditUserContract.View, MineContract.View,EasyPermissions.PermissionCallbacks {
     @BindView(R.id.head_img)
     CircleImageView head_img;
-    @BindView(R.id.sgin)
-    TextView sgin;
+    @BindView(R.id.sign)
+    TextView sign;
     @BindView(R.id.sex)
     TextView sex;
     @BindView(R.id.position)
@@ -126,11 +122,11 @@ public class EditUserMsgActivity extends BaseActivity implements EditUserContrac
             sex.setHint("你的性别");
         }
         if (!TextUtils.isEmpty(LoginActivity.loginUser.getU_sign())){
-            sgin.setHint(LoginActivity.loginUser.getU_sign());
-            sgin.setText(LoginActivity.loginUser.getU_sign());
+            sign.setHint(LoginActivity.loginUser.getU_sign());
+            sign.setText(LoginActivity.loginUser.getU_sign());
             userBean.setU_sign(LoginActivity.loginUser.getU_sign());
         }else {
-            sgin.setHint("编辑签名");
+            sign.setHint("编辑签名");
         }
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
         birthday.setText(format.format(LoginActivity.loginUser.getU_brithday()));
@@ -164,7 +160,7 @@ public class EditUserMsgActivity extends BaseActivity implements EditUserContrac
             finish();
         }else if (v.getId()==R.id.complete){
             showLoadingDialog(false,"修改信息中");
-            userBean.setU_sign(sgin.getText().toString());
+            userBean.setU_sign(sign.getText().toString());
             editUserPresenter.updateUserMsg(userBean);
         }else if (v.getId()==R.id.date_picker){
             showPopueWindow();

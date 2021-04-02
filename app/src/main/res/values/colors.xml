@@ -17,7 +17,7 @@
     <color name="black_2">#222222</color>
     <color name="black">#000000</color>
     <color name="black_7d">#7D7D7D</color>
-
+    <color name="bar_bg">#FAFAFA</color>
     <color name="tab_check">#346af6</color>
     <!--    <color name="tab_check">#3BA9F6</color>-->
     <color name="blue_1">#62B2F6</color>

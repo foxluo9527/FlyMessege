@@ -1,15 +1,17 @@
 package com.example.flymessagedome.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -25,15 +27,14 @@ import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.component.DaggerMessageComponent;
 import com.example.flymessagedome.model.Login;
 import com.example.flymessagedome.service.MessageService;
-import com.example.flymessagedome.service.UpdateService;
 import com.example.flymessagedome.ui.adapter.TabPageAdapter;
 import com.example.flymessagedome.ui.contract.MainContract;
+import com.example.flymessagedome.ui.fragment.CommunityFragment;
 import com.example.flymessagedome.ui.fragment.FriendFragment;
 import com.example.flymessagedome.ui.fragment.MessageFragment;
 import com.example.flymessagedome.ui.fragment.MineFragment;
 import com.example.flymessagedome.ui.presenter.MainPresenter;
 import com.example.flymessagedome.utils.ActivityCollector;
-import com.example.flymessagedome.utils.CommUtil;
 import com.example.flymessagedome.utils.Constant;
 import com.example.flymessagedome.utils.NetworkType;
 import com.example.flymessagedome.utils.NetworkUtils;
@@ -51,12 +52,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
-
+@SuppressLint("NonConstantResourceId")
 public class MainActivity extends BaseActivity implements MainContract.View {
     public static final String TAG = "FlyMessage";
-    private MyConnection conn;
-    private MyUpdateConnection updateConn;
-    public static UpdateService.MyUpdateBinder updateBinder;
     public static MessageService.MessageServiceBinder serviceBinder;
     List<Fragment> fragmentList;
 
@@ -75,14 +73,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try {
-            if (updateConn != null) {
-                unbindService(updateConn);
-                stopService(new Intent(this, UpdateService.class));
-            }
-        } catch (Exception e) {
-
-        }
     }
 
     @Override
@@ -104,13 +94,20 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (!SharedPreferencesUtil.getInstance().getBoolean(Constant.IS_LOGIN,false)){
+        if (!SharedPreferencesUtil.getInstance().getBoolean(Constant.IS_LOGIN, false)) {
             LoginActivity.startActivity(this);
             finish();
-            overridePendingTransition(0,0);
+            overridePendingTransition(0, 0);
         }
         super.onCreate(savedInstanceState);
-        Beta.checkAppUpgrade(false,false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getColor(R.color.bar_bg));
+        }
+        Beta.checkAppUpgrade(false, false);
     }
 
     @Override
@@ -146,33 +143,29 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         fragmentList = new ArrayList<>();
         fragmentList.add(new MessageFragment());
         fragmentList.add(new FriendFragment());
+        fragmentList.add(new CommunityFragment());
         fragmentList.add(new MineFragment());
-        String[] mTabNames = new String[]{"消息", "好友", "我的"};
+        String[] mTabNames = new String[]{"消息", "好友", "社区", "我的"};
         TabPageAdapter pageAdapter = new TabPageAdapter(getSupportFragmentManager(), fragmentList, mTabNames);
         viewPager.setAdapter(pageAdapter);
+        viewPager.setOffscreenPageLimit(4);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setIcon(R.drawable.home_tab_message_selecter);
         tabLayout.getTabAt(1).setIcon(R.drawable.home_tab_friend_selecter);
-        tabLayout.getTabAt(2).setIcon(R.drawable.home_tab_mine_selecter);
+        tabLayout.getTabAt(2).setIcon(R.drawable.home_tab_community_selecter);
+        tabLayout.getTabAt(3).setIcon(R.drawable.home_tab_mine_selecter);
     }
 
     private void bindService() {
         if (serviceBinder == null) {
             Intent intent = new Intent(this, MessageService.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            conn = new MyConnection();
+            MyConnection conn = new MyConnection();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 getApplicationContext().startForegroundService(intent);
             else
                 getApplicationContext().startService(intent);
-            bindService(intent, conn, BIND_AUTO_CREATE);
-        }
-        if (updateBinder == null) {
-            Intent updateIntent = new Intent(this.getApplicationContext(), UpdateService.class);
-            updateIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            updateConn = new MyUpdateConnection();
-            startService(updateIntent);
-            bindService(updateIntent, updateConn, BIND_AUTO_CREATE);
+            getApplicationContext().bindService(intent, conn, BIND_AUTO_CREATE);
         }
     }
 
@@ -226,23 +219,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         startActivity(intent);
     }
 
-    private class MyUpdateConnection implements ServiceConnection {
-        //This method will be entered after the service is started.
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.i(TAG, "::updateConnection::onServiceConnected");
-            //Get MyBinder in service
-            updateBinder = (UpdateService.MyUpdateBinder) service;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            Log.i(TAG, "::updateConnection::onServiceDisconnected");
-        }
-    }
-
-    private class MyConnection implements ServiceConnection {
+    private static class MyConnection implements ServiceConnection {
         //This method will be entered after the service is started.
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override

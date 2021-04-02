@@ -879,7 +879,7 @@ public class GroupChatActivity extends BaseActivity implements GroupMessageContr
     @Override
     public void initDataFailed() {
         dismissLoadingDialog();
-        ToastUtils.showToast("数据获取失败");
+        ToastUtils.showToast(R.string.get_data_failed);
         finish();
     }
 

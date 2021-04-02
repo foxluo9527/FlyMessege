@@ -142,7 +142,7 @@
                         app:srcCompat="@mipmap/sgin" />
 
                     <TextView
-                        android:id="@+id/sgin"
+                        android:id="@+id/sign"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

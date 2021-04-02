@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh"
@@ -34,10 +33,12 @@
                         android:textSize="@dimen/d_18" />
 
                 </RelativeLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d_1"
-                    android:background="@color/colorPrimaryDark"/>
+                    android:background="@color/colorPrimaryDark" />
+
                 <RelativeLayout
                     android:id="@+id/msg_view"
                     android:layout_width="match_parent"
@@ -87,8 +88,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/d_5"
-                            android:textColor="@color/black"
-                            android:text="位置" />
+                            android:text="位置"
+                            android:textColor="@color/black" />
                     </LinearLayout>
 
                     <TextView
@@ -112,11 +113,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/colorPrimaryDark"
-                    android:paddingVertical="@dimen/d_1"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingVertical="@dimen/d_1">
 
                     <LinearLayout
-                        android:id="@+id/sgin_view"
+                        android:id="@+id/sign_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/item_press"
@@ -130,7 +131,7 @@
                             app:srcCompat="@mipmap/sgin" />
 
                         <TextView
-                            android:id="@+id/sgin"
+                            android:id="@+id/sign"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -190,6 +191,7 @@
                             android:textColor="@color/black" />
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/setting_view"
                         android:layout_width="match_parent"

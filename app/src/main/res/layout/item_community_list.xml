@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.example.flymessagedome.view.CircleImageView
+        android:id="@+id/head"
+        android:layout_width="@dimen/d_30"
+        android:layout_height="@dimen/d_30"
+        android:layout_margin="@dimen/d_10"
+        android:src="@drawable/now_head_bg_shape"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/d_10"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="name"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/head"
+        app:layout_constraintEnd_toStartOf="@+id/time"
+        app:layout_constraintStart_toEndOf="@id/head"
+        app:layout_constraintTop_toTopOf="@id/head" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/d_10"
+        android:text="2021/3/21 19:20"
+        app:layout_constraintBottom_toBottomOf="@id/head"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/head" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/d_10"
+        android:text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nxxxxxxxx\nxxxxxxxxxxxxx\nxxxxxx."
+        android:textColor="#333333"
+        android:textSize="13sp"
+        app:layout_constraintTop_toBottomOf="@id/head" />
+    <cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout
+        android:id="@+id/content_pics"
+        android:layout_margin="@dimen/d_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_40"
+        app:layout_constraintTop_toBottomOf="@id/content_pics"
+        android:layout_margin="@dimen/d_10"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="@dimen/d_20"
+                android:layout_height="@dimen/d_20"
+                android:src="@drawable/saw"/>
+            <TextView
+                android:id="@+id/saw_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:text="13.2W"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="@dimen/d_18"
+                android:layout_height="@dimen/d_18"
+                android:src="@drawable/discuss"/>
+            <TextView
+                android:id="@+id/discuss_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:text="1216"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="@dimen/d_18"
+                android:layout_height="@dimen/d_18"
+                android:src="@drawable/zan"/>
+            <TextView
+                android:id="@+id/zan_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:layout_marginLeft="@dimen/d_2"
+                android:text="628"/>
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginHorizontal="@dimen/d_10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#999F9E9E"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

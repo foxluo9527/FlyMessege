@@ -150,11 +150,11 @@ public class MessageService extends Service {
      * @return
      */
     private PendingIntent getIntent() {
-        Intent msgIntent = getApplicationContext().getPackageManager().getLaunchIntentForPackage(getPackageName());//获取启动Activity
+        Intent msigntent = getApplicationContext().getPackageManager().getLaunchIntentForPackage(getPackageName());//获取启动Activity
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 getApplicationContext(),
                 1,
-                msgIntent,
+                msigntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         return pendingIntent;

@@ -35,6 +35,9 @@
     <string name="feedback">飞讯聊天使用反馈</string>
     <string name="feedback_uname">用户名:</string>
     <string name="feedback_content">\n反馈内容:</string>
+    <string name="move_out_blacklist">移出黑名单</string>
+    <string name="move_into_blacklist">拉入黑名单</string>
+    <string name="get_data_failed">数据获取失败</string>
 
     <!-- Preference Titles -->
 

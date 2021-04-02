@@ -37,7 +37,7 @@ import static com.example.flymessagedome.service.MessageService.SERVICE_DISCONNE
 
 public abstract class BaseFragment extends Fragment implements NetStateChangeObserver {
 
-    private static final String TAG = "FlyMessage";
+    public static final String TAG = "FlyMessage";
     private Unbinder unbinder;
     protected View parentView;
     protected FragmentActivity activity;
@@ -88,14 +88,14 @@ public abstract class BaseFragment extends Fragment implements NetStateChangeObs
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unbinder.unbind();
-        if (serviceMessageReceiver!=null){
-            mContext.unregisterReceiver(serviceMessageReceiver);
-        }
         try {
+            unbinder.unbind();
+            if (serviceMessageReceiver!=null){
+                mContext.unregisterReceiver(serviceMessageReceiver);
+            }
             NetStateChangeReceiver.unRegisterReceiver(mContext);
             NetStateChangeReceiver.unRegisterObserver(this);
-        }catch (Exception e){
+        }catch (Exception ignored){
 
         }
     }

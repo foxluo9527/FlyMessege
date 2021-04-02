@@ -3,6 +3,8 @@ package com.example.flymessagedome.utils;
 import android.os.Environment;
 
 public class Constant {
+    public static final String api_key="92fa8d59057fdd134be4cf4a4db4e9da";
+
     public static final String API_BASE_URL = "http://www.foxluo.cn/FlyMessage/";
 
     //申请权限的回调申请码

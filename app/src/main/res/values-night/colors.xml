@@ -14,7 +14,7 @@
     <color name="white">#999999</color>
     <color name="light_white">#777777</color>
     <color name="light_da">#7D7D7D</color>
-
+    <color name="bar_bg">#000</color>
     <color name="black_9">#bbbbbb</color>
     <color name="black_7d">#cccccc</color>
     <color name="black_7">#dddddd</color>

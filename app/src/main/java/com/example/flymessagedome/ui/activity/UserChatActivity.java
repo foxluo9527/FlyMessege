@@ -874,16 +874,16 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     public void initBlackList(boolean inBlacklist) {
         dismissLoadingDialog();
         if (inBlacklist) {
-            blacklistState.setText("移出黑名单");
+            blacklistState.setText(R.string.move_out_blacklist);
         } else {
-            blacklistState.setText("拉入黑名单");
+            blacklistState.setText(R.string.move_into_blacklist);
         }
     }
 
     @Override
     public void initDataFailed() {
         dismissLoadingDialog();
-        ToastUtils.showToast("数据获取失败");
+        ToastUtils.showToast(getString(R.string.get_data_failed));
         finish();
     }
 

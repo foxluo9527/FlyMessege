@@ -27,6 +27,7 @@ import com.example.flymessagedome.ui.activity.ShowLoginHeadActivity;
 import com.example.flymessagedome.ui.activity.UserChatActivity;
 import com.example.flymessagedome.ui.activity.WebActivity;
 import com.example.flymessagedome.ui.activity.WelcomeActivity;
+import com.example.flymessagedome.ui.fragment.CommunityFragment;
 import com.example.flymessagedome.ui.fragment.FriendFragment;
 import com.example.flymessagedome.ui.fragment.MessageFragment;
 import com.example.flymessagedome.ui.fragment.MineFragment;
@@ -43,6 +44,7 @@ public interface MessageComponent {
     UserChatActivity inject(UserChatActivity userChatActivity);
     GroupChatActivity inject(GroupChatActivity groupChatActivity);
     FriendFragment inject(FriendFragment friendFragment);
+    CommunityFragment inject(CommunityFragment communityFragment);
     SearchResultActivity inject(SearchResultActivity searchResultActivity);
     FriendRequestActivity inject(FriendRequestActivity friendRequestActivity);
     EditUserMsgActivity inject(EditUserMsgActivity editUserMsgActivity);

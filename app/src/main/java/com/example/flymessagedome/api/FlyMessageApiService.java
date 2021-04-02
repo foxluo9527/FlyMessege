@@ -21,6 +21,7 @@ import com.example.flymessagedome.model.SearchUserModel;
 import com.example.flymessagedome.model.SendMessageModel;
 import com.example.flymessagedome.model.UserSignModel;
 import com.example.flymessagedome.model.Users;
+import com.example.flymessagedome.model.Weather;
 
 import okhttp3.MultipartBody;
 import retrofit2.http.GET;
@@ -75,6 +76,9 @@ public interface FlyMessageApiService {
 
     @GET("")
     Observable<One> getOne(@Url String url);
+
+    @GET("")
+    Observable<Weather> getWeather(@Url String url);
 
     @GET("message/getUserMessage")
     Observable<MessageModel> getMessage(@Query("loginToken")String loginToken,@Query("pageSize") int pageSize,@Query("pageIndex") int pageIndex);

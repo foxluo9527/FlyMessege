@@ -124,7 +124,7 @@ public class FriendFragment extends BaseFragment implements FriendContract.View,
             try {
                 if (refreshLayout != null)
                     refreshLayout.setRefreshing(false);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }, 10000);
@@ -180,7 +180,7 @@ public class FriendFragment extends BaseFragment implements FriendContract.View,
                     popup.show();
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -214,7 +214,7 @@ public class FriendFragment extends BaseFragment implements FriendContract.View,
             actionIntent.putExtra(MSG_TYPE, SERVICE_DISCONNECT);
             mContext.sendBroadcast(actionIntent);
         } else if (login != null && login.code == Constant.FAILED) {
-            Log.e(MainActivity.TAG, "获取用户登录信息失败，请重新登录");
+            Log.e(TAG, "获取用户登录信息失败，请重新登录");
             ToastUtils.showToast("获取用户登录信息失败，请重新登录");
             SharedPreferencesUtil.getInstance().removeAll();
             ActivityCollector.finishAll();
