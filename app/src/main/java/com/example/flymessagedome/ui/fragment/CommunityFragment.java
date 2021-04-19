@@ -2,9 +2,11 @@ package com.example.flymessagedome.ui.fragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +22,7 @@ import com.example.flymessagedome.base.BaseFragment;
 import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.component.DaggerMessageComponent;
 import com.example.flymessagedome.model.Weather;
+import com.example.flymessagedome.ui.activity.AddPostActivity;
 import com.example.flymessagedome.ui.activity.LoginActivity;
 import com.example.flymessagedome.ui.contract.CommunityContract;
 import com.example.flymessagedome.ui.presenter.CommunityPresenter;
@@ -41,6 +44,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import pub.devrel.easypermissions.EasyPermissions;
 
 @SuppressLint("NonConstantResourceId")
@@ -87,6 +91,15 @@ public class CommunityFragment extends BaseFragment implements CommunityContract
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerMessageComponent.builder().appComponent(appComponent).build().inject(this);
+    }
+
+    @OnClick({R.id.add})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.add:
+                startActivityForResult(new Intent(mContext, AddPostActivity.class),1);
+                break;
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -137,18 +150,24 @@ public class CommunityFragment extends BaseFragment implements CommunityContract
         Message message = new Message();
         message.obj = new SimpleDateFormat("yyyy/MM/dd HH:mm").format(System.currentTimeMillis());
         timeHandler.sendMessage(message);
+    }
 
-        cityName = SharedPreferencesUtil.getInstance().getString("city_name");
+    @Override
+    public void onResume() {
+        super.onResume();
         if (TextUtils.isEmpty(cityName)) {
-            String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-            if (EasyPermissions.hasPermissions(mContext, perms)) {
-                pickCity();
+            cityName = SharedPreferencesUtil.getInstance().getString("city_name");
+            if (TextUtils.isEmpty(cityName)) {
+                String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+                if (EasyPermissions.hasPermissions(mContext, perms)) {
+                    pickCity();
+                } else {
+                    EasyPermissions.requestPermissions(this, "天气需要获取定位权限", Constant.REQUEST_CODE_PERMISSION_CHOICE_PHOTO, perms);
+                }
             } else {
-                EasyPermissions.requestPermissions(this, "天气需要获取定位权限", Constant.REQUEST_CODE_PERMISSION_CHOICE_PHOTO, perms);
+                city.setText(cityName);
+                communityPresenter.getWeather(cityName);
             }
-        }else {
-            city.setText(cityName);
-            communityPresenter.getWeather(cityName);
         }
     }
 
@@ -175,7 +194,7 @@ public class CommunityFragment extends BaseFragment implements CommunityContract
                     @Override
                     public void onPick(int position, City data) {
                         cityName = data.getName();
-                        if (!TextUtils.isEmpty(cityName)){
+                        if (!TextUtils.isEmpty(cityName)) {
                             SharedPreferencesUtil.getInstance().putString("city_name", cityName);
                             LocationService.stop(mListener);
                             city.setText(cityName);
@@ -206,7 +225,7 @@ public class CommunityFragment extends BaseFragment implements CommunityContract
         try {
             weatherDes.setText(weather.getWeather());
             weatherTemp.setText(weather.getReal());
-            String imgName=weather.getWeatherimg().split("\\.")[0];
+            String imgName = weather.getWeatherimg().split("\\.")[0];
             weatherImg.setImageDrawable(getResources().getDrawable(getResources().getIdentifier(imgName, "drawable", mContext.getPackageName())));
         } catch (Exception e) {
             e.printStackTrace();

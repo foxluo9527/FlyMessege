@@ -166,7 +166,13 @@ public class MessageFragment extends BaseFragment implements ChatContract.View, 
                 arg0.add(0, 0, 0, "取消顶置");
             arg0.add(0, 1, 0, "删除聊天");
         });
-        scrollView.getViewTreeObserver().addOnScrollChangedListener(() -> refreshLayout.setEnabled(scrollView.getScrollY() == 0));
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
+            try{
+                refreshLayout.setEnabled(scrollView.getScrollY() == 0);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        });
     }
 
     //设置菜单内容和事件

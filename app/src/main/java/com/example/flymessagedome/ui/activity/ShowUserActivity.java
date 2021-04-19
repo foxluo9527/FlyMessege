@@ -1,10 +1,10 @@
 package com.example.flymessagedome.ui.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
@@ -52,6 +52,7 @@ import cn.bingoogolapple.photopicker.activity.BGAPhotoPreviewActivity;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+@SuppressLint("NonConstantResourceId")
 public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuItemClickListener {
     String user_name;
     @BindView(R.id.nick_name)
@@ -87,6 +88,7 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
     }
 
     @Override
+    @SuppressLint({"StaticFieldLeak", "SetTextI18n"})
     public void initDatas() {
         user_name = getIntent().getStringExtra("userName");
         if (TextUtils.isEmpty(user_name)) {
@@ -107,6 +109,7 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
                     String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
                     return HttpRequest.getUserMsg(user_name, loginToken);
                 }
+
 
                 @Override
                 protected void onPostExecute(Users user) {
@@ -132,8 +135,12 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
 
                         @Override
                         protected void onPostExecute(CheckBlackListModel blackListModel) {
-                            dismissLoadingDialog();
-                            inBlackList = blackListModel.inBlacklist;
+                            try {
+                                dismissLoadingDialog();
+                                inBlackList = blackListModel.inBlacklist;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }.execute();
                     Glide.with(mContext)
@@ -207,6 +214,7 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @OnClick({R.id.back, R.id.user_set, R.id.send_btn, R.id.add_fri_btn, R.id.msg_view, R.id.u_head_img, R.id.show_bg_view})
     public void onViewClick(View view) {
@@ -255,6 +263,7 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @SuppressLint("StaticFieldLeak")
     private void showListPopupMenu(Context context) {
         final View popView = View.inflate(context, R.layout.friend_more_popup, null);
         TextView black_list_state = popView.findViewById(R.id.blacklist_state);
@@ -288,105 +297,93 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
         popupWindow.update();
 
         //popupWindow消失屏幕变为不透明
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                WindowManager.LayoutParams lp = ((Activity) context).getWindow().getAttributes();
-                lp.alpha = 1.0f;
-                ((Activity) context).getWindow().setAttributes(lp);
-            }
+        popupWindow.setOnDismissListener(() -> {
+            WindowManager.LayoutParams lp = ((Activity) context).getWindow().getAttributes();
+            lp.alpha = 1.0f;
+            ((Activity) context).getWindow().setAttributes(lp);
         });
         //popupWindow出现屏幕变为半透明
         WindowManager.LayoutParams lp = ((Activity) context).getWindow().getAttributes();
         lp.alpha = 0.5f;
         ((Activity) context).getWindow().setAttributes(lp);
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.change_rmk:
-                        if (friendsBean != null) {
-                            Intent rmkIntent = new Intent(mContext, ChangeRemarkNameActivity.class);
-                            rmkIntent.putExtra("userId", userBean.getU_id());
-                            rmkIntent.putExtra("fId", friendsBean.getF_id());
-                            startActivity(rmkIntent);
-                        }
-                        popupWindow.dismiss();
-                        break;
-                    case R.id.black_list:
-                        showLoadingDialog(false, "正在操作");
-                        new AsyncTask<Void, Void, Base>() {
-                            @Override
-                            protected Base doInBackground(Void... voids) {
-                                CheckBlackListModel blackListModel = HttpRequest.checkBlackList(userBean.getU_id());
-                                inBlackList = blackListModel.inBlacklist;
-                                if (inBlackList) {
-                                    return HttpRequest.delBlackList(userBean.getU_id());
-                                } else {
-                                    return HttpRequest.addBlackList(userBean.getU_id());
-                                }
+        @SuppressLint("NonConstantResourceId") View.OnClickListener listener = v -> {
+            switch (v.getId()) {
+                case R.id.change_rmk:
+                    if (friendsBean != null) {
+                        Intent rmkIntent = new Intent(mContext, ChangeRemarkNameActivity.class);
+                        rmkIntent.putExtra("userId", userBean.getU_id());
+                        rmkIntent.putExtra("fId", friendsBean.getF_id());
+                        startActivity(rmkIntent);
+                    }
+                    popupWindow.dismiss();
+                    break;
+                case R.id.black_list:
+                    showLoadingDialog(false, "正在操作");
+                    new AsyncTask<Void, Void, Base>() {
+                        @Override
+                        protected Base doInBackground(Void... voids) {
+                            CheckBlackListModel blackListModel = HttpRequest.checkBlackList(userBean.getU_id());
+                            inBlackList = blackListModel.inBlacklist;
+                            if (inBlackList) {
+                                return HttpRequest.delBlackList(userBean.getU_id());
+                            } else {
+                                return HttpRequest.addBlackList(userBean.getU_id());
                             }
-
-                            @Override
-                            protected void onPostExecute(Base base) {
-                                dismissLoadingDialog();
-                                if (base.code == Constant.SUCCESS) {
-                                    inBlackList = !inBlackList;
-                                    ToastUtils.showToast("操作成功");
-                                } else {
-                                    ToastUtils.showToast("操作失败");
-                                }
-                            }
-                        }.execute();
-                        popupWindow.dismiss();
-                        break;
-                    case R.id.add_fri:
-                        if (userBean.getIsFriend()) {
-                            AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-                            dialog.setMessage("确认删除此联系人")
-                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.cancel();//取消弹出框
-                                            showLoadingDialog(false, "正在删除");
-                                            new AsyncTask<Void, Void, Base>() {
-                                                @Override
-                                                protected Base doInBackground(Void... voids) {
-                                                    return HttpRequest.delFriend(friendsBean.getF_id());
-                                                }
-
-                                                @Override
-                                                protected void onPostExecute(Base base) {
-                                                    dismissLoadingDialog();
-                                                    if (base.code == Constant.SUCCESS) {
-                                                        ToastUtils.showToast("操作成功");
-                                                        initDatas();
-                                                        UserChatActivity.resultRefresh = true;
-                                                    } else {
-                                                        ToastUtils.showToast("操作失败");
-                                                    }
-                                                }
-                                            }.execute();
-                                        }
-                                    })
-                                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.cancel();//取消弹出框
-                                        }
-                                    })
-                                    .create().show();
-                        } else {
-                            popupWindow.dismiss();
-                            Intent rq_intent = new Intent(mContext, RequestFriendActivity.class);
-                            rq_intent.putExtra("uName", userBean.getU_name());
-                            startActivity(rq_intent);
                         }
-                        break;
-                    case R.id.cancel:
+
+                        @Override
+                        protected void onPostExecute(Base base) {
+                            dismissLoadingDialog();
+                            if (base.code == Constant.SUCCESS) {
+                                inBlackList = !inBlackList;
+                                ToastUtils.showToast("操作成功");
+                            } else {
+                                ToastUtils.showToast("操作失败");
+                            }
+                        }
+                    }.execute();
+                    popupWindow.dismiss();
+                    break;
+                case R.id.add_fri:
+                    if (userBean.getIsFriend()) {
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+                        dialog.setMessage("确认删除此联系人")
+                                .setPositiveButton("确定", (dialog1, which) -> {
+                                    dialog1.cancel();//取消弹出框
+                                    showLoadingDialog(false, "正在删除");
+                                    new AsyncTask<Void, Void, Base>() {
+                                        @Override
+                                        protected Base doInBackground(Void... voids) {
+                                            return HttpRequest.delFriend(friendsBean.getF_id());
+                                        }
+
+                                        @Override
+                                        protected void onPostExecute(Base base) {
+                                            dismissLoadingDialog();
+                                            if (base.code == Constant.SUCCESS) {
+                                                ToastUtils.showToast("操作成功");
+                                                initDatas();
+                                                UserChatActivity.resultRefresh = true;
+                                            } else {
+                                                ToastUtils.showToast("操作失败");
+                                            }
+                                        }
+                                    }.execute();
+                                })
+                                .setNegativeButton("取消", (dialog12, which) -> {
+                                    dialog12.cancel();//取消弹出框
+                                })
+                                .create().show();
+                    } else {
                         popupWindow.dismiss();
-                        break;
-                }
+                        Intent rq_intent = new Intent(mContext, RequestFriendActivity.class);
+                        rq_intent.putExtra("uName", userBean.getU_name());
+                        startActivity(rq_intent);
+                    }
+                    break;
+                case R.id.cancel:
+                    popupWindow.dismiss();
+                    break;
             }
         };
         changeRmk.setOnClickListener(listener);
@@ -429,9 +426,7 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if (item.getItemId() == R.id.remark_name) {
-
-        }
+        item.getItemId();
         return false;
     }
 }

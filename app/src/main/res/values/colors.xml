@@ -3,7 +3,8 @@
     <!-- PhotoPicker 状态栏的颜色 -->
     <!-- PhotoPicker Toolbar 的颜色 -->
     <!-- 图片选择器库里所有Activity界面的背景色 -->
-
+    <color name="bga_pp_photo_item_bg">#FFFFFF</color>
+    <color name="bga_pp_eighteen_maskColor">#00FFFFFF</color>
     <color name="colorPrimary">#FBFBFB</color>
     <color name="colorPrimaryDark">#F4F4F4</color>
     <color name="colorAccent">#D81B60</color>

@@ -11,10 +11,12 @@
         android:layout_height="@dimen/d_80"
         android:layout_margin="@dimen/d_10"
         android:src="@drawable/now_head_bg_shape"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#999F9E9E"
@@ -44,11 +46,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/d_10"
+        android:layout_marginVertical="@dimen/d_10"
         android:maxLines="3"
+        android:ellipsize="end"
         android:text="sign"
-        android:layout_marginTop="@dimen/d_10"
         android:textColor="@color/black"
         android:textSize="@dimen/s_20"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
         app:layout_constraintStart_toEndOf="@+id/head"
         app:layout_constraintTop_toTopOf="@+id/guideline" />

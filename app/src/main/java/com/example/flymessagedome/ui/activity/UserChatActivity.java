@@ -105,7 +105,7 @@ import static com.example.flymessagedome.utils.DataCleanManager.getFormatSize;
 @SuppressLint("NonConstantResourceId")
 public class UserChatActivity extends BaseActivity implements UserMessageContart.View
         , EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener
-        , EasyPermissions.PermissionCallbacks,MessageAdapter.OnRecyclerViewItemClickListener {
+        , EasyPermissions.PermissionCallbacks, MessageAdapter.OnRecyclerViewItemClickListener {
     private static final String TAG = "FlyMessage";
 
     @BindView(R.id.send_voice)
@@ -198,6 +198,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
 
     @SuppressLint("HandlerLeak")
     Handler onRecordHandler = new Handler() {
+        @SuppressLint("SetTextI18n")
         @Override
         public void handleMessage(@NonNull android.os.Message msg) {
             super.handleMessage(msg);
@@ -220,85 +221,89 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     @SuppressLint("NonConstantResourceId")
     @OnClick({R.id.back, R.id.more, R.id.send_btn, R.id.cancel_choice, R.id.send_img_btn, R.id.get_photo, R.id.send_voice_cancel, R.id.send_voice_control, R.id.add_blacklist, R.id.add_friend})
     public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.back:
-                if (!TextUtils.isEmpty(content))
-                    userMessagePresenter.inserting(user, content);
-                finish();
-                break;
-            case R.id.more:
-                Intent intent = new Intent(mContext, ChatSettingActivity.class);
-                intent.putExtra("userName", user.getU_name());
-                startActivity(intent);
-                break;
-            case R.id.send_btn:
-                showLoadingDialog(true, "消息发送中");
-                String content = msgTv.getText().toString();
-                userMessagePresenter.sendUserMessage(null, user, 0, content);
-                msgTv.setText("");
-                userMessagePresenter.inserting(user, null);
-                sendBtn.setEnabled(false);
-                break;
-            case R.id.cancel_choice:
-                if (choiceNum > 0) {
-                    for (Integer index :
-                            choiceIndex) {
-                        choice[index] = false;
-                    }
-                    choiceIndex.clear();
-                    choiceNum = 0;
-                    sendImgBtn.setEnabled(false);
-                    photoList.getAdapter().notifyDataSetChanged();
-                    cancelChoice.setText("取消选中(0)");
-                }
-                break;
-            case R.id.send_img_btn:
-                if (choiceNum > 0) {
-                    showLoadingDialog(true, "图片发送中");
-                    for (Integer index :
-                            choiceIndex) {
-                        if (choice[index]) {
-                            userMessagePresenter.sendUserMessage(photoUrls.get(index), user, 2, "");
-                            choice[index] = !choice[index];
-                            photoViewAdapter.notifyItemChanged(index);
+        try {
+            switch (view.getId()) {
+                case R.id.back:
+                    if (!TextUtils.isEmpty(content))
+                        userMessagePresenter.inserting(user, content);
+                    finish();
+                    break;
+                case R.id.more:
+                    Intent intent = new Intent(mContext, ChatSettingActivity.class);
+                    intent.putExtra("userName", user.getU_name());
+                    startActivity(intent);
+                    break;
+                case R.id.send_btn:
+                    showLoadingDialog(true, "消息发送中");
+                    String content = msgTv.getText().toString();
+                    userMessagePresenter.sendUserMessage(null, user, 0, content);
+                    msgTv.setText("");
+                    userMessagePresenter.inserting(user, null);
+                    sendBtn.setEnabled(false);
+                    break;
+                case R.id.cancel_choice:
+                    if (choiceNum > 0) {
+                        for (Integer index :
+                                choiceIndex) {
+                            choice[index] = false;
                         }
+                        choiceIndex.clear();
+                        choiceNum = 0;
+                        sendImgBtn.setEnabled(false);
+                        photoList.getAdapter().notifyDataSetChanged();
+                        cancelChoice.setText("取消选中(0)");
                     }
-                    choiceIndex.clear();
-                    choiceNum = 0;
-                    sendImgBtn.setEnabled(false);
-                    cancelChoice.setText("取消选中(0)");
-                }
-                break;
-            case R.id.get_photo:
-                choicePhotoWrapper();
-                break;
-            case R.id.send_voice_cancel:
-                try {
-                    if (onRecording)
-                        AudioRecoderManager.getInstance().cancel(this);//取消录音
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.send_voice_control:
-                try {
-                    if (onRecording) {
-                        AudioRecoderManager.getInstance().stop(this);//结束录音
-                    } else {
-                        takeAudio();
+                    break;
+                case R.id.send_img_btn:
+                    if (choiceNum > 0) {
+                        showLoadingDialog(true, "图片发送中");
+                        for (Integer index :
+                                choiceIndex) {
+                            if (choice[index]) {
+                                userMessagePresenter.sendUserMessage(photoUrls.get(index), user, 2, "");
+                                choice[index] = !choice[index];
+                                photoViewAdapter.notifyItemChanged(index);
+                            }
+                        }
+                        choiceIndex.clear();
+                        choiceNum = 0;
+                        sendImgBtn.setEnabled(false);
+                        cancelChoice.setText("取消选中(0)");
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.add_blacklist:
-                userMessagePresenter.addBlackList(user);
-                break;
-            case R.id.add_friend:
-                Intent rq_intent = new Intent(mContext, RequestFriendActivity.class);
-                rq_intent.putExtra("uName", user.getU_name());
-                startActivity(rq_intent);
-                break;
+                    break;
+                case R.id.get_photo:
+                    choicePhotoWrapper();
+                    break;
+                case R.id.send_voice_cancel:
+                    try {
+                        if (onRecording)
+                            AudioRecoderManager.getInstance().cancel(this);//取消录音
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case R.id.send_voice_control:
+                    try {
+                        if (onRecording) {
+                            AudioRecoderManager.getInstance().stop(this);//结束录音
+                        } else {
+                            takeAudio();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case R.id.add_blacklist:
+                    userMessagePresenter.addBlackList(user);
+                    break;
+                case R.id.add_friend:
+                    Intent rq_intent = new Intent(mContext, RequestFriendActivity.class);
+                    rq_intent.putExtra("uName", user.getU_name());
+                    startActivity(rq_intent);
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -946,7 +951,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                 mPositionId = -1;
             }
             messageAdapter.setOnRecyclerViewItemClickListener(this);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -1220,6 +1225,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     }
 
     @AfterPermissionGranted(Constant.REQUEST_CODE_PERMISSION_CHOICE_PHOTO)
+    @SuppressLint("StaticFieldLeak")
     public void getPhoto() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
@@ -1261,6 +1267,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                         photoViewAdapter = new ChatPhotoViewAdapter(photoUrls, context, choice);
                         photoList.setAdapter(photoViewAdapter);
                         photoViewAdapter.setOnRecyclerViewItemClickListener(new ChatPhotoViewAdapter.OnRecyclerViewItemClickListener() {
+                            @SuppressLint("SetTextI18n")
                             @Override
                             public void onItemClick(View view, int position) {
                                 if (view.getId() == R.id.main_view || view.getId() == R.id.radio_choice) {
@@ -1272,10 +1279,10 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
                                     photoList.getAdapter().notifyDataSetChanged();
                                     if (choice[position]) {
                                         choiceNum++;
-                                        choiceIndex.add(new Integer(position));
+                                        choiceIndex.add(Integer.valueOf(position));
                                         sendImgBtn.setEnabled(true);
                                     } else {
-                                        choiceIndex.remove(new Integer(position));
+                                        choiceIndex.remove(Integer.valueOf(position));
                                         choiceNum--;
                                         if (choiceNum == 0) {
                                             sendImgBtn.setEnabled(false);
@@ -1489,6 +1496,7 @@ public class UserChatActivity extends BaseActivity implements UserMessageContart
     }
 
     @Override
+    @SuppressLint("StaticFieldLeak")
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         resultRefresh = false;

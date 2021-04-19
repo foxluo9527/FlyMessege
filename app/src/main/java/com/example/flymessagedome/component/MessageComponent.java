@@ -3,6 +3,7 @@ package com.example.flymessagedome.component;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.flymessagedome.service.MessageService;
+import com.example.flymessagedome.ui.activity.AddPostActivity;
 import com.example.flymessagedome.ui.activity.AddSignActivity;
 import com.example.flymessagedome.ui.activity.BlackListActivity;
 import com.example.flymessagedome.ui.activity.ContractAddActivity;
@@ -63,4 +64,5 @@ public interface MessageComponent {
     EditGroupMsgActivity inject(EditGroupMsgActivity editGroupMsgActivity);
     ShowGroupMembersActivity inject(ShowGroupMembersActivity showGroupMembersActivity);
     ContractAddActivity inject(ContractAddActivity contractAddActivity);
+    AddPostActivity inject(AddPostActivity addPostActivity);
 }

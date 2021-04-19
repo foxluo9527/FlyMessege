@@ -16,6 +16,7 @@
             android:layout_below="@+id/head_box"
             tools:listitem="@layout/item_community_list" />
         <ImageView
+            android:id="@+id/add"
             android:elevation="1dp"
             android:layout_width="@dimen/d_60"
             android:layout_height="@dimen/d_60"

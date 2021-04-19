@@ -207,7 +207,6 @@ public class CreateGroupActivity extends BaseActivity implements CreateGroupCont
             createGroupPresenter.changeGroupHead(g_id,headPath);
         }else {
             ToastUtils.showToast("创建群聊成功");
-            GroupsActivity.refresh=true;
             finish();
         }
     }

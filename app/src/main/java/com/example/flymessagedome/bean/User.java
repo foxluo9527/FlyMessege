@@ -6,23 +6,6 @@ import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
 public class User {
-
-    /**
-     * nowDate : 1590370361579
-     * u_name : 123
-     * u_sex : 男
-     * u_create_time : 1589343049000
-     * u_forbidden : 0
-     * u_nick_name : 新用户
-     * u_pass : 99490e90b5581d3e8fc35bd780398a03
-     * u_sign : 哈哈哈哈
-     * u_id : 1
-     * u_phone : 17628648573
-     * u_brithday : 930499200000
-     * u_head_img : http://www.foxluo.com/FlyMessage/images/defaultHead.png
-     * u_position : 123
-     * u_bg_img : http://www.foxluo.cn/FlyMessage/images/userBgImg/20200521123701296.JPG
-     */
     private String u_name;
     private String u_sex;
     private long u_create_time;

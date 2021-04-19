@@ -32,7 +32,6 @@ public class GroupsActivity extends BaseActivity implements GroupContract.View {
     @Inject
     GroupPresenter groupPresenter;
     GroupExpendListAdapter adapter;
-    public static boolean refresh=false;
     @Override
     public int getLayoutId() {
         return R.layout.activity_groups;
@@ -63,10 +62,7 @@ public class GroupsActivity extends BaseActivity implements GroupContract.View {
     @Override
     protected void onResume() {
         super.onResume();
-        if (refresh){
-            groupPresenter.getGroupsByPage(20,1);
-            refresh=false;
-        }
+        groupPresenter.getGroupsByPage(20,1);
     }
 
     @Override

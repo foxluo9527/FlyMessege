@@ -139,7 +139,7 @@
                 </RelativeLayout>
 
                 <LinearLayout
-                    android:id="@+id/sgin_view"
+                    android:id="@+id/sign_view"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d_50"
                     android:background="#33FAF1F1"
