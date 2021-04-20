@@ -2,6 +2,7 @@ package com.example.flymessagedome.ui.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import butterknife.OnClick;
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerPreviewActivity;
 import cn.bingoogolapple.photopicker.widget.BGASortableNinePhotoLayout;
@@ -76,6 +78,22 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
         }
     }
 
+    @OnClick({R.id.back, R.id.add})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.back:
+                onBackPressed();
+                break;
+            case R.id.add:
+                Intent data = new Intent();
+                data.putExtra("content", postContent);
+                data.putStringArrayListExtra("photos", mPhotosSnpl.getData());
+                setResult(RESULT_OK, data);
+                finish();
+                break;
+        }
+    }
+
     @Override
     public void initDatas() {
         mPhotosSnpl = findViewById(R.id.snpl_moment_add_photos);
@@ -94,12 +112,19 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
             @Override
             public void afterTextChanged(Editable s) {
                 postContent = content.getText().toString();
-                add.setEnabled(!TextUtils.isEmpty(postContent));
+                add.setEnabled(!TextUtils.isEmpty(postContent) || mPhotosSnpl.getData().size() > 0);
             }
         });
         postContent = SharedPreferencesUtil.getInstance().getString("post_content");
         if (!TextUtils.isEmpty(postContent))
             content.setText(postContent);
+        ArrayList<String> photos = new ArrayList<>();
+        HashSet<String> set = (HashSet<String>) SharedPreferencesUtil.getInstance().getStringSet("photos");
+        for (String s : set) {
+            photos.add(s);
+        }
+        if (photos.size() > 0)
+            mPhotosSnpl.setData(photos);
     }
 
     @Override
@@ -115,6 +140,12 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
                         for (String photo : photos) {
                             set.add(photo);
                         }
+                        SharedPreferencesUtil.getInstance().putStringSet("photos", set);
+                        super.onBackPressed();
+                    })
+                    .setNeutralButton("直接退出", (dialog, which) -> {
+                        Set<String> set = new HashSet<>();
+                        SharedPreferencesUtil.getInstance().putString("post_content", "");
                         SharedPreferencesUtil.getInstance().putStringSet("photos", set);
                         super.onBackPressed();
                     })
@@ -159,6 +190,7 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
     @Override
     public void onClickDeleteNinePhotoItem(BGASortableNinePhotoLayout sortableNinePhotoLayout, View view, int position, String model, ArrayList<String> models) {
         mPhotosSnpl.removeItem(position);
+        add.setEnabled(!TextUtils.isEmpty(postContent) || mPhotosSnpl.getData().size() > 0);
     }
 
     @Override
@@ -198,7 +230,7 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ArrayList<String> photos;
+        ArrayList<String> photos = new ArrayList<>();
         if (resultCode == RESULT_OK && requestCode == RC_CHOOSE_PHOTO) {
             photos = BGAPhotoPickerActivity.getSelectedPhotos(data);
             mPhotosSnpl.addMoreData(photos);
@@ -206,5 +238,6 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
             photos = BGAPhotoPickerPreviewActivity.getSelectedPhotos(data);
             mPhotosSnpl.setData(photos);
         }
+        add.setEnabled(!TextUtils.isEmpty(postContent) || photos.size() > 0);
     }
 }

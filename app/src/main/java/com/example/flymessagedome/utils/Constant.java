@@ -5,7 +5,7 @@ import android.os.Environment;
 public class Constant {
     public static final String api_key="92fa8d59057fdd134be4cf4a4db4e9da";
 
-    public static final String API_BASE_URL = "http://www.foxluo.cn/FlyMessage_war/";
+    public static final String API_BASE_URL = "http://www.foxluo.cn/FlyMessage/";
 
     //申请权限的回调申请码
     //拍照
@@ -31,7 +31,7 @@ public class Constant {
     //欢迎界面资源获取（one一个）
     public static final String ONE_API="http://api.tianapi.com/txapi/one/index";
 
-    public static final String SOCKET_BASE_URL = "ws://www.foxluo.cn/FlyMessage_war/webSocketServer";
+    public static final String SOCKET_BASE_URL = "ws://www.foxluo.cn/FlyMessage/webSocketServer";
 
     public static final String FORGET_PASS_URL="http://www.foxluo.cn/changePass.html";
 
@@ -70,7 +70,7 @@ public class Constant {
 
     public static final String ONLINE_OPEN_OFFICE_FILE="https://view.officeapps.live.com/op/view.aspx?src=";
 
-    public static final String DownloadPath= Environment.getExternalStorageDirectory()+"/FlyMessage_war/file/download/";
+    public static final String DownloadPath= Environment.getExternalStorageDirectory()+"/FlyMessage/file/download/";
 
     public static final String RootPath=Environment.getExternalStorageDirectory()+"";
 

@@ -52,6 +52,7 @@
         android:layout_height="0dp"
         android:background="@null"
         android:padding="@dimen/d_5"
+        android:gravity="top|start"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@id/top" />
     <cn.bingoogolapple.photopicker.widget.BGASortableNinePhotoLayout

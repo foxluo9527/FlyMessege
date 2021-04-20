@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.baidu.location.BDAbstractLocationListener;
@@ -46,6 +47,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 import pub.devrel.easypermissions.EasyPermissions;
+
+import static android.app.Activity.RESULT_OK;
 
 @SuppressLint("NonConstantResourceId")
 public class CommunityFragment extends BaseFragment implements CommunityContract.View {
@@ -97,12 +100,12 @@ public class CommunityFragment extends BaseFragment implements CommunityContract
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.add:
-                startActivityForResult(new Intent(mContext, AddPostActivity.class),1);
+                startActivityForResult(new Intent(mContext, AddPostActivity.class), 1);
                 break;
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint({"SimpleDateFormat", "HandlerLeak"})
     @Override
     public void initDatas() {
         alive = true;
@@ -175,6 +178,18 @@ public class CommunityFragment extends BaseFragment implements CommunityContract
     public void onDestroy() {
         super.onDestroy();
         alive = false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            String postContent = data.getStringExtra("content");
+            ArrayList<String> photos = data.getStringArrayListExtra("photos");
+            if (photos.size()>0){
+
+            }
+        }
     }
 
     private void pickCity() {
