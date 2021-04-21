@@ -1,140 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/refresh"
     tools:context=".ui.activity.ShowPostActivity">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
+        android:id="@+id/top"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <RelativeLayout
-            android:id="@+id/top"
-            android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/d_50"
             android:layout_height="@dimen/d_50"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/colorPrimary">
-
-            <ImageView
-                android:id="@+id/back"
-                android:layout_width="@dimen/d_50"
-                android:layout_height="@dimen/d_50"
-                android:padding="@dimen/d_15"
-                app:srcCompat="@mipmap/back" />
-
-            <TextView
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="详情" />
-            <ImageView
-                android:id="@+id/delete"
-                android:layout_width="@dimen/d_40"
-                android:layout_height="@dimen/d_40"
-                android:layout_centerVertical="true"
-                android:padding="@dimen/d_10"
-                android:visibility="gone"
-                android:layout_toLeftOf="@id/edit"
-                android:src="@drawable/delete"
-                android:layout_toStartOf="@id/edit" />
-            <ImageView
-                android:id="@+id/edit"
-                android:layout_width="@dimen/d_40"
-                android:layout_height="@dimen/d_40"
-                android:layout_centerVertical="true"
-                android:padding="@dimen/d_10"
-                android:visibility="gone"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/edit"
-                android:layout_alignParentEnd="true" />
-        </RelativeLayout>
-        <com.example.flymessagedome.view.CircleImageView
-            android:id="@+id/head"
-            android:layout_width="@dimen/d_30"
-            android:layout_height="@dimen/d_30"
-            android:layout_margin="@dimen/d_10"
-            android:src="@drawable/now_head_bg_shape"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/top" />
+            android:padding="@dimen/d_15"
+            app:srcCompat="@mipmap/back" />
 
         <TextView
-            android:id="@+id/name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/d_10"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text="name"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@id/head"
-            app:layout_constraintEnd_toStartOf="@+id/time"
-            app:layout_constraintStart_toEndOf="@id/head"
-            app:layout_constraintTop_toTopOf="@id/head" />
-
-        <TextView
-            android:id="@+id/time"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/d_10"
-            android:text="2021/3/21 19:20"
-            app:layout_constraintBottom_toBottomOf="@id/head"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/head" />
-
-        <TextView
-            android:id="@+id/content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/d_10"
-            android:text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nxxxxxxxx\nxxxxxxxxxxxxx\nxxxxxx."
-            android:textColor="#333333"
-            android:textSize="13sp"
-            app:layout_constraintTop_toBottomOf="@id/head" />
-
-        <cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout
-            android:id="@+id/content_pics"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/d_10"
-            app:layout_constraintTop_toBottomOf="@id/content" />
-
-        <LinearLayout
-            android:id="@+id/post_action"
-            android:layout_width="match_parent"
+            android:text="详情" />
+        <ImageView
+            android:id="@+id/delete"
+            android:layout_width="@dimen/d_40"
             android:layout_height="@dimen/d_40"
-            android:layout_margin="@dimen/d_10"
-            android:orientation="horizontal"
-            android:gravity="right"
-            app:layout_constraintTop_toBottomOf="@id/content_pics">
-            <ImageView
-                android:id="@+id/zan_state"
-                android:layout_width="@dimen/d_40"
-                android:layout_height="@dimen/d_40"
-                android:adjustViewBounds="true"
-                android:scaleType="centerInside"
-                android:padding="10dp"
-                android:src="@drawable/zan"
-                android:layout_marginRight="@dimen/d_10"/>
-
-            <ImageView
-                android:layout_width="@dimen/d_40"
-                android:layout_height="@dimen/d_40"
-                android:padding="10dp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerInside"
-                android:src="@drawable/discuss"
-                android:layout_marginRight="@dimen/d_10"/>
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
+            android:layout_centerVertical="true"
+            android:padding="@dimen/d_10"
+            android:visibility="gone"
+            android:layout_toLeftOf="@id/edit"
+            android:src="@drawable/delete"
+            android:layout_toStartOf="@id/edit" />
+        <ImageView
+            android:id="@+id/edit"
+            android:layout_width="@dimen/d_40"
+            android:layout_height="@dimen/d_40"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/d_10"
+            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/edit"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_50"
+        app:layout_constraintBottom_toBottomOf="parent" >
+        <EditText
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/post_action"
-            tools:listitem="@layout/layout_post_discuss_item"
-            android:padding="@dimen/d_10"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:layout_height="@dimen/d_30"
+            android:background="@drawable/input"
+            android:layout_centerVertical="true"
+            android:paddingHorizontal="@dimen/d_5"
+            android:layout_marginHorizontal="@dimen/d_10"
+            android:layout_toLeftOf="@id/send"/>
+        <Button
+            android:id="@+id/send"
+            android:layout_width="@dimen/d_50"
+            android:layout_height="@dimen/d_30"
+            android:layout_marginRight="@dimen/d_10"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="发送"
+            android:background="@drawable/bga_pp_selector_btn_confirm"/>
+    </RelativeLayout>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
+        app:layout_constraintTop_toBottomOf="@id/top"
+        app:layout_constraintBottom_toTopOf="@id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_view"
+            android:fillViewport="true"
+            app:layout_constraintTop_toBottomOf="@id/top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.example.flymessagedome.view.CircleImageView
+                    android:id="@+id/head"
+                    android:layout_width="@dimen/d_30"
+                    android:layout_height="@dimen/d_30"
+                    android:layout_margin="@dimen/d_10"
+                    android:src="@drawable/now_head_bg_shape"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d_10"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@id/head"
+                    app:layout_constraintEnd_toStartOf="@+id/time"
+                    app:layout_constraintStart_toEndOf="@id/head"
+                    app:layout_constraintTop_toTopOf="@id/head" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/d_10"
+                    app:layout_constraintBottom_toBottomOf="@id/head"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/head" />
+
+                <TextView
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/d_10"
+                    android:textColor="#333333"
+                    android:textSize="13sp"
+                    app:layout_constraintTop_toBottomOf="@id/head" />
+
+                <cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout
+                    android:id="@+id/content_pics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/d_10"
+                    app:layout_constraintTop_toBottomOf="@id/content" />
+
+                <LinearLayout
+                    android:id="@+id/post_action"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/d_40"
+                    android:layout_margin="@dimen/d_10"
+                    android:orientation="horizontal"
+                    android:gravity="right"
+                    app:layout_constraintTop_toBottomOf="@id/content_pics">
+                    <ImageView
+                        android:id="@+id/zan_state"
+                        android:layout_width="@dimen/d_40"
+                        android:layout_height="@dimen/d_40"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerInside"
+                        android:padding="10dp"
+                        android:src="@drawable/zan"
+                        android:layout_marginRight="@dimen/d_10"/>
+
+                    <ImageView
+                        android:id="@+id/discuss"
+                        android:layout_width="@dimen/d_40"
+                        android:layout_height="@dimen/d_40"
+                        android:padding="10dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/discuss"
+                        android:layout_marginRight="@dimen/d_10"/>
+                </LinearLayout>
+                <com.example.flymessagedome.ui.widget.MaxRecyclerView
+                    android:id="@+id/discuss_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/post_action"
+                    tools:listitem="@layout/layout_post_discuss_item"
+                    android:padding="@dimen/d_10"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

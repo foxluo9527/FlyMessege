@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools">
 
     <com.example.flymessagedome.view.CircleImageView
@@ -21,7 +21,6 @@
         android:layout_marginLeft="@dimen/d_10"
         android:ellipsize="end"
         android:singleLine="true"
-        android:text="name"
         android:textColor="@color/black"
         app:layout_constraintEnd_toStartOf="@+id/zan_num"
         app:layout_constraintStart_toEndOf="@id/head"
@@ -32,11 +31,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1"
-        app:layout_constraintBottom_toBottomOf="@id/zan"
-        app:layout_constraintEnd_toStartOf="@id/zan"
-        app:layout_constraintTop_toTopOf="@id/zan" />
+        app:layout_constraintBottom_toBottomOf="@id/zan_state"
+        app:layout_constraintEnd_toStartOf="@id/zan_state"
+        app:layout_constraintTop_toTopOf="@id/zan_state" />
     <ImageView
-        android:id="@+id/zan"
+        android:id="@+id/zan_state"
         android:layout_width="@dimen/d_30"
         android:layout_height="@dimen/d_30"
         android:layout_marginRight="@dimen/d_10"
@@ -52,10 +51,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/d_10"
         android:layout_marginTop="@dimen/d_5"
-        android:text="xxxx\nxxxxxxxxxx\nxx"
         android:textSize="15sp"
         android:textColor="#333333"
-        app:layout_constraintEnd_toEndOf="@id/zan"
+        app:layout_constraintEnd_toEndOf="@id/zan_state"
         app:layout_constraintStart_toEndOf="@id/head"
         app:layout_constraintTop_toBottomOf="@id/name" />
     <TextView
@@ -64,16 +62,15 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/content"
         app:layout_constraintTop_toBottomOf="@id/content"
-        android:layout_marginTop="@dimen/d_5"
-        android:text="2021/3/21 19:20"/>
+        android:layout_marginTop="@dimen/d_5"/>
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/replies_list"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/head"
         android:layout_marginLeft="@dimen/d_10"
         app:layout_constraintTop_toBottomOf="@id/time"
         android:layout_marginTop="@dimen/d_5"
         tools:listitem="@layout/layout_post_discuss_reply_item"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/zan"/>
+        app:layout_constraintEnd_toEndOf="@id/zan_state"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

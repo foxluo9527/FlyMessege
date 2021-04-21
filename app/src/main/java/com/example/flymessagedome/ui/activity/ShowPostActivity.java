@@ -2,11 +2,16 @@ package com.example.flymessagedome.ui.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
@@ -17,8 +22,10 @@ import com.example.flymessagedome.base.BaseActivity;
 import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.component.DaggerMessageComponent;
 import com.example.flymessagedome.model.Post;
+import com.example.flymessagedome.ui.adapter.DiscussAdapter;
 import com.example.flymessagedome.ui.contract.ShowPostContract;
 import com.example.flymessagedome.ui.presenter.PostPresenter;
+import com.example.flymessagedome.ui.widget.MaxRecyclerView;
 import com.example.flymessagedome.utils.Constant;
 import com.example.flymessagedome.utils.ToastUtils;
 import com.example.flymessagedome.view.CircleImageView;
@@ -30,6 +37,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPreviewActivity;
 import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -42,6 +50,9 @@ public class ShowPostActivity extends BaseActivity implements ShowPostContract.V
 
     @BindView(R.id.refresh)
     SwipeRefreshLayout refreshLayout;
+
+    @BindView(R.id.scroll_view)
+    NestedScrollView scrollView;
 
     @BindView(R.id.head)
     CircleImageView head;
@@ -67,9 +78,15 @@ public class ShowPostActivity extends BaseActivity implements ShowPostContract.V
     @BindView(R.id.edit)
     ImageView edit;
 
+    @BindView(R.id.discuss_list)
+    MaxRecyclerView discussList;
+
     @Inject
     PostPresenter postPresenter;
     private int postId;
+    private final ArrayList<Post.PostBean.CommentsBean> comments = new ArrayList<>();
+    private DiscussAdapter adapter;
+    private Post.PostBean postBean;
 
     @Override
     public int getLayoutId() {
@@ -81,6 +98,7 @@ public class ShowPostActivity extends BaseActivity implements ShowPostContract.V
         DaggerMessageComponent.builder().appComponent(appComponent).build().inject(this);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void initDatas() {
         postId = getIntent().getIntExtra("postId", -1);
@@ -91,6 +109,13 @@ public class ShowPostActivity extends BaseActivity implements ShowPostContract.V
         refreshLayout.setOnRefreshListener(() -> postPresenter.getPost(postId));
         refreshLayout.setRefreshing(true);
         postPresenter.getPost(postId);
+        adapter = new DiscussAdapter(comments, mContext);
+        discussList.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+        discussList.setAdapter(adapter);
+        discussList.setNestedScrollingEnabled(false);
+        scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            refreshLayout.setEnabled(scrollY == 0);
+        });
     }
 
     @Override
@@ -101,6 +126,7 @@ public class ShowPostActivity extends BaseActivity implements ShowPostContract.V
     @Override
     public void initPost(Post.PostBean postBean) {
         refreshLayout.setRefreshing(false);
+        this.postBean = postBean;
         try {
             if (postBean.getU_id() == LoginActivity.loginUser.getU_id()) {
                 edit.setVisibility(View.VISIBLE);
@@ -114,9 +140,20 @@ public class ShowPostActivity extends BaseActivity implements ShowPostContract.V
             for (Post.PostBean.PostItemsBean postItem : postBean.getPostItems()) {
                 photos.add(proxy.getProxyUrl(postItem.getCommunity_post_item_url()));
             }
+            content.setText(postBean.getCommunityPostContent());
             pics.setData(photos);
-            name.setText(postBean.getU_name());
+            name.setText(postBean.getU_nick_name());
             time.setText(QQFormatTime(postBean.getCreateTime()));
+            if (postBean.getZan_state() == 0)
+                for (Post.PostBean.ZanBean zan : postBean.getZans()) {
+                    if (zan.getUser_id() == LoginActivity.loginUser.getU_id()) {
+                        postBean.setZan_state(1);
+                        break;
+                    }
+                }
+            comments.clear();
+            comments.addAll(postBean.getComments());
+            adapter.notifyDataSetChanged();
             zanState.setImageDrawable(getResources().getDrawable(postBean.getZan_state() == 0 ? R.drawable.zan : R.drawable.zan_sel));
             pics.setDelegate(new BGANinePhotoLayout.Delegate() {
                 @Override
@@ -131,6 +168,40 @@ public class ShowPostActivity extends BaseActivity implements ShowPostContract.V
             });
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void zanPostSuccess(int postId) {
+        dismissLoadingDialog();
+        setResult(2);
+        postBean.setZan_state(1);
+        zanState.setImageDrawable(getResources().getDrawable(R.drawable.zan_sel));
+    }
+
+    @Override
+    public void cancelZanPostSuccess(int postId) {
+        dismissLoadingDialog();
+        setResult(2);
+        postBean.setZan_state(0);
+        zanState.setImageDrawable(getResources().getDrawable(R.drawable.zan));
+    }
+
+    @OnClick({R.id.back, R.id.delete, R.id.edit, R.id.zan_state, R.id.discuss})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.back:
+                finish();
+                break;
+            case R.id.zan_state:
+                if (postBean.getZan_state() == 0) {
+                    showLoadingDialog(false, "点赞中");
+                    postPresenter.zanPost(postId);
+                }else {
+                    showLoadingDialog(false, "取消点赞中");
+                    postPresenter.cancelZanPost(postId);
+                }
+                break;
         }
     }
 
@@ -162,10 +233,12 @@ public class ShowPostActivity extends BaseActivity implements ShowPostContract.V
 
     @Override
     public void complete() {
-        refreshLayout.setRefreshing(false);
+        refreshLayout.setRefreshing(true);
+        postPresenter.getPost(postId);
     }
 
     @Override
     public void tokenExceed() {
+
     }
 }

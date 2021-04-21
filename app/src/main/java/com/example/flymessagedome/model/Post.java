@@ -53,7 +53,7 @@ public class Post extends Base{
         private String communityPostContent;
         private List<CommentsBean> comments;
         private List<PostItemsBean> postItems;
-        private List<?> zans;
+        private List<ZanBean> zans;
 
         public String getU_name() {
             return u_name;
@@ -175,14 +175,33 @@ public class Post extends Base{
             this.postItems = postItems;
         }
 
-        public List<?> getZans() {
+        public List<ZanBean> getZans() {
             return zans;
         }
 
-        public void setZans(List<?> zans) {
+        public void setZans(List<ZanBean> zans) {
             this.zans = zans;
         }
+        public static class ZanBean{
+            private int user_id;
+            private long create_time;
 
+            public int getUser_id() {
+                return user_id;
+            }
+
+            public void setUser_id(int user_id) {
+                this.user_id = user_id;
+            }
+
+            public long getCreate_time() {
+                return create_time;
+            }
+
+            public void setCreate_time(long create_time) {
+                this.create_time = create_time;
+            }
+        }
         public static class CommentsBean {
             /**
              * create_time : 1618998321000

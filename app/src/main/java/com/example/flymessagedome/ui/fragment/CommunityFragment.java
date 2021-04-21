@@ -246,7 +246,7 @@ public class CommunityFragment extends BaseFragment implements BGARefreshLayout.
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
             String postContent = data.getStringExtra("content");
             ((BaseActivity) mContext).showLoadingDialog(false, "发布帖子中");
             communityPresenter.addPost(postContent);
@@ -254,6 +254,8 @@ public class CommunityFragment extends BaseFragment implements BGARefreshLayout.
             if (photos.size() > 0) {
                 unUploadPhotos = photos;
             }
+        } else if (requestCode == 2 && resultCode == 2) {
+            mRefreshLayout.beginRefreshing();
         }
     }
 
@@ -442,7 +444,7 @@ public class CommunityFragment extends BaseFragment implements BGARefreshLayout.
     public void clickPost(int position) {
         Intent intent = new Intent(mContext, ShowPostActivity.class);
         intent.putExtra("postId", postsBeans.get(position).getCommunity_post_id());
-        startActivity(intent);
+        startActivityForResult(intent, 2);
     }
 
     @Override
