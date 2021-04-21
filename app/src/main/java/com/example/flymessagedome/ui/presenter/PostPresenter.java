@@ -34,7 +34,7 @@ public class PostPresenter extends RxPresenter<ShowPostContract.View> implements
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        mView.showError("取消点赞帖子失败");
+                        mView.showError("获取帖子信息失败");
                     }
 
                     @Override
@@ -46,7 +46,7 @@ public class PostPresenter extends RxPresenter<ShowPostContract.View> implements
                                 } else
                                     mView.showError(result.msg);
                             } else {
-                                mView.showError("取消点赞帖子失败");
+                                mView.showError("获取帖子信息失败");
                             }
                         }
                     }

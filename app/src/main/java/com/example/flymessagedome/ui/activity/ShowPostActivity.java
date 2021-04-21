@@ -88,14 +88,14 @@ public class ShowPostActivity extends BaseActivity implements ShowPostContract.V
             finish();
             return;
         }
-        refreshLayout.setOnRefreshListener(() -> {
-            postPresenter.getPost(postId);
-        });
+        refreshLayout.setOnRefreshListener(() -> postPresenter.getPost(postId));
+        refreshLayout.setRefreshing(true);
+        postPresenter.getPost(postId);
     }
 
     @Override
     public void configViews() {
-
+        postPresenter.attachView(this);
     }
 
     @Override
