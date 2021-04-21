@@ -1,5 +1,6 @@
 package com.example.flymessagedome.api;
 
+import com.example.flymessagedome.model.AddPostResult;
 import com.example.flymessagedome.model.Base;
 import com.example.flymessagedome.model.BlackListModel;
 import com.example.flymessagedome.model.ChangeBgModel;
@@ -17,6 +18,8 @@ import com.example.flymessagedome.model.HeadModel;
 import com.example.flymessagedome.model.Login;
 import com.example.flymessagedome.model.MessageModel;
 import com.example.flymessagedome.model.One;
+import com.example.flymessagedome.model.Post;
+import com.example.flymessagedome.model.PostListResult;
 import com.example.flymessagedome.model.SearchUserModel;
 import com.example.flymessagedome.model.SendMessageModel;
 import com.example.flymessagedome.model.UserSignModel;
@@ -338,5 +341,28 @@ public class FlyMessageApi {
     public Observable<Base> delFriendRequest(int rq_id) {
         String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
         return fmService.delFriendRequest(loginToken, rq_id);
+    }
+
+    public Observable<AddPostResult> addPost(String content) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.addPost(content, loginToken);
+    }
+
+    public Observable<PostListResult> getPosts(int pageSize, int pageIndex) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.getPosts(loginToken, pageSize, pageIndex);
+    }
+
+    public Observable<Base> zanPost(int postId) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.zanPost(loginToken, postId);
+    }
+    public Observable<Post> getPost(int postId) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.getPost(loginToken, postId);
+    }
+    public Observable<Base> cancelZanPost(int postId) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.cancelZanPost(loginToken, postId);
     }
 }

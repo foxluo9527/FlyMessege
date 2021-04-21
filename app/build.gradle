@@ -110,9 +110,9 @@ dependencies {
     implementation 'io.reactivex:rxjava:1.2.0'
 
     // retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
     // okhttp
     implementation 'com.squareup.okhttp3:okhttp:3.6.0'
@@ -128,8 +128,8 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.2.2'
 
     //aria  下载框架
-    implementation 'com.arialyy.aria:core:3.8.6'
-    annotationProcessor 'com.arialyy.aria:compiler:3.8.6'
+    implementation 'me.laoyuyu.aria:core:3.8.16'
+    annotationProcessor 'me.laoyuyu.aria:compiler:3.8.16'
 
     //图片裁剪框架ucrop
     implementation 'com.github.yalantis:ucrop:2.2.4'

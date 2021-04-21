@@ -43,7 +43,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.activity.AddPostActivity"></activity>
+        <activity android:name=".ui.activity.ShowPostActivity"></activity>
+        <activity android:name=".ui.activity.AddPostActivity" />
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

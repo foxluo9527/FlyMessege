@@ -1,13 +1,12 @@
 package com.example.flymessagedome.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.annotation.SuppressLint;
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
 
 import com.example.flymessagedome.R;
 import com.example.flymessagedome.base.BaseActivity;
@@ -15,7 +14,6 @@ import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.component.DaggerMessageComponent;
 import com.example.flymessagedome.model.BlackListModel;
 import com.example.flymessagedome.ui.adapter.BlackListAdapter;
-import com.example.flymessagedome.ui.adapter.FriendRequestAdapter;
 import com.example.flymessagedome.ui.contract.BlackListContract;
 import com.example.flymessagedome.ui.presenter.BlackListPresenter;
 import com.example.flymessagedome.utils.NetworkUtils;
@@ -31,8 +29,10 @@ import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 import cn.bingoogolapple.refreshlayout.BGARefreshViewHolder;
 
+@SuppressLint("NonConstantResourceId")
 public class BlackListActivity extends BaseActivity implements BGARefreshLayout.BGARefreshLayoutDelegate, BlackListContract.View {
-    ArrayList<BlackListModel.BlackListsBean> blackListsBeans=new ArrayList<>();
+    ArrayList<BlackListModel.BlackListsBean> blackListsBeans = new ArrayList<>();
+
     @BindView(R.id.blacklist_refresh)
     BGARefreshLayout mRefreshLayout;
     @BindView(R.id.blacklist_view)
@@ -40,9 +40,10 @@ public class BlackListActivity extends BaseActivity implements BGARefreshLayout.
     @BindView(R.id.none)
     TextView none;
     BlackListAdapter adapter;
-    int nowPage=1;
+    int nowPage = 1;
     @Inject
     BlackListPresenter blackListPresenter;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_black_list;
@@ -52,30 +53,33 @@ public class BlackListActivity extends BaseActivity implements BGARefreshLayout.
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerMessageComponent.builder().appComponent(appComponent).build().inject(this);
     }
+
     @OnClick({R.id.back})
-    public void onViewClick(View v){
-        switch (v.getId()){
+    public void onViewClick(View v) {
+        switch (v.getId()) {
             case R.id.back:
                 finish();
                 break;
         }
     }
+
     @Override
     public void initDatas() {
         initRefreshLayout();
-        adapter=new BlackListAdapter(blackListsBeans,mContext);
-        StaggeredGridLayoutManager msgGridLayoutManager=new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        adapter = new BlackListAdapter(blackListsBeans, mContext);
+        StaggeredGridLayoutManager msgGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(msgGridLayoutManager);
-        ((SimpleItemAnimator)recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setNestedScrollingEnabled(false);
         adapter.setOnRecyclerViewItemClickListener((view, position) -> {
-            showLoadingDialog(true,"移除黑名单中");
+            showLoadingDialog(true, "移除黑名单中");
             blackListPresenter.removeBlackList(blackListsBeans.get(position));
         });
         mRefreshLayout.beginRefreshing();
     }
+
     private void initRefreshLayout() {
         // 为BGARefreshLayout 设置代理
         mRefreshLayout.setDelegate(this);
@@ -109,26 +113,26 @@ public class BlackListActivity extends BaseActivity implements BGARefreshLayout.
     @Override
     public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
         none.setVisibility(View.GONE);
-        if (NetworkUtils.isConnected(mContext)){
-            nowPage=1;
-            blackListPresenter.getBlackList(20,nowPage);
+        if (NetworkUtils.isConnected(mContext)) {
+            nowPage = 1;
+            blackListPresenter.getBlackList(20, nowPage);
             blackListsBeans.clear();
-        }else {
+        } else {
             ToastUtils.showToast("请检查网络连接");
         }
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
-        if (NetworkUtils.isConnected(mContext)){
-            if (blackListsBeans.size()<20||blackListsBeans.size()%20!=0){
+        if (NetworkUtils.isConnected(mContext)) {
+            if (blackListsBeans.size() < 20 || blackListsBeans.size() % 20 != 0) {
                 ToastUtils.showToast("人家也是有底线的");
                 return false;
             }
             nowPage++;
-            blackListPresenter.getBlackList(20,nowPage);
+            blackListPresenter.getBlackList(20, nowPage);
             return true;
-        }else {
+        } else {
             ToastUtils.showToast("请检查网络连接");
             return false;
         }
@@ -137,7 +141,7 @@ public class BlackListActivity extends BaseActivity implements BGARefreshLayout.
     @Override
     public void initBlackList(ArrayList<BlackListModel.BlackListsBean> blackListBeans) {
         blackListsBeans.addAll(blackListBeans);
-        none.setVisibility(blackListBeans.size()==0?View.VISIBLE:View.GONE);
+        none.setVisibility(blackListBeans.size() == 0 ? View.VISIBLE : View.GONE);
         adapter.notifyDataSetChanged();
         mRefreshLayout.endRefreshing();
         mRefreshLayout.endLoadingMore();

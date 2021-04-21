@@ -25,6 +25,7 @@ import com.example.flymessagedome.ui.activity.SearchResultActivity;
 import com.example.flymessagedome.ui.activity.ShowGroupMembersActivity;
 import com.example.flymessagedome.ui.activity.ShowHistorySignActivity;
 import com.example.flymessagedome.ui.activity.ShowLoginHeadActivity;
+import com.example.flymessagedome.ui.activity.ShowPostActivity;
 import com.example.flymessagedome.ui.activity.UserChatActivity;
 import com.example.flymessagedome.ui.activity.WebActivity;
 import com.example.flymessagedome.ui.activity.WelcomeActivity;
@@ -65,4 +66,5 @@ public interface MessageComponent {
     ShowGroupMembersActivity inject(ShowGroupMembersActivity showGroupMembersActivity);
     ContractAddActivity inject(ContractAddActivity contractAddActivity);
     AddPostActivity inject(AddPostActivity addPostActivity);
+    ShowPostActivity inject(ShowPostActivity showPostActivity);
 }

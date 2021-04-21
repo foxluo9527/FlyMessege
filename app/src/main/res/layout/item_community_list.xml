@@ -93,14 +93,18 @@
                 android:text="1216"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/zan_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal">
             <ImageView
+                android:id="@+id/zan_state"
                 android:layout_width="@dimen/d_18"
                 android:layout_height="@dimen/d_18"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
                 android:src="@drawable/zan"/>
             <TextView
                 android:id="@+id/zan_num"

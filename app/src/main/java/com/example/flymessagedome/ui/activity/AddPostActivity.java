@@ -1,8 +1,8 @@
 package com.example.flymessagedome.ui.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,8 +24,10 @@ import com.example.flymessagedome.R;
 import com.example.flymessagedome.base.BaseActivity;
 import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.component.DaggerMessageComponent;
+import com.example.flymessagedome.ui.fragment.CommunityFragment;
 import com.example.flymessagedome.utils.Constant;
 import com.example.flymessagedome.utils.SharedPreferencesUtil;
+import com.example.flymessagedome.utils.ToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -78,6 +80,7 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     @OnClick({R.id.back, R.id.add})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -85,6 +88,10 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
                 onBackPressed();
                 break;
             case R.id.add:
+                if (CommunityFragment.onUpload){
+                    ToastUtils.showToast("正在上传中，请稍后重试");
+                    return;
+                }
                 Intent data = new Intent();
                 data.putExtra("content", postContent);
                 data.putStringArrayListExtra("photos", mPhotosSnpl.getData());
@@ -120,9 +127,10 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
             content.setText(postContent);
         ArrayList<String> photos = new ArrayList<>();
         HashSet<String> set = (HashSet<String>) SharedPreferencesUtil.getInstance().getStringSet("photos");
-        for (String s : set) {
-            photos.add(s);
-        }
+        if (set != null)
+            for (String s : set) {
+                photos.add(s);
+            }
         if (photos.size() > 0)
             mPhotosSnpl.setData(photos);
     }

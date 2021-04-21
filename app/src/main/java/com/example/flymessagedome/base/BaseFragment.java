@@ -105,6 +105,7 @@ public abstract class BaseFragment extends Fragment implements NetStateChangeObs
     }
 
     public abstract @LayoutRes int getLayoutResId();
+
     protected abstract void setupActivityComponent(AppComponent appComponent);
 
     public abstract void initDatas();
@@ -134,6 +135,7 @@ public abstract class BaseFragment extends Fragment implements NetStateChangeObs
     protected void receiveFriendRequest(){
         Log.e(TAG,"收到好友申请");
     }
+
     protected void loginRemote(){
         Log.e(TAG,"异地登陆");
     }

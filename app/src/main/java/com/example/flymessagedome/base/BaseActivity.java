@@ -173,7 +173,6 @@ public abstract class BaseActivity extends AppCompatActivity implements NetState
         Log.e(TAG, "异地登陆，请重新登录");
         ToastUtils.showToast("异地登陆，请重新登录");
         MainActivity.serviceBinder.closeConnect();
-        LoginActivity.loginUser = null;
         ActivityCollector.finishAll();
         SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
         LoginActivity.startActivity(this);
