@@ -216,7 +216,7 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
 
     @SuppressLint("NonConstantResourceId")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @OnClick({R.id.back, R.id.user_set, R.id.send_btn, R.id.add_fri_btn, R.id.msg_view, R.id.u_head_img, R.id.show_bg_view})
+    @OnClick({R.id.back, R.id.user_set, R.id.send_btn, R.id.add_fri_btn, R.id.msg_view, R.id.u_head_img, R.id.show_bg_view,R.id.community})
     public void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -238,15 +238,21 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
                 startActivity(rq_intent);
                 break;
             case R.id.msg_view:
-                Intent showMsigntent = new Intent(mContext, ShowUserMsgActivity.class);
-                showMsigntent.putExtra("userId", userBean.getU_id());
-                startActivity(showMsigntent);
+                Intent showMsgIntent = new Intent(mContext, ShowUserMsgActivity.class);
+                showMsgIntent.putExtra("userId", userBean.getU_id());
+                startActivity(showMsgIntent);
                 break;
             case R.id.u_head_img:
                 showHeadImg();
                 break;
             case R.id.show_bg_view:
                 showBGImg();
+                break;
+            case R.id.community:
+                Intent communityIntent=new Intent(mContext, UserCommunityActivity.class);
+                communityIntent.putExtra("userId",userBean.getU_id());
+                communityIntent.putExtra("uName",userBean.getU_nick_name());
+                startActivityForResult(communityIntent,2);
                 break;
         }
     }

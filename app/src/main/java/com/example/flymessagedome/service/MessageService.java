@@ -1,5 +1,6 @@
 package com.example.flymessagedome.service;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -295,6 +296,7 @@ public class MessageService extends Service {
     GroupModel groupModel =null;
     GroupMemberModel groupMember=null;
     //接收到用户的消息
+    @SuppressLint("StaticFieldLeak")
     public void receiveMessage(SocketMessage messageBean){
         Message message=messageBean.getContent();
         if (message.getM_object_id()!=LoginActivity.loginUser.getU_id()){

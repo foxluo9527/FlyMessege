@@ -18,22 +18,23 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
+import com.alibaba.fastjson.JSON;
+import com.danikula.videocache.HttpProxyCacheServer;
+import com.example.flymessagedome.FlyMessageApplication;
 import com.example.flymessagedome.R;
 import com.example.flymessagedome.base.BaseActivity;
 import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.component.DaggerMessageComponent;
-import com.example.flymessagedome.ui.fragment.CommunityFragment;
-import com.example.flymessagedome.utils.Constant;
-import com.example.flymessagedome.utils.SharedPreferencesUtil;
-import com.example.flymessagedome.utils.ToastUtils;
+import com.example.flymessagedome.model.Post;
+import com.example.flymessagedome.ui.contract.EditPostContract;
+import com.example.flymessagedome.ui.presenter.EditPostPresenter;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -43,41 +44,30 @@ import cn.bingoogolapple.photopicker.widget.BGASortableNinePhotoLayout;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static com.example.flymessagedome.ui.activity.AddPostActivity.PRC_PHOTO_PICKER;
+import static com.example.flymessagedome.ui.activity.AddPostActivity.RC_PHOTO_PREVIEW;
 import static com.example.flymessagedome.utils.Constant.RC_CHOOSE_PHOTO;
 
 @SuppressLint("NonConstantResourceId")
-public class AddPostActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks, BGASortableNinePhotoLayout.Delegate {
-    public static final int RC_PHOTO_PREVIEW = 101;
-    public static final int PRC_PHOTO_PICKER = 102;
+public class EditPostActivity extends BaseActivity implements EditPostContract.View, EasyPermissions.PermissionCallbacks, BGASortableNinePhotoLayout.Delegate {
 
     @BindView(R.id.snpl_moment_add_photos)
     BGASortableNinePhotoLayout mPhotosSnpl;
 
-    @BindView(R.id.add)
-    Button add;
+    @BindView(R.id.save)
+    Button save;
 
     @BindView(R.id.content)
     EditText content;
 
-    String postContent;
+    private Post.PostBean postBean;
+    private final ArrayList<String> addPhotos = new ArrayList<>();
+    private HttpProxyCacheServer proxy;
+    @Inject
+    EditPostPresenter postPresenter;
 
     @Override
-    public int getLayoutId() {
-        return R.layout.activity_add_post;
-    }
-
-    @Override
-    protected void setupActivityComponent(AppComponent appComponent) {
-        DaggerMessageComponent.builder().appComponent(appComponent).build().inject(this);
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (!SharedPreferencesUtil.getInstance().getBoolean(Constant.IS_LOGIN, false)) {
-            LoginActivity.startActivity(this);
-            finish();
-            overridePendingTransition(0, 0);
-        }
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -88,25 +78,32 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
         }
     }
 
-    @SuppressLint("NonConstantResourceId")
-    @OnClick({R.id.back, R.id.add})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.back:
-                onBackPressed();
-                break;
-            case R.id.add:
-                Intent data = new Intent();
-                data.putExtra("content", postContent);
-                data.putStringArrayListExtra("photos", mPhotosSnpl.getData());
-                setResult(RESULT_OK, data);
-                finish();
-                break;
-        }
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_edit_post;
     }
 
     @Override
+    protected void setupActivityComponent(AppComponent appComponent) {
+        DaggerMessageComponent.builder().appComponent(appComponent).build().inject(this);
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
     public void initDatas() {
+        String json = getIntent().getStringExtra("post");
+        if (TextUtils.isEmpty(json)) {
+            finish();
+            return;
+        }
+        postBean = JSON.parseObject(json, Post.PostBean.class);
+        content.setText(postBean.getCommunityPostContent() + "");
+        ArrayList<String> data = new ArrayList<>();
+        proxy = FlyMessageApplication.getProxy(mContext);
+        for (Post.PostBean.PostItemsBean postItem : postBean.getPostItems()) {
+            data.add(proxy.getProxyUrl(postItem.getCommunity_post_item_url()));
+        }
+        mPhotosSnpl.setData(data);
         mPhotosSnpl.setDelegate(this);
         content.addTextChangedListener(new TextWatcher() {
             @Override
@@ -121,54 +118,95 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
 
             @Override
             public void afterTextChanged(Editable s) {
-                postContent = content.getText().toString();
-                add.setEnabled(!TextUtils.isEmpty(postContent) || mPhotosSnpl.getData().size() > 0);
+                save.setEnabled(!TextUtils.isEmpty(content.getText().toString()) || mPhotosSnpl.getData().size() > 0);
             }
         });
-        postContent = SharedPreferencesUtil.getInstance().getString("post_content");
-        if (!TextUtils.isEmpty(postContent))
-            content.setText(postContent);
-        ArrayList<String> photos = new ArrayList<>();
-        HashSet<String> set = (HashSet<String>) SharedPreferencesUtil.getInstance().getStringSet("photos");
-        if (set != null)
-            for (String s : set) {
-                photos.add(s);
-            }
-        if (photos.size() > 0)
-            mPhotosSnpl.setData(photos);
+        save.setEnabled(!TextUtils.isEmpty(content.getText().toString()) || mPhotosSnpl.getData().size() > 0);
     }
 
-    @Override
-    public void onBackPressed() {
-        ArrayList<String> photos = mPhotosSnpl.getData();
-        if (!TextUtils.isEmpty(postContent) || photos.size() > 0) {
-            new AlertDialog.Builder(this)
-                    .setTitle("确认退出?")
-                    .setMessage("内容暂未保存是否退出")
-                    .setPositiveButton("保存并退出", (dialog1, which) -> {
-                        SharedPreferencesUtil.getInstance().putString("post_content", postContent);
-                        Set<String> set = new HashSet<>();
-                        for (String photo : photos) {
-                            set.add(photo);
-                        }
-                        SharedPreferencesUtil.getInstance().putStringSet("photos", set);
-                        super.onBackPressed();
-                    })
-                    .setNeutralButton("直接退出", (dialog, which) -> {
-                        Set<String> set = new HashSet<>();
-                        SharedPreferencesUtil.getInstance().putString("post_content", "");
-                        SharedPreferencesUtil.getInstance().putStringSet("photos", set);
-                        super.onBackPressed();
-                    })
-                    .setNegativeButton("取消", null)
-                    .show();
-        } else {
-            super.onBackPressed();
+    @OnClick({R.id.back, R.id.save})
+    public void onclick(View view) {
+        switch (view.getId()) {
+            case R.id.back:
+                finish();
+                break;
+            case R.id.save:
+                new AlertDialog.Builder(mContext)
+                        .setMessage("确认保存?")
+                        .setPositiveButton("确定", (dialog, which) -> {
+                            showLoadingDialog(false, "保存中...");
+                            postPresenter.editContent(postBean.getCommunity_post_id(), content.getText().toString());
+                        })
+                        .setNegativeButton("取消", null).show();
+                break;
         }
     }
 
     @Override
     public void configViews() {
+        postPresenter.attachView(this);
+    }
+
+    @Override
+    public void editSuccess() {
+        ArrayList<Integer> removeItemIds = new ArrayList<>();
+        for (String photo : mPhotosSnpl.getData()) {
+            if (photo.contains("com.example.flymessagedome/cache/video-cache")) {
+                for (int i = 0; i < postBean.getPostItems().size(); i++) {
+                    Post.PostBean.PostItemsBean postItem = postBean.getPostItems().get(i);
+                    if (proxy.getProxyUrl(postItem.getCommunity_post_item_url()).equals(photo)) {
+                        postBean.getPostItems().remove(i);
+                        break;
+                    }
+                }
+            } else {
+                addPhotos.add(photo);
+            }
+        }
+        for (Post.PostBean.PostItemsBean postItem : postBean.getPostItems()) {
+            removeItemIds.add(postItem.getCommunity_post_item_id());
+        }
+        Intent result = new Intent();
+        result.putStringArrayListExtra("photos", addPhotos);
+        setResult(2, result);
+        if (removeItemIds.size() > 0) {
+            postPresenter.removeItems(removeItemIds);
+        } else {
+            dismissLoadingDialog();
+            finish();
+        }
+    }
+
+    @Override
+    public void removeFailed() {
+        dismissLoadingDialog();
+        finish();
+    }
+
+    @Override
+    public void removeSuccess() {
+        dismissLoadingDialog();
+        finish();
+    }
+
+    @Override
+    public void showError() {
+        dismissLoadingDialog();
+    }
+
+    @Override
+    public void showError(String msg) {
+        dismissLoadingDialog();
+    }
+
+    @Override
+    public void complete() {
+        dismissLoadingDialog();
+    }
+
+    @Override
+    public void tokenExceed() {
+
     }
 
     @AfterPermissionGranted(PRC_PHOTO_PICKER)
@@ -199,7 +237,7 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
     @Override
     public void onClickDeleteNinePhotoItem(BGASortableNinePhotoLayout sortableNinePhotoLayout, View view, int position, String model, ArrayList<String> models) {
         mPhotosSnpl.removeItem(position);
-        add.setEnabled(!TextUtils.isEmpty(postContent) || mPhotosSnpl.getData().size() > 0);
+        save.setEnabled(!TextUtils.isEmpty(content.getText().toString()) || mPhotosSnpl.getData().size() > 0);
     }
 
     @Override
@@ -220,17 +258,12 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+
     }
 
     @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms) {
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms) {
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
         if (requestCode == PRC_PHOTO_PICKER) {
             Toast.makeText(this, "您拒绝了「图片选择」所需要的相关权限!", Toast.LENGTH_SHORT).show();
         }
@@ -239,7 +272,7 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ArrayList<String> photos = new ArrayList<>();
+        ArrayList<String> photos;
         if (resultCode == RESULT_OK && requestCode == RC_CHOOSE_PHOTO) {
             photos = BGAPhotoPickerActivity.getSelectedPhotos(data);
             mPhotosSnpl.addMoreData(photos);
@@ -247,6 +280,6 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
             photos = BGAPhotoPickerPreviewActivity.getSelectedPhotos(data);
             mPhotosSnpl.setData(photos);
         }
-        add.setEnabled(!TextUtils.isEmpty(postContent) || photos.size() > 0);
+        save.setEnabled(!TextUtils.isEmpty(content.getText().toString()) || mPhotosSnpl.getData().size() > 0);
     }
 }

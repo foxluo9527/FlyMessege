@@ -125,8 +125,14 @@ public interface FlyMessageApiService {
     @Headers("Content-Type:application/x-www-form-urlencoded; charset=utf-8")
     Observable<AddPostResult> addPost(@Field("content") String content, @Field("loginToken") String loginToken);
 
+    @GET("community/getUserPost")
+    Observable<PostListResult> getUserPost(@Query("loginToken") String loginToken, @Query("pageSize") int pageSize, @Query("pageIndex") int pageIndex,@Query("u_id") int u_id);
+
     @GET("community/getPosts")
     Observable<PostListResult> getPosts(@Query("loginToken") String loginToken, @Query("pageSize") int pageSize, @Query("pageIndex") int pageIndex);
+
+    @GET("community/delPost")
+    Observable<Base> delPost(@Query("loginToken") String loginToken, @Query("postId") int postId);
 
     @GET("community/zanPost")
     Observable<Base> zanPost(@Query("loginToken") String loginToken, @Query("postId") int postId);
@@ -136,6 +142,30 @@ public interface FlyMessageApiService {
 
     @GET("community/cancelZanPost")
     Observable<Base> cancelZanPost(@Query("loginToken") String loginToken, @Query("postId") int postId);
+
+    @GET("community/zanPostComment")
+    Observable<Base> zanPostComment(@Query("loginToken") String loginToken, @Query("postCommentId") int postCommentId);
+
+    @GET("community/delPostComment")
+    Observable<Base> delPostComment(@Query("loginToken") String loginToken, @Query("postCommentId") int postCommentId);
+
+    @GET("community/delCommentReply")
+    Observable<Base> delCommentReply(@Query("loginToken") String loginToken, @Query("replyId") int replyId);
+
+    @GET("community/editPostContent")
+    Observable<Base> editPostContent(@Query("loginToken") String loginToken, @Query("postId") int postId, @Query("content") String content);
+
+    @GET("community/delPostItem")
+    Observable<Base> delPostItem(@Query("loginToken") String loginToken, @Query("postId") int postId, @Query("postItemId") int postItemId);
+
+    @GET("community/cancelZanPostComment")
+    Observable<Base> cancelZanPostComment(@Query("loginToken") String loginToken, @Query("postCommentId") int postCommentId);
+
+    @GET("community/addPostComment")
+    Observable<Base> addPostComment(@Query("loginToken") String loginToken, @Query("postId") int postId, @Query("content") String content);
+
+    @GET("community/replyPostComment")
+    Observable<Base> replyPostComment(@Query("loginToken") String loginToken, @Query("postCommentId") int commentId, @Query("replyId") int replyId, @Query("content") String content);
 
     /**
      * 可群成员自己删除自己和群主删除群成员

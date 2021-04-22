@@ -1,7 +1,12 @@
 package com.example.flymessagedome;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.os.IBinder;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
@@ -14,6 +19,9 @@ import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.component.DaggerAppComponent;
 import com.example.flymessagedome.module.AppModule;
 import com.example.flymessagedome.module.FlyMessageApiModule;
+import com.example.flymessagedome.service.MessageService;
+import com.example.flymessagedome.service.UploadService;
+import com.example.flymessagedome.ui.activity.MainActivity;
 import com.example.flymessagedome.utils.AppUtils;
 import com.example.flymessagedome.utils.LocationService;
 import com.example.flymessagedome.utils.SharedPreferencesUtil;
@@ -25,6 +33,7 @@ public class FlyMessageApplication extends MultiDexApplication {
     private DaoSession mDaoSession;
     private AppComponent appComponent;
     private HttpProxyCacheServer proxy;
+    public UploadService uploadService;
 
     @Override
     public void onCreate() {
@@ -38,7 +47,29 @@ public class FlyMessageApplication extends MultiDexApplication {
         initBugly();
         LocationService.get().init(this);
         changeDefaultDarkModel(SharedPreferencesUtil.getInstance().getBoolean("withSystemDark", true));
+        try {
+            if (uploadService == null) {
+                Intent intent = new Intent(getApplicationContext(), UploadService.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getApplicationContext().startService(intent);
+                getApplicationContext().bindService(intent, connection, Context.BIND_AUTO_CREATE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            instances.uploadService = ((UploadService.MyBinder) service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
     public static FlyMessageApplication getInstances() {
         return instances;

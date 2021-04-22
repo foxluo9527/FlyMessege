@@ -9,6 +9,7 @@ import com.example.flymessagedome.ui.activity.BlackListActivity;
 import com.example.flymessagedome.ui.activity.ContractAddActivity;
 import com.example.flymessagedome.ui.activity.CreateGroupActivity;
 import com.example.flymessagedome.ui.activity.EditGroupMsgActivity;
+import com.example.flymessagedome.ui.activity.EditPostActivity;
 import com.example.flymessagedome.ui.activity.EditUserMsgActivity;
 import com.example.flymessagedome.ui.activity.FriendRequestActivity;
 import com.example.flymessagedome.ui.activity.GroupChatActivity;
@@ -27,6 +28,7 @@ import com.example.flymessagedome.ui.activity.ShowHistorySignActivity;
 import com.example.flymessagedome.ui.activity.ShowLoginHeadActivity;
 import com.example.flymessagedome.ui.activity.ShowPostActivity;
 import com.example.flymessagedome.ui.activity.UserChatActivity;
+import com.example.flymessagedome.ui.activity.UserCommunityActivity;
 import com.example.flymessagedome.ui.activity.WebActivity;
 import com.example.flymessagedome.ui.activity.WelcomeActivity;
 import com.example.flymessagedome.ui.fragment.CommunityFragment;
@@ -66,5 +68,7 @@ public interface MessageComponent {
     ShowGroupMembersActivity inject(ShowGroupMembersActivity showGroupMembersActivity);
     ContractAddActivity inject(ContractAddActivity contractAddActivity);
     AddPostActivity inject(AddPostActivity addPostActivity);
+    EditPostActivity inject(EditPostActivity editPostActivity);
     ShowPostActivity inject(ShowPostActivity showPostActivity);
+    UserCommunityActivity inject(UserCommunityActivity userCommunityActivity);
 }

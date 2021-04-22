@@ -348,21 +348,73 @@ public class FlyMessageApi {
         return fmService.addPost(content, loginToken);
     }
 
+    public Observable<PostListResult> getUserPosts(int userId, int pageSize, int pageIndex) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.getUserPost(loginToken, pageSize, pageIndex, userId);
+    }
+
     public Observable<PostListResult> getPosts(int pageSize, int pageIndex) {
         String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
         return fmService.getPosts(loginToken, pageSize, pageIndex);
+    }
+
+    public Observable<Post> getPost(int postId) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.getPost(loginToken, postId);
+    }
+
+    public Observable<Base> delPost(int postId) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.delPost(loginToken, postId);
     }
 
     public Observable<Base> zanPost(int postId) {
         String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
         return fmService.zanPost(loginToken, postId);
     }
-    public Observable<Post> getPost(int postId) {
-        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
-        return fmService.getPost(loginToken, postId);
-    }
+
     public Observable<Base> cancelZanPost(int postId) {
         String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
         return fmService.cancelZanPost(loginToken, postId);
+    }
+
+    public Observable<Base> zanComment(int commentId) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.zanPostComment(loginToken, commentId);
+    }
+
+    public Observable<Base> delPostComment(int commentId) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.delPostComment(loginToken, commentId);
+    }
+
+    public Observable<Base> delCommentReply(int replyId) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.delCommentReply(loginToken, replyId);
+    }
+
+    public Observable<Base> cancelZanComment(int commentId) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.cancelZanPostComment(loginToken, commentId);
+    }
+
+    public Observable<Base> addPostComment(int postId, String content) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.addPostComment(loginToken, postId, content);
+    }
+
+    public Observable<Base> replyPostComment(int commentId, int replyId, String content) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.replyPostComment(loginToken, commentId, replyId, content);
+    }
+
+    public Observable<Base> editPostContent(int postId, String content) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.editPostContent(loginToken, postId, content);
+    }
+
+    public Observable<Base> delPostItem(int postId, int itemId) {
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        return fmService.delPostItem(loginToken, postId, itemId);
     }
 }

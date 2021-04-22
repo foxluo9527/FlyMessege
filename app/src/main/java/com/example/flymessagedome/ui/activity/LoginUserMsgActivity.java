@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
@@ -57,7 +58,9 @@ import pub.devrel.easypermissions.EasyPermissions;
 import static com.example.flymessagedome.utils.Constant.RC_CHOOSE_BG_IMG;
 import static com.example.flymessagedome.utils.Constant.RC_CHOOSE_HEAD_IMG;
 
+@SuppressLint("NonConstantResourceId")
 public class LoginUserMsgActivity extends BaseActivity implements MineContract.View,EasyPermissions.PermissionCallbacks{
+
     @BindView(R.id.nick_name)
     TextView nickName;
     @BindView(R.id.u_name)
@@ -88,7 +91,7 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @OnClick({R.id.back,R.id.u_head_img,R.id.sign_view,R.id.msg_view,R.id.change_msg,R.id.show_bg_view,R.id.my_qr_code,R.id.more})
+    @OnClick({R.id.back,R.id.u_head_img,R.id.sign_view,R.id.msg_view,R.id.change_msg,R.id.show_bg_view,R.id.my_qr_code,R.id.more,R.id.community})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.back:
@@ -116,6 +119,12 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
                 break;
             case R.id.more:
                 showMorePopupMenu(mContext);
+                break;
+            case R.id.community:
+                Intent intent=new Intent(mContext, UserCommunityActivity.class);
+                intent.putExtra("userId",LoginActivity.loginUser.getU_id());
+                intent.putExtra("uName",LoginActivity.loginUser.getU_nick_name());
+                startActivityForResult(intent,2);
                 break;
         }
     }
@@ -179,34 +188,28 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
         popupWindow.update();
 
         //popupWindow消失屏幕变为不透明
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                WindowManager.LayoutParams lp = ((Activity)context).getWindow().getAttributes();
-                lp.alpha = 1.0f;
-                ((Activity)context).getWindow().setAttributes(lp);
-            }
+        popupWindow.setOnDismissListener(() -> {
+            WindowManager.LayoutParams lp = ((Activity)context).getWindow().getAttributes();
+            lp.alpha = 1.0f;
+            ((Activity)context).getWindow().setAttributes(lp);
         });
         //popupWindow出现屏幕变为半透明
         WindowManager.LayoutParams lp =  ((Activity)context).getWindow().getAttributes();
         lp.alpha = 0.5f;
         ((Activity)context).getWindow().setAttributes(lp);
-        View.OnClickListener listener=new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.cancel_item:
-                        popupWindow.dismiss();
-                        break;
-                    case R.id.change_head:
-                        popupWindow.dismiss();
-                        choiceHeadImg();
-                        break;
-                    case R.id.show_head:
-                        popupWindow.dismiss();
-                        startActivity(new Intent(mContext,ShowLoginHeadActivity.class));
-                        break;
-                }
+        View.OnClickListener listener= v -> {
+            switch (v.getId()){
+                case R.id.cancel_item:
+                    popupWindow.dismiss();
+                    break;
+                case R.id.change_head:
+                    popupWindow.dismiss();
+                    choiceHeadImg();
+                    break;
+                case R.id.show_head:
+                    popupWindow.dismiss();
+                    startActivity(new Intent(mContext,ShowLoginHeadActivity.class));
+                    break;
             }
         };
         cancel.setOnClickListener(listener);

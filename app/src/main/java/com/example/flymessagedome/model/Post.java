@@ -221,6 +221,8 @@ public class Post extends Base{
             private int hot_value;
             private String send_u_head;
             private String send_u_name;
+            private String send_u_nick_name;
+            private int zan_state;
             private int zan_num;
             private int community_post_comment_id;
             private int community_post_id;
@@ -228,6 +230,22 @@ public class Post extends Base{
             private int state;
             private String community_post_comment_content;
             private List<RepliesBean> replies;
+
+            public int getZan_state() {
+                return zan_state;
+            }
+
+            public void setZan_state(int zan_state) {
+                this.zan_state = zan_state;
+            }
+
+            public String getSend_u_nick_name() {
+                return send_u_nick_name;
+            }
+
+            public void setSend_u_nick_name(String send_u_nick_name) {
+                this.send_u_nick_name = send_u_nick_name;
+            }
 
             public long getCreate_time() {
                 return create_time;
@@ -334,11 +352,20 @@ public class Post extends Base{
                 private long create_time;
                 private String send_u_head;
                 private String send_u_name;
+                private String send_u_nick_name;
                 private int community_post_comment_id;
                 private int community_post_comment_reply_id;
                 private int send_u_id;
                 private String reply_content;
                 private int reply_u_id;
+
+                public String getSend_u_nick_name() {
+                    return send_u_nick_name;
+                }
+
+                public void setSend_u_nick_name(String send_u_nick_name) {
+                    this.send_u_nick_name = send_u_nick_name;
+                }
 
                 public String getReply_u_name() {
                     return reply_u_name;

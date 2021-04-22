@@ -43,7 +43,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.activity.ShowPostActivity"></activity>
+        <activity android:name=".ui.activity.UserCommunityActivity"></activity>
+        <activity android:name=".ui.activity.EditPostActivity" />
+        <activity android:name=".ui.activity.ShowPostActivity" />
         <activity android:name=".ui.activity.AddPostActivity" />
 
         <meta-data
@@ -217,6 +219,10 @@
 
         <service
             android:name=".service.MessageService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".service.UploadService"
             android:enabled="true"
             android:exported="false" />
 

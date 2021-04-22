@@ -150,7 +150,28 @@
                         android:text="签名" />
 
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/community"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#33FAF1F1"
+                    android:gravity="top"
+                    android:orientation="horizontal">
 
+                    <ImageView
+                        android:layout_width="@dimen/d_20"
+                        android:layout_height="@dimen/d_20"
+                        android:layout_margin="@dimen/d_15"
+                        app:srcCompat="@drawable/community_sel" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="@dimen/d_15"
+                        android:text="社区动态" />
+
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 

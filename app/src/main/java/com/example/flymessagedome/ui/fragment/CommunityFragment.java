@@ -19,11 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.arialyy.annotations.Upload;
-import com.arialyy.aria.core.Aria;
-import com.arialyy.aria.core.common.HttpOption;
-import com.arialyy.aria.core.common.RequestEnum;
-import com.arialyy.aria.core.task.UploadTask;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.bumptech.glide.Glide;
@@ -35,10 +30,14 @@ import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.component.DaggerMessageComponent;
 import com.example.flymessagedome.model.PostListResult;
 import com.example.flymessagedome.model.Weather;
+import com.example.flymessagedome.service.UploadService;
 import com.example.flymessagedome.ui.activity.AddPostActivity;
+import com.example.flymessagedome.ui.activity.AddSignActivity;
 import com.example.flymessagedome.ui.activity.LoginActivity;
+import com.example.flymessagedome.ui.activity.LoginUserMsgActivity;
 import com.example.flymessagedome.ui.activity.ShowPostActivity;
 import com.example.flymessagedome.ui.activity.ShowUserActivity;
+import com.example.flymessagedome.ui.activity.UserCommunityActivity;
 import com.example.flymessagedome.ui.adapter.PostListAdapter;
 import com.example.flymessagedome.ui.contract.CommunityContract;
 import com.example.flymessagedome.ui.presenter.CommunityPresenter;
@@ -115,7 +114,6 @@ public class CommunityFragment extends BaseFragment implements BGARefreshLayout.
     private String cityName;
     private Handler timeHandler;
     private ArrayList<String> unUploadPhotos;
-    public static boolean onUpload = false;
     private final ArrayList<PostListResult.PostsBean> postsBeans = new ArrayList<>();
     private int nowPage = 1;
     private PostListAdapter adapter;
@@ -130,11 +128,23 @@ public class CommunityFragment extends BaseFragment implements BGARefreshLayout.
         DaggerMessageComponent.builder().appComponent(appComponent).build().inject(this);
     }
 
-    @OnClick({R.id.add})
+    @OnClick({R.id.add,R.id.name,R.id.sign,R.id.head})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.add:
                 startActivityForResult(new Intent(mContext, AddPostActivity.class), 1);
+                break;
+            case R.id.name:
+                startActivity(new Intent(mContext, LoginUserMsgActivity.class));
+                break;
+            case R.id.head:
+                Intent intent=new Intent(mContext, UserCommunityActivity.class);
+                intent.putExtra("uName",LoginActivity.loginUser.getU_nick_name());
+                intent.putExtra("userId",LoginActivity.loginUser.getU_id());
+                startActivityForResult(intent,2);
+                break;
+            case R.id.sign:
+                startActivity(new Intent(mContext, AddSignActivity.class));
                 break;
         }
     }
@@ -152,7 +162,6 @@ public class CommunityFragment extends BaseFragment implements BGARefreshLayout.
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View parentView = super.onCreateView(inflater, container, savedInstanceState);
-        Aria.upload(this).register();
         initRefreshLayout();
         list.setLayoutManager(new LinearLayoutManager(mContext));
         adapter = new PostListAdapter(postsBeans, mContext);
@@ -240,7 +249,6 @@ public class CommunityFragment extends BaseFragment implements BGARefreshLayout.
     public void onDestroy() {
         super.onDestroy();
         alive = false;
-        Aria.upload(this).unRegister();
     }
 
     @Override
@@ -318,20 +326,11 @@ public class CommunityFragment extends BaseFragment implements BGARefreshLayout.
     public void addPostSuccess(int postId) {
         ((BaseActivity) mContext).dismissLoadingDialog();
         if (unUploadPhotos != null && unUploadPhotos.size() > 0) {
-            onUpload = true;
+            ArrayList<UploadService.UploadTaskBean> taskBeans = new ArrayList<>();
             for (String photo : unUploadPhotos) {
-                HttpOption option = new HttpOption();
-                option.setRequestType(RequestEnum.POST);
-                option.setParam("postId", String.valueOf(postId));
-                option.setAttachment("file");
-                Aria.upload(this).load(photo)
-                        .setUploadUrl(Constant.API_BASE_URL + "community/addPostItem?loginToken=" + SharedPreferencesUtil.getInstance().getString("loginToken"))
-                        .ignoreFilePathOccupy()
-                        .option(option)
-                        .create();
+                taskBeans.add(new UploadService.UploadTaskBean(postId, photo));
+                FlyMessageApplication.getInstances().uploadService.initUploadTask(taskBeans);
             }
-        } else {
-            onUpload = false;
         }
     }
 
@@ -380,24 +379,6 @@ public class CommunityFragment extends BaseFragment implements BGARefreshLayout.
                 adapter.notifyItemChanged(i);
                 break;
             }
-        }
-    }
-
-    @Upload.onTaskComplete
-    public void taskComplete(UploadTask task) {
-        String path = task.getEntity().getFilePath();
-        for (int i = 0; i < unUploadPhotos.size(); i++) {
-            String photo = unUploadPhotos.get(i);
-            if (TextUtils.equals(photo, path)) {
-                unUploadPhotos.remove(i);
-                break;
-            }
-        }
-        onUpload = (unUploadPhotos.size() != 0);
-        if (!onUpload) {
-            ToastUtils.showToast("上传完成");
-        } else {
-            ToastUtils.showToast("上传图片成功:剩余" + unUploadPhotos.size() + "张");
         }
     }
 

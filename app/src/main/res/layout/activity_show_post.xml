@@ -53,8 +53,11 @@
         android:layout_height="@dimen/d_50"
         app:layout_constraintBottom_toBottomOf="parent" >
         <EditText
+            android:id="@+id/comment"
             android:layout_width="match_parent"
             android:layout_height="@dimen/d_30"
+            android:singleLine="true"
+            android:maxLength="1000"
             android:background="@drawable/input"
             android:layout_centerVertical="true"
             android:paddingHorizontal="@dimen/d_5"
