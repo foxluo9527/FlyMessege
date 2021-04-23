@@ -410,7 +410,7 @@
 <table width='100%' class='codestyle'><pre><code class="language-json">{
     "msg": "修改密码失败:验证码错误",
     "code": 509
-}</code></pre></table></div><h3>1.3.2、校验用户名重复</h3><div style="margin-left:30px;"><p><a href="http://localhost:8080/FlyMessage/user/checkUserName?loginToken=a6c72aa9-b3e9-44e5-96a2-538c9363aa62&u_name=%E7%BD%97%E7%A6%8F%E6%9E%97">http://localhost:8080/FlyMessage/user/checkUserName?loginToken=a6c72aa9-b3e9-44e5-96a2-538c9363aa62&u_name=%E7%BD%97%E7%A6%8F%E6%9E%97</a></p></div><h3>1.3.3、修改手机号</h3><div style="margin-left:30px;"><p><a href="http://localhost:8080/FlyMessage/user/changePhone?loginToken=00c85fb7-201f-40f8-b0b3-cd797f1a47eb&u_phone=17628648573">http://localhost:8080/FlyMessage/user/changePhone?loginToken=00c85fb7-201f-40f8-b0b3-cd797f1a47eb&u_phone=17628648573</a></p></div><h3>1.3.4、修改密码(登录用户)</h3><div style="margin-left:30px;"><p><a href="http://localhost:8080/FlyMessage/user/changePass?loginToken=00c85fb7-201f-40f8-b0b3-cd797f1a47eb&u_pass=123">http://localhost:8080/FlyMessage/user/changePass?loginToken=00c85fb7-201f-40f8-b0b3-cd797f1a47eb&u_pass=123</a></p></div><h3>1.3.5、校验手机号重复</h3><div style="margin-left:30px;"><p><a href="http://localhost:8080/FlyMessage/user/checkUserPhone?loginToken=a6c72aa9-b3e9-44e5-96a2-538c9363aa62&phone=17628648573">http://localhost:8080/FlyMessage/user/checkUserPhone?loginToken=a6c72aa9-b3e9-44e5-96a2-538c9363aa62&phone=17628648573</a></p></div></div><h2>1.4、用户信息</h2><div style="margin-left:0px;"><h3>1.4.1、修改个人信息</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/updateUserMsg" title="http://www.foxluo.cn/FlyMessage/user/updateUserMsg"><a href="http://www.foxluo.cn/FlyMessage/user/updateUserMsg">http://www.foxluo.cn/FlyMessage/user/updateUserMsg</a></a>
+}</code></pre></table></div><h3>1.3.2、校验用户名重复</h3><div style="margin-left:30px;"><p><a href="http://www.foxluo.cn/FlyMessage/user/checkUserName?loginToken=a6c72aa9-b3e9-44e5-96a2-538c9363aa62&u_name=%E7%BD%97%E7%A6%8F%E6%9E%97">http://www.foxluo.cn/FlyMessage/user/checkUserName?loginToken=a6c72aa9-b3e9-44e5-96a2-538c9363aa62&u_name=%E7%BD%97%E7%A6%8F%E6%9E%97</a></p></div><h3>1.3.3、修改手机号</h3><div style="margin-left:30px;"><p><a href="http://www.foxluo.cn/FlyMessage/user/changePhone?loginToken=00c85fb7-201f-40f8-b0b3-cd797f1a47eb&u_phone=17628648573">http://www.foxluo.cn/FlyMessage/user/changePhone?loginToken=00c85fb7-201f-40f8-b0b3-cd797f1a47eb&u_phone=17628648573</a></p></div><h3>1.3.4、修改密码(登录用户)</h3><div style="margin-left:30px;"><p><a href="http://www.foxluo.cn/FlyMessage/user/changePass?loginToken=00c85fb7-201f-40f8-b0b3-cd797f1a47eb&u_pass=123">http://www.foxluo.cn/FlyMessage/user/changePass?loginToken=00c85fb7-201f-40f8-b0b3-cd797f1a47eb&u_pass=123</a></p></div><h3>1.3.5、校验手机号重复</h3><div style="margin-left:30px;"><p><a href="http://www.foxluo.cn/FlyMessage/user/checkUserPhone?loginToken=a6c72aa9-b3e9-44e5-96a2-538c9363aa62&phone=17628648573">http://www.foxluo.cn/FlyMessage/user/checkUserPhone?loginToken=a6c72aa9-b3e9-44e5-96a2-538c9363aa62&phone=17628648573</a></p></div></div><h2>1.4、用户信息</h2><div style="margin-left:0px;"><h3>1.4.1、修改个人信息</h3><div style="margin-left:30px;"><p>接口地址:<a href="http://www.foxluo.cn/FlyMessage/user/updateUserMsg" title="http://www.foxluo.cn/FlyMessage/user/updateUserMsg"><a href="http://www.foxluo.cn/FlyMessage/user/updateUserMsg">http://www.foxluo.cn/FlyMessage/user/updateUserMsg</a></a>
 请求示例:<a href="http://www.foxluo.cn/FlyMessage/user/updateUserMsg?loginToken=c9a43848-2f18-4c1d-bd9a-5c40fda89b52&brithday930499200000" title="http://www.foxluo.cn/FlyMessage/user/updateUserMsg?loginToken=c9a43848-2f18-4c1d-bd9a-5c40fda89b52&brithday=930499200000"><a href="http://www.foxluo.cn/FlyMessage/user/updateUserMsg?loginToken=c9a43848-2f18-4c1d-bd9a-5c40fda89b52&brithday=930499200000">http://www.foxluo.cn/FlyMessage/user/updateUserMsg?loginToken=c9a43848-2f18-4c1d-bd9a-5c40fda89b52&brithday=930499200000</a></a></p>
 <p>请求方式: <strong>GET</strong></p>
 <table>
@@ -2515,7 +2515,944 @@
   "msg": "登录超时，请重新登录",
   "code": "512"
 }</code></pre></table></div><h3>4.2.5、获取群主</h3><div style="margin-left:30px;"><p><a href="http://www.foxluo.cn/FlyMessage/group/getGroupCreator?g_id=7&loginToken=d7490380-987d-4591-90fc-c921414fde9a">http://www.foxluo.cn/FlyMessage/group/getGroupCreator?g_id=7&loginToken=d7490380-987d-4591-90fc-c921414fde9a</a></p>
-<p>{"group_creator":{"g_nick_name":"新用户","g_id":7,"id":10,"power":1,"u_id":1,"add_time":1593173673000},"msg":"获取群主信息成功","code":200}</p></div></div></div><h1>5、WebSocket接口</h1><div style="margin-left:0px;"><h2>5.1、websocket server</h2><div style="margin-left:0px;"><p>接口地址:<a href="ws://www.foxluo.cn/FlyMessage/webSocketServer" title="ws://www.foxluo.cn/FlyMessage/webSocketServer">ws://www.foxluo.cn/FlyMessage/webSocketServer</a>
+<p>{"group_creator":{"g_nick_name":"新用户","g_id":7,"id":10,"power":1,"u_id":1,"add_time":1593173673000},"msg":"获取群主信息成功","code":200}</p></div></div></div><h1>5、社区接口</h1><div style="margin-left:0px;"><h2>5.1、帖子管理</h2><div style="margin-left:0px;"><h3>5.1.1、发布帖子</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/addPost</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">content</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "发表帖子成功",
+  "code": 200,
+  "postId": 34
+}
+</code></pre></table></div><h3>5.1.2、用户获取社区</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/getPosts</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>GET </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">pageSize</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">pageIndex</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "获取社区帖子成功",
+  "code": 200,
+  "posts": [
+    {
+      "u_name": "foxluo",
+      "community_post_id": 34,
+      "u_nick_name": "罗福林",
+      "communityPostState": 1,
+      "postItems": [],
+      "zanCount": 0,
+      "commentCount": 0,
+      "shareCount": 0,
+      "showCount": 0,
+      "u_id": 34,
+      "createTime": 1619155434000,
+      "u_head": "http://www.foxluo.cn/FlyMessage/images/userHeads/20210422172643446.jpg",
+      "zan_state": 0,
+      "communityPostContent": "测试123"
+    },
+    {
+      "u_name": "804f-4aee-8f33-95d33ec85261",
+      "community_post_id": 33,
+      "u_nick_name": "新用户",
+      "communityPostState": 1,
+      "postItems": [
+        {
+          "community_post_id": 33,
+          "community_post_item_id": 29,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210422235310617.jpg"
+        }
+      ],
+      "zanCount": 1,
+      "commentCount": 0,
+      "shareCount": 0,
+      "showCount": 3,
+      "u_id": 36,
+      "createTime": 1619106789000,
+      "u_head": "http://www.foxluo.cn/FlyMessage/images/userHeads/20210422234936555.jpg",
+      "zan_state": 1,
+      "communityPostContent": "hi,bro.what's up."
+    },
+    {
+      "u_name": "d0e4-4998-b3a2-632f8e6c567c",
+      "community_post_id": 32,
+      "u_nick_name": "焦糖布丁",
+      "communityPostState": 1,
+      "postItems": [
+        {
+          "community_post_id": 32,
+          "community_post_item_id": 27,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210422212341430.jpg"
+        }
+      ],
+      "zanCount": 1,
+      "commentCount": 2,
+      "shareCount": 0,
+      "showCount": 27,
+      "u_id": 35,
+      "createTime": 1619097820000,
+      "u_head": "http://www.foxluo.cn/FlyMessage/images/userHeads/20210422210115232.jpg",
+      "zan_state": 1,
+      "communityPostContent": "无聊的一天"
+    },
+    {
+      "u_name": "foxluo",
+      "community_post_id": 30,
+      "u_nick_name": "罗福林",
+      "communityPostState": 1,
+      "postItems": [
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 13,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210421165926748.jpg"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 14,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210421165927724.JPG"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 15,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210421165928426.jpg"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 21,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210422172240165.jpg"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 22,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210422172240165.jpg"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 23,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210422172243337.jpg"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 24,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210422172244368.jpg"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 25,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210422172245024.jpg"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 26,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210422172246228.jpg"
+        }
+      ],
+      "zanCount": 1,
+      "commentCount": 6,
+      "shareCount": 0,
+      "showCount": 150,
+      "u_id": 34,
+      "createTime": 1618995566000,
+      "u_head": "http://www.foxluo.cn/FlyMessage/images/userHeads/20210422172643446.jpg",
+      "zan_state": 1,
+      "communityPostContent": "九宫格来啦"
+    },
+    {
+      "u_name": "foxluo",
+      "community_post_id": 29,
+      "u_nick_name": "罗福林",
+      "communityPostState": 1,
+      "postItems": [
+        {
+          "community_post_id": 29,
+          "community_post_item_id": 30,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210423072205602.jpg"
+        }
+      ],
+      "zanCount": 1,
+      "commentCount": 1,
+      "shareCount": 0,
+      "showCount": 33,
+      "u_id": 34,
+      "createTime": 1618991771000,
+      "u_head": "http://www.foxluo.cn/FlyMessage/images/userHeads/20210422172643446.jpg",
+      "zan_state": 1,
+      "communityPostContent": "丑逼一个"
+    }
+  ]
+}
+</code></pre></table></div><h3>5.1.3、获取用户社区详情</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/getUserPost</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>GET </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">pageSize</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">pageIndex</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">u_id</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "获取用户社区主页帖子成功",
+  "code": 200,
+  "posts": [
+    {
+      "u_name": "foxluo",
+      "community_post_id": 34,
+      "u_nick_name": "罗福林",
+      "communityPostState": 1,
+      "postItems": [],
+      "zanCount": 0,
+      "commentCount": 0,
+      "shareCount": 0,
+      "showCount": 0,
+      "u_id": 34,
+      "createTime": 1619155434000,
+      "u_head": "http://www.foxluo.cn/FlyMessage/images/userHeads/20210422172643446.jpg",
+      "zan_state": 0,
+      "communityPostContent": "测试123"
+    },
+    {
+      "u_name": "foxluo",
+      "community_post_id": 30,
+      "u_nick_name": "罗福林",
+      "communityPostState": 1,
+      "postItems": [
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 13,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210421165926748.jpg"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 14,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210421165927724.JPG"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 15,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210421165928426.jpg"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 21,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210422172240165.jpg"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 22,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210422172240165.jpg"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 23,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210422172243337.jpg"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 24,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210422172244368.jpg"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 25,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210422172245024.jpg"
+        },
+        {
+          "community_post_id": 30,
+          "community_post_item_id": 26,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210422172246228.jpg"
+        }
+      ],
+      "zanCount": 1,
+      "commentCount": 6,
+      "shareCount": 0,
+      "showCount": 150,
+      "u_id": 34,
+      "createTime": 1618995566000,
+      "u_head": "http://www.foxluo.cn/FlyMessage/images/userHeads/20210422172643446.jpg",
+      "zan_state": 1,
+      "communityPostContent": "九宫格来啦"
+    },
+    {
+      "u_name": "foxluo",
+      "community_post_id": 29,
+      "u_nick_name": "罗福林",
+      "communityPostState": 1,
+      "postItems": [
+        {
+          "community_post_id": 29,
+          "community_post_item_id": 30,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210423072205602.jpg"
+        }
+      ],
+      "zanCount": 1,
+      "commentCount": 1,
+      "shareCount": 0,
+      "showCount": 33,
+      "u_id": 34,
+      "createTime": 1618991771000,
+      "u_head": "http://www.foxluo.cn/FlyMessage/images/userHeads/20210422172643446.jpg",
+      "zan_state": 1,
+      "communityPostContent": "丑逼一个"
+    },
+    {
+      "u_name": "foxluo",
+      "community_post_id": 28,
+      "u_nick_name": "罗福林",
+      "communityPostState": 1,
+      "postItems": [],
+      "zanCount": 1,
+      "commentCount": 0,
+      "shareCount": 0,
+      "showCount": 5,
+      "u_id": 34,
+      "createTime": 1618991600000,
+      "u_head": "http://www.foxluo.cn/FlyMessage/images/userHeads/20210422172643446.jpg",
+      "zan_state": 1,
+      "communityPostContent": "测试1"
+    },
+    {
+      "u_name": "foxluo",
+      "community_post_id": 27,
+      "u_nick_name": "罗福林",
+      "communityPostState": 1,
+      "postItems": [
+        {
+          "community_post_id": 27,
+          "community_post_item_id": 10,
+          "community_post_item_type": 0,
+          "community_post_item_url": "http://www.foxluo.cn/FlyMessage/file/postFile/20210421105722477.jpg"
+        }
+      ],
+      "zanCount": 1,
+      "commentCount": 0,
+      "shareCount": 0,
+      "showCount": 3,
+      "u_id": 34,
+      "createTime": 1618973833000,
+      "u_head": "http://www.foxluo.cn/FlyMessage/images/userHeads/20210422172643446.jpg",
+      "zan_state": 1,
+      "communityPostContent": ""
+    }
+  ]
+}
+</code></pre></table></div><h3>5.1.4、获取单个帖子详情</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/getPost</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>GET </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">postId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "获取帖子详情成功",
+  "code": 200,
+  "post": {
+    "u_name": "foxluo",
+    "comments": [],
+    "community_post_id": 11,
+    "u_nick_name": "罗福林",
+    "communityPostState": 1,
+    "postItems": [],
+    "zanCount": 0,
+    "commentCount": 0,
+    "shareCount": 0,
+    "showCount": 1,
+    "u_id": 34,
+    "zans": [],
+    "createTime": 1618907326000,
+    "u_head": "http://www.foxluo.cn/FlyMessage/images/userHeads/20210422172643446.jpg",
+    "zan_state": 0,
+    "communityPostContent": "我是傻逼"
+  }
+}
+</code></pre></table></div><h3>5.1.5、删除帖子</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/delPost</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>GET </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">postId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "删除帖子成功",
+  "code": 200
+}
+</code></pre></table></div><h3>5.1.6、修改帖子内容</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/editPostContent</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>GET </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">postId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">content</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "修改帖子内容成功",
+  "code": 200
+}
+</code></pre></table></div></div><h2>5.2、帖子赞</h2><div style="margin-left:0px;"><h3>5.2.1、点赞帖子</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/zanPost</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>GET </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">postId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "点赞帖子成功",
+  "code": 200
+}
+</code></pre></table></div><h3>5.2.2、取消点赞</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/cancelZanPost</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>GET </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">postId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "取消点赞帖子成功",
+  "code": 200
+}
+</code></pre></table></div></div><h2>5.3、帖子评论</h2><div style="margin-left:0px;"><h3>5.3.1、评论帖子</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/addPostComment</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>GET </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">postId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">content</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "评论帖子成功",
+  "code": 200
+}
+</code></pre></table></div><h3>5.3.2、点赞评论</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/zanPostComment</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>GET </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">postCommentId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "点赞评论成功",
+  "code": 200
+}
+</code></pre></table></div><h3>5.3.3、回复评论</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/replyPostComment</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>GET </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">postCommentId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">replyId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>>0为对回复的回复;-1:对评论的回复</td>
+</tr>
+<tr>
+<td style="text-align: left;">content</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "回复评论成功",
+  "code": 200
+}
+</code></pre></table></div><h3>5.3.4、删除评论</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/delPostComment</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>GET </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">postCommentId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "删除评论成功",
+  "code": 200
+}
+</code></pre></table></div><h3>5.3.5、删除评论回复</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/delCommentReply</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>GET </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">replyId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "删除评论回复成功",
+  "code": 200
+}
+</code></pre></table></div></div><h2>5.4、帖子附图</h2><div style="margin-left:0px;"><h3>5.4.1、添加帖子附图</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/addPostItem</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>POST </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">postId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">file</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">MultipartFile</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "上传帖子附图成功",
+  "code": 200
+}
+</code></pre></table></div><h3>5.4.2、删除帖子附图</h3><div style="margin-left:30px;"><p><strong>请求URL：</strong> </p>
+<ul>
+<li><code>http://www.foxluo.cn/FlyMessage/community/delPostItem</code></li>
+</ul>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li>GET </li>
+</ul>
+<p><strong>参数：</strong> </p>
+<table>
+<thead><tr style='background-color: rgb(0, 136, 204); color: rgb(255, 255, 255);'>
+<th style="text-align: left;">参数名</th>
+<th style="text-align: left;">必选</th>
+<th style="text-align: left;">类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">loginToken</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">string</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">postId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+<tr>
+<td style="text-align: left;">postItemId</td>
+<td style="text-align: left;">是</td>
+<td style="text-align: left;">int</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回示例</strong></p>
+<table width='100%' class='codestyle'><pre><code>{
+  "msg": "删除帖子附图成功",
+  "code": 200
+}
+</code></pre></table></div></div></div><h1>6、WebSocket接口</h1><div style="margin-left:0px;"><h2>6.1、websocket server</h2><div style="margin-left:0px;"><p>接口地址:<a href="ws://www.foxluo.cn/FlyMessage/webSocketServer" title="ws://www.foxluo.cn/FlyMessage/webSocketServer">ws://www.foxluo.cn/FlyMessage/webSocketServer</a>
 请求示例:<a href="ws://www.foxluo.cn/FlyMessage/webSocketServer?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e" title="http://www.foxluo.cn/FlyMessage/group/queryGroup?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e">ws://www.foxluo.cn/FlyMessage/webSocketServer?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e</a></p>
 <p>连接方式: <strong>SOCKET</strong></p>
 <table>
@@ -2577,7 +3514,7 @@
 <table width='100%' class='codestyle'><pre><code class="language-json">{
     "msgType": 4,
     "content": "你已异地登陆，即将下线"
-}</code></pre></table></div><h2>5.2、socket js</h2><div style="margin-left:0px;"><p>接口地址:<a href="ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer" title="ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer">ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer</a>
+}</code></pre></table></div><h2>6.2、socket js</h2><div style="margin-left:0px;"><p>接口地址:<a href="ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer" title="ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer">ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer</a>
 请求示例:<a href="ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e" title="ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e">ws://www.foxluo.cn/FlyMessage/sockjs/webSocketServer?loginToken=5c4f1912-9841-48b5-ae77-47a596481b9e</a></p>
 <p>连接方式: <strong>SOCKET</strong></p>
 <table>
@@ -2640,4 +3577,4 @@
     "msgType": 4,
     "content": "你已异地登陆，即将下线"
 }</code></pre></table>
-<video src="http://your-site.com/your.mp4" style="width: 100%; height: 100%;" controls="controls"></video></div></div><h1>6、管理员接口</h1><div style="margin-left:0px;"></div></body></html>
+<video src="http://your-site.com/your.mp4" style="width: 100%; height: 100%;" controls="controls"></video></div></div><h1>7、管理员接口</h1><div style="margin-left:0px;"></div></body></html>
