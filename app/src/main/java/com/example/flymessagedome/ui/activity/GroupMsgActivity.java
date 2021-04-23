@@ -105,7 +105,7 @@ public class GroupMsgActivity extends BaseActivity {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
+                                dialog.cancel();
                                 showLoadingDialog(false,"正在加入群聊");
                                 new AsyncTask<Void,Void, Base>() {
                                     @Override
@@ -129,7 +129,7 @@ public class GroupMsgActivity extends BaseActivity {
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
+                                dialog.cancel();
                             }
                         })
                         .create().show();

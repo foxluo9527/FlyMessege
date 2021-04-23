@@ -1,5 +1,6 @@
 package com.example.flymessagedome.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -26,17 +27,17 @@ import butterknife.ButterKnife;
 
 public class SearchGroupsAdapter extends RecyclerView.Adapter {
     ArrayList<GroupBean> userBeans;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
     Context context;
-    private OnRecyclerViewItemClickListener listener;
-    private HttpProxyCacheServer proxyCacheServer;
-    String searchString="";
-    public SearchGroupsAdapter(ArrayList<GroupBean> userBeans, Context context,OnRecyclerViewItemClickListener listener) {
+    private final OnRecyclerViewItemClickListener listener;
+    private final HttpProxyCacheServer proxyCacheServer;
+
+    public SearchGroupsAdapter(ArrayList<GroupBean> userBeans, Context context, OnRecyclerViewItemClickListener listener) {
         this.userBeans = userBeans;
-        this.mLayoutInflater=LayoutInflater.from(context);
+        this.mLayoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.listener = listener;
-        proxyCacheServer= FlyMessageApplication.getProxy(context);
+        proxyCacheServer = FlyMessageApplication.getProxy(context);
     }
 
     @NonNull
@@ -44,27 +45,25 @@ public class SearchGroupsAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new SearchViewHolder(mLayoutInflater.inflate(R.layout.search_group_item, parent, false));
     }
+
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int position);
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        SearchViewHolder viewHolder=(SearchViewHolder)holder;
-        GroupBean userBean=userBeans.get(position);
-        Glide.with(context).load(proxyCacheServer.getProxyUrl(userBean.getG_head_img()))
-
-
-                .into(viewHolder.headImg);
-        viewHolder.name.setText(userBean.getG_name());
-        viewHolder.introduce.setText(""+userBean.getG_introduce());
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onItemClick(v,position);
-            }
-        });
+        try {
+            SearchViewHolder viewHolder = (SearchViewHolder) holder;
+            GroupBean userBean = userBeans.get(position);
+            Glide.with(context).load(proxyCacheServer.getProxyUrl(userBean.getG_head_img())).into(viewHolder.headImg);
+            viewHolder.name.setText(userBean.getG_name());
+            viewHolder.introduce.setText("" + userBean.getG_introduce());
+            viewHolder.itemView.setOnClickListener(v -> listener.onItemClick(v, position));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -72,7 +71,9 @@ public class SearchGroupsAdapter extends RecyclerView.Adapter {
         return userBeans.size();
     }
 
-    static class SearchViewHolder extends RecyclerView.ViewHolder{
+    @SuppressLint("NonConstantResourceId")
+    static class SearchViewHolder extends RecyclerView.ViewHolder {
+
         @Nullable
         @BindView(R.id.head_img)
         CircleImageView headImg;
@@ -80,6 +81,7 @@ public class SearchGroupsAdapter extends RecyclerView.Adapter {
         TextView name;
         @BindView(R.id.group_introduce)
         TextView introduce;
+
         public SearchViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

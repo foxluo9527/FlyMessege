@@ -4,10 +4,8 @@ import com.example.flymessagedome.api.FlyMessageApi;
 import com.example.flymessagedome.base.RxPresenter;
 import com.example.flymessagedome.model.ChangeBgModel;
 import com.example.flymessagedome.model.ChangeHeadModel;
-import com.example.flymessagedome.ui.activity.MainActivity;
 import com.example.flymessagedome.ui.contract.MineContract;
 import com.example.flymessagedome.utils.Constant;
-import com.example.flymessagedome.utils.SharedPreferencesUtil;
 
 import javax.inject.Inject;
 
@@ -16,12 +14,14 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MineFragmentPresenter extends RxPresenter<MineContract.View> implements MineContract.Presenter<MineContract.View>{
-    private FlyMessageApi flyMessageApi;
+public class MineFragmentPresenter extends RxPresenter<MineContract.View> implements MineContract.Presenter<MineContract.View> {
+    private final FlyMessageApi flyMessageApi;
+
     @Inject
     public MineFragmentPresenter(FlyMessageApi flyMessageApi) {
         this.flyMessageApi = flyMessageApi;
     }
+
     @Override
     public void changeHead(String filePath) {
         Subscription rxSubscription = flyMessageApi.changeHead(filePath).subscribeOn(Schedulers.io())
@@ -42,9 +42,9 @@ public class MineFragmentPresenter extends RxPresenter<MineContract.View> implem
                     public void onNext(ChangeHeadModel changeHeadModel) {
                         if (changeHeadModel != null && mView != null && changeHeadModel.code == Constant.SUCCESS) {
                             mView.initHeadImg(changeHeadModel.getHeadUrl());
-                        }else if (changeHeadModel!=null){
+                        } else if (changeHeadModel != null) {
                             mView.showError(changeHeadModel.msg);
-                        }else {
+                        } else {
                             mView.showError("修改头像失败");
                         }
                     }
@@ -72,9 +72,9 @@ public class MineFragmentPresenter extends RxPresenter<MineContract.View> implem
                     public void onNext(ChangeBgModel changeHeadModel) {
                         if (changeHeadModel != null && mView != null && changeHeadModel.code == Constant.SUCCESS) {
                             mView.initBgImg(changeHeadModel.getBgUrl());
-                        }else if (changeHeadModel!=null){
+                        } else if (changeHeadModel != null) {
                             mView.showError(changeHeadModel.msg);
-                        }else {
+                        } else {
                             mView.showError("修改名片背景失败");
                         }
                     }

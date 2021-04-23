@@ -167,9 +167,9 @@ public class MessageFragment extends BaseFragment implements ChatContract.View, 
             arg0.add(0, 1, 0, "删除聊天");
         });
         scrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
-            try{
+            try {
                 refreshLayout.setEnabled(scrollView.getScrollY() == 0);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
@@ -247,24 +247,32 @@ public class MessageFragment extends BaseFragment implements ChatContract.View, 
 
     @Override
     public void initChatList(ChatAdapter chatAdapter) {
-        refreshLayout.setRefreshing(false);
-        chatList.setAdapter(chatAdapter);
+        try {
+            refreshLayout.setRefreshing(false);
+            chatList.setAdapter(chatAdapter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void loginFailed(Login login) {
-        refreshLayout.setRefreshing(false);
-        if (!NetworkUtils.isConnected(mContext) || login == null) {
-            Intent actionIntent = new Intent(SOCKET_SERVICE_ACTION);
-            actionIntent.putExtra(MSG_TYPE, SERVICE_DISCONNECT);
-            mContext.sendBroadcast(actionIntent);
-        } else if (login != null && login.code == Constant.FAILED) {
-            Log.e(TAG, "获取用户登录信息失败，请重新登录");
-            ToastUtils.showToast("获取用户登录信息失败，请重新登录");
-            SharedPreferencesUtil.getInstance().removeAll();
-            ActivityCollector.finishAll();
-            SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
-            LoginActivity.startActivity(mContext);
+        try {
+            refreshLayout.setRefreshing(false);
+            if (!NetworkUtils.isConnected(mContext) || login == null) {
+                Intent actionIntent = new Intent(SOCKET_SERVICE_ACTION);
+                actionIntent.putExtra(MSG_TYPE, SERVICE_DISCONNECT);
+                mContext.sendBroadcast(actionIntent);
+            } else if (login != null && login.code == Constant.FAILED) {
+                Log.e(TAG, "获取用户登录信息失败，请重新登录");
+                ToastUtils.showToast("获取用户登录信息失败，请重新登录");
+                SharedPreferencesUtil.getInstance().removeAll();
+                ActivityCollector.finishAll();
+                SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
+                LoginActivity.startActivity(mContext);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

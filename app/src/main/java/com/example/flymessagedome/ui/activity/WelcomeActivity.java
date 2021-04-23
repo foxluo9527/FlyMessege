@@ -22,14 +22,15 @@ import com.example.flymessagedome.ui.presenter.WelcomePresenter;
 import com.example.flymessagedome.utils.NetworkUtils;
 import com.example.flymessagedome.utils.SharedPreferencesUtil;
 import com.example.flymessagedome.utils.ToastUtils;
-import com.tencent.bugly.crashreport.CrashReport;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
+@SuppressLint("NonConstantResourceId")
 public class WelcomeActivity extends BaseActivity implements WelcomeContract.View {
+
 
     @BindView(R.id.one_text)
     EditText oneText;
@@ -106,7 +107,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
                         LoginActivity.startActivity(WelcomeActivity.this);
                 }
                 Intent intent = new Intent(WelcomeActivity.this, WebActivity.class);
-                intent.putExtra("URLString", "http://wufazhuce.com/"+(oneData==null?(""):("one/"+oneData.getOneid())));
+                intent.putExtra("URLString", "http://wufazhuce.com/" + (oneData == null ? ("") : ("one/" + oneData.getOneid())));
                 finish();
                 startActivity(intent);
                 break;
@@ -123,24 +124,36 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
 
     @Override
     public void showOne(One.NewsListBean data) {
-        this.oneData=data;
-        oneText.setText(data.getWord());
-        HttpProxyCacheServer proxy = FlyMessageApplication.getProxy(WelcomeActivity.this);
-        data.setImgurl(proxy.getProxyUrl(data.getImgurl()));
-        Glide.with(WelcomeActivity.this).load(data.getImgurl()).into(oneImg);
+        try {
+            this.oneData = data;
+            oneText.setText(data.getWord());
+            HttpProxyCacheServer proxy = FlyMessageApplication.getProxy(WelcomeActivity.this);
+            data.setImgurl(proxy.getProxyUrl(data.getImgurl()));
+            Glide.with(WelcomeActivity.this).load(data.getImgurl()).into(oneImg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void showError() {
-        if (!this.isDestroyed())
-            showError(getString(R.string.get_one_failed));
+        try {
+            if (!this.isDestroyed())
+                showError(getString(R.string.get_one_failed));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void showError(String msg) {
-        ToastUtils.showToast(msg);
+        try {
+            ToastUtils.showToast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

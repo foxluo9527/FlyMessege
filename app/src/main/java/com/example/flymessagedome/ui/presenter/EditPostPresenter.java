@@ -16,7 +16,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class EditPostPresenter extends RxPresenter<EditPostContract.View> implements EditPostContract.Presenter<EditPostContract.View> {
-    private FlyMessageApi flyMessageApi;
+    private final FlyMessageApi flyMessageApi;
     private ArrayList<Integer> removeItemIds;
     private int postId;
 

@@ -165,14 +165,14 @@ public class GroupChatSettingActivity extends BaseActivity {
                         .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
+                                dialog.cancel();
                                 exitGroup();
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
+                                dialog.cancel();
                             }
                         })
                         .create().show();
@@ -182,7 +182,7 @@ public class GroupChatSettingActivity extends BaseActivity {
                         .setPositiveButton("删除", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
+                                dialog.cancel();
                                 messageDao.queryBuilder().where(MessageDao.Properties.CId.eq(userChat.getC_id())).buildDelete().executeDeleteWithoutDetachingEntities();
                                 userChat.setChat_reshow(false);
                                 chatDao.update(userChat);
@@ -193,7 +193,7 @@ public class GroupChatSettingActivity extends BaseActivity {
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
+                                dialog.cancel();
                             }
                         })
                         .create().show();
@@ -449,7 +449,7 @@ public class GroupChatSettingActivity extends BaseActivity {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
+                                dialog.cancel();
                                 userChat.setBgImg(resultUri.getPath());
                                 chatDao.update(userChat);
                                 ToastUtils.showToast("更换聊天背景成功");
@@ -459,7 +459,7 @@ public class GroupChatSettingActivity extends BaseActivity {
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
+                                dialog.cancel();
                             }
                         })
                         .create().show();

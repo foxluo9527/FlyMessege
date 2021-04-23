@@ -1,11 +1,8 @@
 package com.example.flymessagedome.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -27,7 +24,9 @@ import com.example.flymessagedome.utils.ToastUtils;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+@SuppressLint({"NonConstantResourceId", "SetTextI18n"})
 public class UserNameActivity extends BaseActivity {
+
     @BindView(R.id.old_u_name)
     TextView old_u_name;
     @BindView(R.id.new_u_name)
@@ -36,48 +35,41 @@ public class UserNameActivity extends BaseActivity {
     TextView u_name_error;
     @BindView(R.id.cancel)
     ImageView cancel;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_user_name;
     }
-    @OnClick({R.id.back,R.id.change_name,R.id.cancel})
-    public void onViewClick(View v){
-        switch (v.getId()){
+
+    @OnClick({R.id.back, R.id.change_name, R.id.cancel})
+    public void onViewClick(View v) {
+        switch (v.getId()) {
             case R.id.back:
                 finish();
                 break;
             case R.id.change_name:
-                String newName=new_u_name.getText().toString();
-                if (TextUtils.isEmpty(newName)){
+                String newName = new_u_name.getText().toString();
+                if (TextUtils.isEmpty(newName)) {
                     u_name_error.setVisibility(View.VISIBLE);
                     u_name_error.setText("请输入新用户名");
                     return;
-                } else if (newName.length()<6) {
+                } else if (newName.length() < 6) {
                     u_name_error.setVisibility(View.VISIBLE);
                     u_name_error.setText("请输入6-20位新用户名");
                     return;
-                }else if (CommUtil.isMobileNO(newName)){
+                } else if (CommUtil.isMobileNO(newName)) {
                     u_name_error.setVisibility(View.VISIBLE);
                     u_name_error.setText("请勿直接使用电话号码作为飞讯名");
                     return;
-                }else if (newName.equals(old_u_name.getText().toString())){
+                } else if (newName.equals(old_u_name.getText().toString())) {
                     u_name_error.setVisibility(View.VISIBLE);
                     u_name_error.setText("新旧飞讯名不能重复");
                     return;
-                }else {
+                } else {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                     dialog.setMessage("确认修改飞讯名?")
-                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    changeName(newName);
-                                }})
-                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();//取消弹出框
-                                }
-                            })
+                            .setPositiveButton("确定", (dialog1, which) -> changeName(newName))
+                            .setNegativeButton("取消", (dialog12, which) -> dialog12.cancel())
                             .setCancelable(false)
                             .create().show();
                 }
@@ -89,40 +81,44 @@ public class UserNameActivity extends BaseActivity {
                 break;
         }
     }
-    private void changeName(String newName){
-        if (NetworkUtils.isConnected(mContext)){
-            showLoadingDialog(true,"修改飞讯名中");
-            new AsyncTask<Void,Void, Base>() {
+
+    @SuppressLint("StaticFieldLeak")
+    private void changeName(String newName) {
+        if (NetworkUtils.isConnected(mContext)) {
+            showLoadingDialog(true, "修改飞讯名中");
+            new AsyncTask<Void, Void, Base>() {
                 @Override
                 protected Base doInBackground(Void... voids) {
-                    Base base= HttpRequest.checkUserName(newName);
-                    if (base!=null&&base.code== Constant.SUCCESS)
+                    Base base = HttpRequest.checkUserName(newName);
+                    if (base != null && base.code == Constant.SUCCESS)
                         return HttpRequest.changeUserName(newName);
-                    else if (base!=null)
-                        return base;
-                    else
-                        return null;
+                    else return base;
                 }
+
 
                 @Override
                 protected void onPostExecute(Base base) {
-                    dismissLoadingDialog();
-                    if (base==null){
-                        ToastUtils.showToast("修改飞讯名失败");
-                    }else{
-                        ToastUtils.showToast(base.msg);
-                        if (base.code== Constant.SUCCESS){
-                            LoginActivity.loginUser.setU_name(newName);
-                            initDatas();
+                    try {
+                        dismissLoadingDialog();
+                        if (base == null) {
+                            ToastUtils.showToast("修改飞讯名失败");
+                        } else {
+                            ToastUtils.showToast(base.msg);
+                            if (base.code == Constant.SUCCESS) {
+                                LoginActivity.loginUser.setU_name(newName);
+                                initDatas();
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }.execute();
-        }
-        else {
+        } else {
             ToastUtils.showToast("修改飞讯名失败，请检查网络");
         }
     }
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
 
@@ -154,9 +150,9 @@ public class UserNameActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 u_name_error.setVisibility(View.GONE);
-                if (s.length()>0){
+                if (s.length() > 0) {
                     cancel.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     cancel.setVisibility(View.GONE);
                 }
             }

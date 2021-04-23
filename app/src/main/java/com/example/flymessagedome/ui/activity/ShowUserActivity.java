@@ -113,61 +113,65 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
 
                 @Override
                 protected void onPostExecute(Users user) {
-                    if (user == null || user.code != Constant.SUCCESS) {
-                        if (user != null)
-                            ToastUtils.showToast(user.msg);
-                        finish();
-                        return;
-                    }
-                    userBean = user.getUser();
-                    List<FriendsBean> friends = friendsBeanDao.queryBuilder()
-                            .where(FriendsBeanDao.Properties.F_source_u_id.eq(LoginActivity.loginUser.getU_id()))
-                            .where(FriendsBeanDao.Properties.F_object_u_id.eq(userBean.getU_id()))
-                            .list();
-                    if (friends.size() > 0) {
-                        friendsBean = friends.get(0);
-                    }
-                    new AsyncTask<Void, Void, CheckBlackListModel>() {
-                        @Override
-                        protected CheckBlackListModel doInBackground(Void... voids) {
-                            return HttpRequest.checkBlackList(userBean.getU_id());
+                    try {
+                        if (user == null || user.code != Constant.SUCCESS) {
+                            if (user != null)
+                                ToastUtils.showToast(user.msg);
+                            finish();
+                            return;
                         }
-
-                        @Override
-                        protected void onPostExecute(CheckBlackListModel blackListModel) {
-                            try {
-                                dismissLoadingDialog();
-                                inBlackList = blackListModel.inBlacklist;
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                        userBean = user.getUser();
+                        List<FriendsBean> friends = friendsBeanDao.queryBuilder()
+                                .where(FriendsBeanDao.Properties.F_source_u_id.eq(LoginActivity.loginUser.getU_id()))
+                                .where(FriendsBeanDao.Properties.F_object_u_id.eq(userBean.getU_id()))
+                                .list();
+                        if (friends.size() > 0) {
+                            friendsBean = friends.get(0);
+                        }
+                        new AsyncTask<Void, Void, CheckBlackListModel>() {
+                            @Override
+                            protected CheckBlackListModel doInBackground(Void... voids) {
+                                return HttpRequest.checkBlackList(userBean.getU_id());
                             }
+
+                            @Override
+                            protected void onPostExecute(CheckBlackListModel blackListModel) {
+                                try {
+                                    dismissLoadingDialog();
+                                    inBlackList = blackListModel.inBlacklist;
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }.execute();
+                        Glide.with(mContext)
+                                .load(FlyMessageApplication.getProxy(mContext).getProxyUrl(userBean.getU_head_img()))
+                                .into(headImg);
+                        Glide.with(mContext)
+                                .asDrawable()
+                                .load(FlyMessageApplication.getProxy(mContext).getProxyUrl(userBean.getU_bg_img()))
+                                .into(mainView);
+                        sign.setText(userBean.getU_sign());
+                        if (userBean.getU_sex() == null) {
+                            sex.setVisibility(View.GONE);
+                        } else if (userBean.getU_sex().equals("男")) {
+                            sex.setImageDrawable(AppCompatResources.getDrawable(mContext, R.mipmap.man));
+                        } else if (userBean.getU_sex().equals("女")) {
+                            sex.setImageDrawable(AppCompatResources.getDrawable(mContext, R.mipmap.women));
                         }
-                    }.execute();
-                    Glide.with(mContext)
-                            .load(FlyMessageApplication.getProxy(mContext).getProxyUrl(userBean.getU_head_img()))
-                            .into(headImg);
-                    Glide.with(mContext)
-                            .asDrawable()
-                            .load(FlyMessageApplication.getProxy(mContext).getProxyUrl(userBean.getU_bg_img()))
-                            .into(mainView);
-                    sign.setText(userBean.getU_sign());
-                    if (userBean.getU_sex() == null) {
-                        sex.setVisibility(View.GONE);
-                    } else if (userBean.getU_sex().equals("男")) {
-                        sex.setImageDrawable(AppCompatResources.getDrawable(mContext, R.mipmap.man));
-                    } else if (userBean.getU_sex().equals("女")) {
-                        sex.setImageDrawable(AppCompatResources.getDrawable(mContext, R.mipmap.women));
-                    }
-                    if (friendsBean != null && !friendsBean.getF_remarks_name().equals(userBean.getU_nick_name()))
-                        nickName.setText(friendsBean.getF_remarks_name() + "(" + userBean.getU_nick_name() + ")");
-                    else
-                        nickName.setText(userBean.getU_nick_name());
-                    u_name.setText(userBean.getU_name());
-                    position.setText(userBean.getU_position());
-                    if (userBean.getIsFriend()) {
-                        add_fri.setVisibility(View.GONE);
-                    } else {
-                        add_fri.setVisibility(View.VISIBLE);
+                        if (friendsBean != null && !friendsBean.getF_remarks_name().equals(userBean.getU_nick_name()))
+                            nickName.setText(friendsBean.getF_remarks_name() + "(" + userBean.getU_nick_name() + ")");
+                        else
+                            nickName.setText(userBean.getU_nick_name());
+                        u_name.setText(userBean.getU_name());
+                        position.setText(userBean.getU_position());
+                        if (userBean.getIsFriend()) {
+                            add_fri.setVisibility(View.GONE);
+                        } else {
+                            add_fri.setVisibility(View.VISIBLE);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }.execute();
@@ -216,7 +220,7 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
 
     @SuppressLint("NonConstantResourceId")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @OnClick({R.id.back, R.id.user_set, R.id.send_btn, R.id.add_fri_btn, R.id.msg_view, R.id.u_head_img, R.id.show_bg_view,R.id.community})
+    @OnClick({R.id.back, R.id.user_set, R.id.send_btn, R.id.add_fri_btn, R.id.msg_view, R.id.u_head_img, R.id.show_bg_view, R.id.community})
     public void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -249,10 +253,10 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
                 showBGImg();
                 break;
             case R.id.community:
-                Intent communityIntent=new Intent(mContext, UserCommunityActivity.class);
-                communityIntent.putExtra("userId",userBean.getU_id());
-                communityIntent.putExtra("uName",userBean.getU_nick_name());
-                startActivityForResult(communityIntent,2);
+                Intent communityIntent = new Intent(mContext, UserCommunityActivity.class);
+                communityIntent.putExtra("userId", userBean.getU_id());
+                communityIntent.putExtra("uName", userBean.getU_nick_name());
+                startActivityForResult(communityIntent, 2);
                 break;
         }
     }
@@ -339,12 +343,16 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
 
                         @Override
                         protected void onPostExecute(Base base) {
-                            dismissLoadingDialog();
-                            if (base.code == Constant.SUCCESS) {
-                                inBlackList = !inBlackList;
-                                ToastUtils.showToast("操作成功");
-                            } else {
-                                ToastUtils.showToast("操作失败");
+                            try {
+                                dismissLoadingDialog();
+                                if (base.code == Constant.SUCCESS) {
+                                    inBlackList = !inBlackList;
+                                    ToastUtils.showToast("操作成功");
+                                } else {
+                                    ToastUtils.showToast("操作失败");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                     }.execute();
@@ -355,7 +363,7 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
                         AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                         dialog.setMessage("确认删除此联系人")
                                 .setPositiveButton("确定", (dialog1, which) -> {
-                                    dialog1.cancel();//取消弹出框
+                                    dialog1.cancel();
                                     showLoadingDialog(false, "正在删除");
                                     new AsyncTask<Void, Void, Base>() {
                                         @Override
@@ -365,19 +373,23 @@ public class ShowUserActivity extends BaseActivity implements MenuItem.OnMenuIte
 
                                         @Override
                                         protected void onPostExecute(Base base) {
-                                            dismissLoadingDialog();
-                                            if (base.code == Constant.SUCCESS) {
-                                                ToastUtils.showToast("操作成功");
-                                                initDatas();
-                                                UserChatActivity.resultRefresh = true;
-                                            } else {
-                                                ToastUtils.showToast("操作失败");
+                                            try {
+                                                dismissLoadingDialog();
+                                                if (base.code == Constant.SUCCESS) {
+                                                    ToastUtils.showToast("操作成功");
+                                                    initDatas();
+                                                    UserChatActivity.resultRefresh = true;
+                                                } else {
+                                                    ToastUtils.showToast("操作失败");
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
                                             }
                                         }
                                     }.execute();
                                 })
                                 .setNegativeButton("取消", (dialog12, which) -> {
-                                    dialog12.cancel();//取消弹出框
+                                    dialog12.cancel();
                                 })
                                 .create().show();
                     } else {

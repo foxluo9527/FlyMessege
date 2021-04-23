@@ -1,10 +1,10 @@
 package com.example.flymessagedome.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.view.ActionMode;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,10 +52,10 @@ import static com.example.flymessagedome.utils.ImageUtils.getRoundedCornerBitmap
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private LayoutInflater mLayoutInflater;
-    private Context mContext;
-    private List<Message> mDatas;
-    private ArrayList<photoMap> photoMaps;
+    private final LayoutInflater mLayoutInflater;
+    private final Context mContext;
+    private final List<Message> mDatas;
+    private final ArrayList<photoMap> photoMaps;
     private boolean showChoice = false;
     private boolean[] choices;
     private static final int MSG_TYPE_MY_USER_NORMAL = 1;
@@ -74,7 +74,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int MSG_TYPE_OTHER_GROUP_PIC = 14;
     private static final int MSG_TYPE_MY_GROUP_VOICE = 15;
     private static final int MSG_TYPE_OTHER_GROUP_VOICE = 16;
-    private HttpProxyCacheServer proxyCacheServer;
+    private final HttpProxyCacheServer proxyCacheServer;
     UserDao userDao = FlyMessageApplication.getInstances().getDaoSession().getUserDao();
     UserBeanDao userBeanDao = FlyMessageApplication.getInstances().getDaoSession().getUserBeanDao();
     GroupMemberDao groupMemberDao = FlyMessageApplication.getInstances().getDaoSession().getGroupMemberDao();
@@ -137,7 +137,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {
             case MSG_TYPE_MY_USER_NORMAL:
@@ -193,1102 +193,885 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return null;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Message msg = mDatas.get(holder.getAdapterPosition());
-        Message lastMsg = null;
-        UserBean other = userBeanDao.load((long) msg.getM_source_id());
-        if (position != 0)
-            lastMsg = mDatas.get(position - 1);
-        if (msg.getM_type() == 0) {
-            if (holder instanceof UserChatLeftNormalViewHolder) {
-                if (showChoice) {
-                    ((UserChatLeftNormalViewHolder) holder).choice.setVisibility(View.VISIBLE);
-                    if (choices.length > position)
-                        ((UserChatLeftNormalViewHolder) holder).choice.setChecked(choices[position]);
-                    ((UserChatLeftNormalViewHolder) holder).choice.setOnCheckStateChangedListener(new ImageViewCheckBox.OnCheckStateChangedListener() {
-                        @Override
-                        public void onCheckStateChanged(boolean isChecked) {
-                            choices[position] = isChecked;
-                        }
-                    });
-                } else {
-                    ((UserChatLeftNormalViewHolder) holder).choice.setVisibility(View.GONE);
-                }
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((UserChatLeftNormalViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((UserChatLeftNormalViewHolder) holder).tv_send_time.setText("");
-                }
-                Glide.with(mContext)
-                        .load(other.getU_head_img())
-
-
-                        .into(((UserChatLeftNormalViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((UserChatLeftNormalViewHolder) holder).headImg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                        }
-                    });
-                }
-                ((UserChatLeftNormalViewHolder) holder).msg_content.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
-                    @Override
-                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onDestroyActionMode(ActionMode mode) {
-                    }
-
-                    @Override
-                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                        //这里可以添加自己的菜单选项（前提是要返回true的）
-                        menu.add(1, 2, 0, "删除");
-                        return true;//返回false 就是屏蔽ActionMode菜单
-                    }
-
-                    @Override
-                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                        mOnRecyclerViewItemClickListener.onItemMenuClick(((UserChatLeftNormalViewHolder) holder).msg_content, position, item.getItemId());
-                        return false;
-                    }
-                });
-                ((UserChatLeftNormalViewHolder) holder).msg_content.setText(StringUtil.formatFileMessage(msg.getM_content()));
-            } else if (holder instanceof UserChatRightNormalViewHolder) {
-                if (showChoice) {
-                    ((UserChatRightNormalViewHolder) holder).choice.setVisibility(View.VISIBLE);
-                    if (choices.length > position)
-                        ((UserChatRightNormalViewHolder) holder).choice.setChecked(choices[position]);
-                    ((UserChatRightNormalViewHolder) holder).choice.setOnCheckStateChangedListener(new ImageViewCheckBox.OnCheckStateChangedListener() {
-                        @Override
-                        public void onCheckStateChanged(boolean isChecked) {
-                            choices[position] = isChecked;
-                        }
-                    });
-                } else {
-                    ((UserChatRightNormalViewHolder) holder).choice.setVisibility(View.GONE);
-                }
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((UserChatRightNormalViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((UserChatRightNormalViewHolder) holder).tv_send_time.setText("");
-                }
-                if (msg.getIsSend()) {
-                    ((UserChatRightNormalViewHolder) holder).sendFailed.setVisibility(View.GONE);
-                } else {
-                    ((UserChatRightNormalViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
-                    ((UserChatRightNormalViewHolder) holder).sendFailed.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (mOnRecyclerViewItemClickListener != null)
-                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                        }
-                    });
-                }
-                Glide.with(mContext)
-                        .load(me.getU_head_img())
-
-
-                        .into(((UserChatRightNormalViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((UserChatRightNormalViewHolder) holder).headImg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                        }
-                    });
-                }
-                ((UserChatRightNormalViewHolder) holder).msg_content.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
-                    @Override
-                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onDestroyActionMode(ActionMode mode) {
-                    }
-
-                    @Override
-                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                        //这里可以添加自己的菜单选项（前提是要返回true的）
-                        menu.add(1, 2, 0, "删除");
-                        return true;//返回false 就是屏蔽ActionMode菜单
-                    }
-
-                    @Override
-                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                        mOnRecyclerViewItemClickListener.onItemMenuClick(((UserChatRightNormalViewHolder) holder).msg_content, position, item.getItemId());
-                        return false;
-                    }
-                });
-                ((UserChatRightNormalViewHolder) holder).msg_content.setText(StringUtil.formatFileMessage(msg.getM_content()));
-            } else if (holder instanceof UserChatLeftFileViewHolder) {
-                if (showChoice) {
-                    ((UserChatLeftFileViewHolder) holder).choice.setVisibility(View.VISIBLE);
-                    ((UserChatLeftFileViewHolder) holder).choice.setChecked(choices[position]);
-                    ((UserChatLeftFileViewHolder) holder).choice.setOnCheckStateChangedListener(new ImageViewCheckBox.OnCheckStateChangedListener() {
-                        @Override
-                        public void onCheckStateChanged(boolean isChecked) {
-                            choices[position] = isChecked;
-                        }
-                    });
-                } else {
-                    ((UserChatLeftFileViewHolder) holder).choice.setVisibility(View.GONE);
-                }
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((UserChatLeftFileViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((UserChatLeftFileViewHolder) holder).tv_send_time.setText("");
-                }
-                Glide.with(mContext)
-                        .load(other.getU_head_img())
-
-
-                        .into(((UserChatLeftFileViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((UserChatLeftFileViewHolder) holder).headImg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                        }
-                    });
-                }
-                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
-                if (msgFile != null) {
-                    ((UserChatLeftFileViewHolder) holder).tv_file_name.setText("" + msgFile.getFilename());
-                    if (msgFile.getLink().contains("http")) {
-                        if (msg.getDownloadState() == 0)
-                            ((UserChatLeftFileViewHolder) holder).tv_file_msg.setText("在线文件");
-                        else if (msg.getDownloadState() == 1) {
-                            ((UserChatLeftFileViewHolder) holder).tv_file_msg.setText("正在下载");
-                        } else if (msg.getDownloadState() == 2) {
-                            ((UserChatLeftFileViewHolder) holder).tv_file_msg.setText("下载失败");
-                        } else if (msg.getDownloadState() == 3) {
-                            ((UserChatLeftFileViewHolder) holder).tv_file_msg.setText("下载暂停");
-                        } else if (msg.getDownloadState() == 4) {
-                            ((UserChatLeftFileViewHolder) holder).tv_file_msg.setText("已下载");
-                        }
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        try {
+            Message msg = mDatas.get(holder.getAdapterPosition());
+            Message lastMsg = null;
+            UserBean other = userBeanDao.load((long) msg.getM_source_id());
+            if (position != 0)
+                lastMsg = mDatas.get(position - 1);
+            if (msg.getM_type() == 0) {
+                if (holder instanceof UserChatLeftNormalViewHolder) {
+                    if (showChoice) {
+                        ((UserChatLeftNormalViewHolder) holder).choice.setVisibility(View.VISIBLE);
+                        if (choices.length > position)
+                            ((UserChatLeftNormalViewHolder) holder).choice.setChecked(choices[position]);
+                        ((UserChatLeftNormalViewHolder) holder).choice.setOnCheckStateChangedListener(isChecked -> choices[position] = isChecked);
                     } else {
-                        ((UserChatLeftFileViewHolder) holder).tv_file_msg.setText("已下载");
+                        ((UserChatLeftNormalViewHolder) holder).choice.setVisibility(View.GONE);
                     }
-                    int fileHeadResource = -1;
-                    if (msgFile.getFileType().equals("word")) {
-                        fileHeadResource = R.drawable.word;
-                    } else if (msgFile.getFileType().equals("ppt")) {
-                        fileHeadResource = R.drawable.ppt;
-                    } else if (msgFile.getFileType().equals("excel")) {
-                        fileHeadResource = R.drawable.excel;
-                    } else if (msgFile.getFileType().equals("pdf")) {
-                        fileHeadResource = R.drawable.pdf;
-                    } else if (msgFile.getFileType().equals("music")) {
-                        fileHeadResource = R.drawable.music;
-                    } else if (msgFile.getFileType().equals("video")) {
-                        fileHeadResource = R.drawable.video;
-                    } else if (msgFile.getFileType().equals("file")) {
-                        fileHeadResource = R.drawable.unknow;
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((UserChatLeftNormalViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
+                    } else {
+                        ((UserChatLeftNormalViewHolder) holder).tv_send_time.setText("");
                     }
                     Glide.with(mContext)
-                            .load(fileHeadResource)
+                            .load(other.getU_head_img())
 
 
-                            .into(((UserChatLeftFileViewHolder) holder).file_type_img);
+                            .into(((UserChatLeftNormalViewHolder) holder).headImg);
                     if (mOnRecyclerViewItemClickListener != null) {
-                        ((UserChatLeftFileViewHolder) holder).file_msg_view.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                        ((UserChatLeftNormalViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                    }
+                    ((UserChatLeftNormalViewHolder) holder).msg_content.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+                        @Override
+                        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                            return false;
+                        }
+
+                        @Override
+                        public void onDestroyActionMode(ActionMode mode) {
+                        }
+
+                        @Override
+                        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                            //这里可以添加自己的菜单选项（前提是要返回true的）
+                            menu.add(1, 2, 0, "删除");
+                            return true;//返回false 就是屏蔽ActionMode菜单
+                        }
+
+                        @Override
+                        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                            mOnRecyclerViewItemClickListener.onItemMenuClick(((UserChatLeftNormalViewHolder) holder).msg_content, position, item.getItemId());
+                            return false;
+                        }
+                    });
+                    ((UserChatLeftNormalViewHolder) holder).msg_content.setText(StringUtil.formatFileMessage(msg.getM_content()));
+                } else if (holder instanceof UserChatRightNormalViewHolder) {
+                    if (showChoice) {
+                        ((UserChatRightNormalViewHolder) holder).choice.setVisibility(View.VISIBLE);
+                        if (choices.length > position)
+                            ((UserChatRightNormalViewHolder) holder).choice.setChecked(choices[position]);
+                        ((UserChatRightNormalViewHolder) holder).choice.setOnCheckStateChangedListener(isChecked -> choices[position] = isChecked);
+                    } else {
+                        ((UserChatRightNormalViewHolder) holder).choice.setVisibility(View.GONE);
+                    }
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((UserChatRightNormalViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
+                    } else {
+                        ((UserChatRightNormalViewHolder) holder).tv_send_time.setText("");
+                    }
+                    if (msg.getIsSend()) {
+                        ((UserChatRightNormalViewHolder) holder).sendFailed.setVisibility(View.GONE);
+                    } else {
+                        ((UserChatRightNormalViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
+                        ((UserChatRightNormalViewHolder) holder).sendFailed.setOnClickListener(v -> {
+                            if (mOnRecyclerViewItemClickListener != null)
                                 mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                            }
                         });
-                        ((UserChatLeftFileViewHolder) holder).file_msg_view.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                            @Override
-                            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                    }
+                    Glide.with(mContext)
+                            .load(me.getU_head_img())
+
+
+                            .into(((UserChatRightNormalViewHolder) holder).headImg);
+                    if (mOnRecyclerViewItemClickListener != null) {
+                        ((UserChatRightNormalViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                    }
+                    ((UserChatRightNormalViewHolder) holder).msg_content.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+                        @Override
+                        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                            return false;
+                        }
+
+                        @Override
+                        public void onDestroyActionMode(ActionMode mode) {
+                        }
+
+                        @Override
+                        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                            //这里可以添加自己的菜单选项（前提是要返回true的）
+                            menu.add(1, 2, 0, "删除");
+                            return true;//返回false 就是屏蔽ActionMode菜单
+                        }
+
+                        @Override
+                        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                            mOnRecyclerViewItemClickListener.onItemMenuClick(((UserChatRightNormalViewHolder) holder).msg_content, position, item.getItemId());
+                            return false;
+                        }
+                    });
+                    ((UserChatRightNormalViewHolder) holder).msg_content.setText(StringUtil.formatFileMessage(msg.getM_content()));
+                } else if (holder instanceof UserChatLeftFileViewHolder) {
+                    if (showChoice) {
+                        ((UserChatLeftFileViewHolder) holder).choice.setVisibility(View.VISIBLE);
+                        ((UserChatLeftFileViewHolder) holder).choice.setChecked(choices[position]);
+                        ((UserChatLeftFileViewHolder) holder).choice.setOnCheckStateChangedListener(isChecked -> choices[position] = isChecked);
+                    } else {
+                        ((UserChatLeftFileViewHolder) holder).choice.setVisibility(View.GONE);
+                    }
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((UserChatLeftFileViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
+                    } else {
+                        ((UserChatLeftFileViewHolder) holder).tv_send_time.setText("");
+                    }
+                    Glide.with(mContext)
+                            .load(other.getU_head_img())
+
+
+                            .into(((UserChatLeftFileViewHolder) holder).headImg);
+                    if (mOnRecyclerViewItemClickListener != null) {
+                        ((UserChatLeftFileViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                    }
+                    StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
+                    if (msgFile != null) {
+                        ((UserChatLeftFileViewHolder) holder).tv_file_name.setText("" + msgFile.getFilename());
+                        if (msgFile.getLink().contains("http")) {
+                            if (msg.getDownloadState() == 0)
+                                ((UserChatLeftFileViewHolder) holder).tv_file_msg.setText("在线文件");
+                            else if (msg.getDownloadState() == 1) {
+                                ((UserChatLeftFileViewHolder) holder).tv_file_msg.setText("正在下载");
+                            } else if (msg.getDownloadState() == 2) {
+                                ((UserChatLeftFileViewHolder) holder).tv_file_msg.setText("下载失败");
+                            } else if (msg.getDownloadState() == 3) {
+                                ((UserChatLeftFileViewHolder) holder).tv_file_msg.setText("下载暂停");
+                            } else if (msg.getDownloadState() == 4) {
+                                ((UserChatLeftFileViewHolder) holder).tv_file_msg.setText("已下载");
+                            }
+                        } else {
+                            ((UserChatLeftFileViewHolder) holder).tv_file_msg.setText("已下载");
+                        }
+                        int fileHeadResource = -1;
+                        switch (msgFile.getFileType()) {
+                            case "word":
+                                fileHeadResource = R.drawable.word;
+                                break;
+                            case "ppt":
+                                fileHeadResource = R.drawable.ppt;
+                                break;
+                            case "excel":
+                                fileHeadResource = R.drawable.excel;
+                                break;
+                            case "pdf":
+                                fileHeadResource = R.drawable.pdf;
+                                break;
+                            case "music":
+                                fileHeadResource = R.drawable.music;
+                                break;
+                            case "video":
+                                fileHeadResource = R.drawable.video;
+                                break;
+                            case "file":
+                                fileHeadResource = R.drawable.unknow;
+                                break;
+                        }
+                        Glide.with(mContext)
+                                .load(fileHeadResource)
+                                .into(((UserChatLeftFileViewHolder) holder).file_type_img);
+                        if (mOnRecyclerViewItemClickListener != null) {
+                            ((UserChatLeftFileViewHolder) holder).file_msg_view.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                            ((UserChatLeftFileViewHolder) holder).file_msg_view.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
                                 menu.add(0, position, 0, "删除");
                                 menu.add(0, position, 1, "下载");
                                 menu.add(0, position, 2, "直链分享");
-                            }
-                        });
-                    }
-                } else {
-                    ((UserChatLeftFileViewHolder) holder).tv_file_msg.setVisibility(View.GONE);
-                    ((UserChatLeftFileViewHolder) holder).tv_file_name.setText("获取文件失败");
-                    if (mOnRecyclerViewItemClickListener != null) {
-                        ((UserChatRightFileViewHolder) holder).file_msg_view.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                            }
-                        });
-                        ((UserChatRightFileViewHolder) holder).file_msg_view.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                            @Override
-                            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                                menu.add(0, position, 0, "删除");
-                            }
-                        });
-                    }
-                }
-            } else if (holder instanceof UserChatRightFileViewHolder) {
-                if (showChoice) {
-                    ((UserChatRightFileViewHolder) holder).choice.setVisibility(View.VISIBLE);
-                    ((UserChatRightFileViewHolder) holder).choice.setChecked(choices[position]);
-                    ((UserChatRightFileViewHolder) holder).choice.setOnCheckStateChangedListener(new ImageViewCheckBox.OnCheckStateChangedListener() {
-                        @Override
-                        public void onCheckStateChanged(boolean isChecked) {
-                            choices[position] = isChecked;
+                            });
                         }
-                    });
-                } else {
-                    ((UserChatRightFileViewHolder) holder).choice.setVisibility(View.GONE);
-                }
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((UserChatRightFileViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((UserChatRightFileViewHolder) holder).tv_send_time.setText("");
-                }
-                if (msg.getIsSend()) {
-                    ((UserChatRightFileViewHolder) holder).sendFailed.setVisibility(View.GONE);
-                } else {
-                    ((UserChatRightFileViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
-                    ((UserChatRightFileViewHolder) holder).sendFailed.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (mOnRecyclerViewItemClickListener != null)
-                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
+                    } else {
+                        ((UserChatLeftFileViewHolder) holder).tv_file_msg.setVisibility(View.GONE);
+                        ((UserChatLeftFileViewHolder) holder).tv_file_name.setText("获取文件失败");
+                        if (mOnRecyclerViewItemClickListener != null) {
+                            ((UserChatRightFileViewHolder) holder).file_msg_view.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                            ((UserChatRightFileViewHolder) holder).file_msg_view.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
                         }
-                    });
-                }
-                Glide.with(mContext)
-                        .load(me.getU_head_img())
-
-
-                        .into(((UserChatRightFileViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((UserChatRightFileViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
-                }
-                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
-                if (msgFile != null) {
-                    ((UserChatRightFileViewHolder) holder).tv_file_name.setText("" + msgFile.getFilename());
+                    }
+                } else if (holder instanceof UserChatRightFileViewHolder) {
+                    if (showChoice) {
+                        ((UserChatRightFileViewHolder) holder).choice.setVisibility(View.VISIBLE);
+                        ((UserChatRightFileViewHolder) holder).choice.setChecked(choices[position]);
+                        ((UserChatRightFileViewHolder) holder).choice.setOnCheckStateChangedListener(isChecked -> choices[position] = isChecked);
+                    } else {
+                        ((UserChatRightFileViewHolder) holder).choice.setVisibility(View.GONE);
+                    }
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((UserChatRightFileViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
+                    } else {
+                        ((UserChatRightFileViewHolder) holder).tv_send_time.setText("");
+                    }
                     if (msg.getIsSend()) {
-                        ((UserChatRightFileViewHolder) holder).tv_file_msg.setText("发送成功");
+                        ((UserChatRightFileViewHolder) holder).sendFailed.setVisibility(View.GONE);
                     } else {
-                        ((UserChatRightFileViewHolder) holder).tv_file_msg.setText("发送失败");
-                    }
-                    int fileHeadResource = -1;
-                    if (msgFile.getFileType().equals("word")) {
-                        fileHeadResource = R.drawable.word;
-                    } else if (msgFile.getFileType().equals("ppt")) {
-                        fileHeadResource = R.drawable.ppt;
-                    } else if (msgFile.getFileType().equals("excel")) {
-                        fileHeadResource = R.drawable.excel;
-                    } else if (msgFile.getFileType().equals("pdf")) {
-                        fileHeadResource = R.drawable.pdf;
-                    } else if (msgFile.getFileType().equals("music")) {
-                        fileHeadResource = R.drawable.music;
-                    } else if (msgFile.getFileType().equals("video")) {
-                        fileHeadResource = R.drawable.video;
-                    } else if (msgFile.getFileType().equals("file")) {
-                        fileHeadResource = R.drawable.unknow;
+                        ((UserChatRightFileViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
+                        ((UserChatRightFileViewHolder) holder).sendFailed.setOnClickListener(v -> {
+                            if (mOnRecyclerViewItemClickListener != null)
+                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
+                        });
                     }
                     Glide.with(mContext)
-                            .load(fileHeadResource)
-
-
-                            .into(((UserChatRightFileViewHolder) holder).file_type_img);
-                } else {
-                    ((UserChatRightFileViewHolder) holder).tv_file_msg.setVisibility(View.GONE);
-                    ((UserChatRightFileViewHolder) holder).tv_file_name.setText("获取文件失败");
-
-                }
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((UserChatRightFileViewHolder) holder).file_msg_view.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mOnRecyclerViewItemClickListener.onItemClick(v, position);
+                            .load(me.getU_head_img())
+                            .into(((UserChatRightFileViewHolder) holder).headImg);
+                    if (mOnRecyclerViewItemClickListener != null) {
+                        ((UserChatRightFileViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                    }
+                    StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
+                    if (msgFile != null) {
+                        ((UserChatRightFileViewHolder) holder).tv_file_name.setText("" + msgFile.getFilename());
+                        if (msg.getIsSend()) {
+                            ((UserChatRightFileViewHolder) holder).tv_file_msg.setText("发送成功");
+                        } else {
+                            ((UserChatRightFileViewHolder) holder).tv_file_msg.setText("发送失败");
                         }
-                    });
-                    ((UserChatRightFileViewHolder) holder).file_msg_view.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                        @Override
-                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                            menu.add(0, position, 0, "删除");
+                        int fileHeadResource = -1;
+                        switch (msgFile.getFileType()) {
+                            case "word":
+                                fileHeadResource = R.drawable.word;
+                                break;
+                            case "ppt":
+                                fileHeadResource = R.drawable.ppt;
+                                break;
+                            case "excel":
+                                fileHeadResource = R.drawable.excel;
+                                break;
+                            case "pdf":
+                                fileHeadResource = R.drawable.pdf;
+                                break;
+                            case "music":
+                                fileHeadResource = R.drawable.music;
+                                break;
+                            case "video":
+                                fileHeadResource = R.drawable.video;
+                                break;
+                            case "file":
+                                fileHeadResource = R.drawable.unknow;
+                                break;
                         }
-                    });
-                }
-            } else if (holder instanceof UserChatLeftPicViewHolder) {
-                if (showChoice) {
-                    ((UserChatLeftPicViewHolder) holder).choice.setVisibility(View.VISIBLE);
-                    ((UserChatLeftPicViewHolder) holder).choice.setChecked(choices[position]);
-                    ((UserChatLeftPicViewHolder) holder).choice.setOnCheckStateChangedListener(new ImageViewCheckBox.OnCheckStateChangedListener() {
-                        @Override
-                        public void onCheckStateChanged(boolean isChecked) {
-                            choices[position] = isChecked;
-                        }
-                    });
-                } else {
-                    ((UserChatLeftPicViewHolder) holder).choice.setVisibility(View.GONE);
-                }
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((UserChatLeftPicViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((UserChatLeftPicViewHolder) holder).tv_send_time.setText("");
-                }
-                Glide.with(mContext)
-                        .load(other.getU_head_img())
+                        Glide.with(mContext)
+                                .load(fileHeadResource)
+                                .into(((UserChatRightFileViewHolder) holder).file_type_img);
+                    } else {
+                        ((UserChatRightFileViewHolder) holder).tv_file_msg.setVisibility(View.GONE);
+                        ((UserChatRightFileViewHolder) holder).tv_file_name.setText("获取文件失败");
 
-
-                        .into(((UserChatLeftPicViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((UserChatLeftPicViewHolder) holder).headImg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mOnRecyclerViewItemClickListener.onItemClick(v, position);
+                    }
+                    if (mOnRecyclerViewItemClickListener != null) {
+                        ((UserChatRightFileViewHolder) holder).file_msg_view.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                        ((UserChatRightFileViewHolder) holder).file_msg_view.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
+                    }
+                } else if (holder instanceof UserChatLeftPicViewHolder) {
+                    if (showChoice) {
+                        ((UserChatLeftPicViewHolder) holder).choice.setVisibility(View.VISIBLE);
+                        ((UserChatLeftPicViewHolder) holder).choice.setChecked(choices[position]);
+                        ((UserChatLeftPicViewHolder) holder).choice.setOnCheckStateChangedListener(isChecked -> choices[position] = isChecked);
+                    } else {
+                        ((UserChatLeftPicViewHolder) holder).choice.setVisibility(View.GONE);
+                    }
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((UserChatLeftPicViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
+                    } else {
+                        ((UserChatLeftPicViewHolder) holder).tv_send_time.setText("");
+                    }
+                    Glide.with(mContext)
+                            .load(other.getU_head_img())
+                            .into(((UserChatLeftPicViewHolder) holder).headImg);
+                    if (mOnRecyclerViewItemClickListener != null) {
+                        ((UserChatLeftPicViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                    }
+                    StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
+                    if (msgFile != null) {
+                        ViewGroup.LayoutParams params = ((UserChatLeftPicViewHolder) holder).msg_pic.getLayoutParams();
+                        params.width = width;
+                        ((UserChatLeftPicViewHolder) holder).msg_pic.setLayoutParams(params);
+                        ((UserChatLeftPicViewHolder) holder).msg_pic.setVisibility(View.VISIBLE);
+                        String link;
+                        if (msgFile.getLink().contains("http"))
+                            link = proxyCacheServer.getProxyUrl(msgFile.getLink());
+                        else
+                            link = msgFile.getLink();
+                        if (!photoMaps.contains(new photoMap(position, link)))
+                            photoMaps.add(new photoMap(position, link));
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(link)
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                        resource = getRoundedCornerBitmap(resource, 30f);
+                                        ((UserChatLeftPicViewHolder) holder).msg_pic.setImageBitmap(resource);
+                                    }
+                                });
+                        if (mOnRecyclerViewItemClickListener != null) {
+                            ((UserChatLeftPicViewHolder) holder).msg_pic.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                            ((UserChatLeftPicViewHolder) holder).msg_pic.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
                         }
-                    });
+                    }
+                } else if (holder instanceof UserChatRightPivViewHolder) {
+                    if (showChoice) {
+                        ((UserChatRightPivViewHolder) holder).choice.setVisibility(View.VISIBLE);
+                        ((UserChatRightPivViewHolder) holder).choice.setChecked(choices[position]);
+                        ((UserChatRightPivViewHolder) holder).choice.setOnCheckStateChangedListener(isChecked -> choices[position] = isChecked);
+                    } else {
+                        ((UserChatRightPivViewHolder) holder).choice.setVisibility(View.GONE);
+                    }
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((UserChatRightPivViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
+                    } else {
+                        ((UserChatRightPivViewHolder) holder).tv_send_time.setText("");
+                    }
+                    if (msg.getIsSend()) {
+                        ((UserChatRightPivViewHolder) holder).sendFailed.setVisibility(View.GONE);
+                    } else {
+                        ((UserChatRightPivViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
+                        ((UserChatRightPivViewHolder) holder).sendFailed.setOnClickListener(v -> {
+                            if (mOnRecyclerViewItemClickListener != null)
+                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
+                        });
+                    }
+                    Glide.with(mContext)
+                            .load(me.getU_head_img())
+                            .into(((UserChatRightPivViewHolder) holder).headImg);
+                    if (mOnRecyclerViewItemClickListener != null) {
+                        ((UserChatRightPivViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                    }
+                    StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
+                    if (msgFile != null) {
+                        String link = null;
+                        if (msgFile.getLink().contains("http"))
+                            link = proxyCacheServer.getProxyUrl(msgFile.getLink());
+                        else
+                            link = msgFile.getLink();
+                        if (!photoMaps.contains(new photoMap(position, link)))
+                            photoMaps.add(new photoMap(position, link));
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(link)
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                        resource = getRoundedCornerBitmap(resource, 30f);
+                                        ((UserChatRightPivViewHolder) holder).msg_pic.setImageBitmap(resource);
+                                    }
+                                });
+                        if (mOnRecyclerViewItemClickListener != null) {
+                            ((UserChatRightPivViewHolder) holder).msg_pic.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                            ((UserChatRightPivViewHolder) holder).msg_pic.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
+                        }
+                    }
+                } else if (holder instanceof UserChatLeftVoiceViewHolder) {
+                    if (showChoice) {
+                        ((UserChatLeftVoiceViewHolder) holder).choice.setVisibility(View.VISIBLE);
+                        ((UserChatLeftVoiceViewHolder) holder).choice.setChecked(choices[position]);
+                        ((UserChatLeftVoiceViewHolder) holder).choice.setOnCheckStateChangedListener(isChecked -> choices[position] = isChecked);
+                    } else {
+                        ((UserChatLeftVoiceViewHolder) holder).choice.setVisibility(View.GONE);
+                    }
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((UserChatLeftVoiceViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
+                    } else {
+                        ((UserChatLeftVoiceViewHolder) holder).tv_send_time.setText("");
+                    }
+                    Glide.with(mContext)
+                            .load(other.getU_head_img())
+                            .into(((UserChatLeftVoiceViewHolder) holder).headImg);
+                    if (mOnRecyclerViewItemClickListener != null) {
+                        ((UserChatLeftVoiceViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                    }
+                    StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
+                    if (msgFile != null) {
+                        ((UserChatLeftVoiceViewHolder) holder).voice_msg_view.setVisibility(View.VISIBLE);
+                        ((UserChatLeftVoiceViewHolder) holder).voice_play_state.setText("" + getVoiceLength(msgFile.getLink()));
+                        if (UserChatActivity.viocePlay.length > position && UserChatActivity.viocePlay[position]) {
+                            ((UserChatLeftVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.pause));
+                        } else {
+                            ((UserChatLeftVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.play));
+                        }
+                        if (mOnRecyclerViewItemClickListener != null) {
+                            ((UserChatLeftVoiceViewHolder) holder).voice_msg_view.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                            ((UserChatLeftVoiceViewHolder) holder).voice_msg_view.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
+                        }
+                    }
+                } else if (holder instanceof UserChatRightVoiceViewHolder) {
+                    if (showChoice) {
+                        ((UserChatRightVoiceViewHolder) holder).choice.setVisibility(View.VISIBLE);
+                        ((UserChatRightVoiceViewHolder) holder).choice.setChecked(choices[position]);
+                        ((UserChatRightVoiceViewHolder) holder).choice.setOnCheckStateChangedListener(isChecked -> choices[position] = isChecked);
+                    } else {
+                        ((UserChatRightVoiceViewHolder) holder).choice.setVisibility(View.GONE);
+                    }
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((UserChatRightVoiceViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
+                    } else {
+                        ((UserChatRightVoiceViewHolder) holder).tv_send_time.setText("");
+                    }
+                    if (msg.getIsSend()) {
+                        ((UserChatRightVoiceViewHolder) holder).sendFailed.setVisibility(View.GONE);
+                    } else {
+                        ((UserChatRightVoiceViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
+                        ((UserChatRightVoiceViewHolder) holder).sendFailed.setOnClickListener(v -> {
+                            if (mOnRecyclerViewItemClickListener != null)
+                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
+                        });
+                    }
+                    Glide.with(mContext)
+                            .load(me.getU_head_img())
+                            .into(((UserChatRightVoiceViewHolder) holder).headImg);
+                    if (mOnRecyclerViewItemClickListener != null) {
+                        ((UserChatRightVoiceViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                    }
+                    StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
+                    if (msgFile != null) {
+                        ((UserChatRightVoiceViewHolder) holder).voice_msg_view.setVisibility(View.VISIBLE);
+                        ((UserChatRightVoiceViewHolder) holder).voice_play_state.setText("" + getVoiceLength(msgFile.getLink()));
+                        if (UserChatActivity.viocePlay.length > position && UserChatActivity.viocePlay[position]) {
+                            ((UserChatRightVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.pause));
+                        } else {
+                            ((UserChatRightVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.play));
+                        }
+                        if (mOnRecyclerViewItemClickListener != null) {
+                            ((UserChatRightVoiceViewHolder) holder).voice_msg_view.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                            ((UserChatRightVoiceViewHolder) holder).voice_msg_view.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
+                        }
+                    }
                 }
-                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
-                if (msgFile != null) {
-                    ViewGroup.LayoutParams params = ((UserChatLeftPicViewHolder) holder).msg_pic.getLayoutParams();
-                    params.width = width;
-                    ((UserChatLeftPicViewHolder) holder).msg_pic.setLayoutParams(params);
-                    ((UserChatLeftPicViewHolder) holder).msg_pic.setVisibility(View.VISIBLE);
-                    String link = null;
-                    if (msgFile.getLink().contains("http"))
-                        link = proxyCacheServer.getProxyUrl(msgFile.getLink());
+            } else {
+                List<GroupMember> members = groupMemberDao.queryBuilder()
+                        .where(GroupMemberDao.Properties.U_id.eq(msg.getM_source_id()))
+                        .where(GroupMemberDao.Properties.G_id.eq(msg.getM_source_g_id()))
+                        .list();
+                GroupMember groupMember = null;
+                if (members.size() > 0) {
+                    groupMember = members.get(0);
+                }
+                if (holder instanceof GroupChatLeftNormalViewHolder) {
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((GroupChatLeftNormalViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
+                    } else {
+                        ((GroupChatLeftNormalViewHolder) holder).tv_send_time.setText("");
+                    }
+                    if (groupMember != null)
+                        ((GroupChatLeftNormalViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
+                    else if (other != null)
+                        ((GroupChatLeftNormalViewHolder) holder).tv_group_member_name.setText(other.getU_nick_name() + "");
                     else
-                        link = msgFile.getLink();
-                    if (!photoMaps.contains(new photoMap(position, link)))
-                        photoMaps.add(new photoMap(position, link));
+                        ((GroupChatLeftNormalViewHolder) holder).tv_group_member_name.setText("UnKnown");
                     Glide.with(mContext)
-                            .asBitmap()
-                            .load(link)
-
-
-                            .into(new SimpleTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                    resource = getRoundedCornerBitmap(resource, 30f);
-                                    ((UserChatLeftPicViewHolder) holder).msg_pic.setImageBitmap(resource);
-                                }
-                            });
+                            .load(other.getU_head_img())
+                            .into(((GroupChatLeftNormalViewHolder) holder).headImg);
                     if (mOnRecyclerViewItemClickListener != null) {
-                        ((UserChatLeftPicViewHolder) holder).msg_pic.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                            }
-                        });
-                        ((UserChatLeftPicViewHolder) holder).msg_pic.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                            @Override
-                            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                                menu.add(0, position, 0, "删除");
-                            }
-                        });
+                        ((GroupChatLeftNormalViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
                     }
-                }
-            } else if (holder instanceof UserChatRightPivViewHolder) {
-                if (showChoice) {
-                    ((UserChatRightPivViewHolder) holder).choice.setVisibility(View.VISIBLE);
-                    ((UserChatRightPivViewHolder) holder).choice.setChecked(choices[position]);
-                    ((UserChatRightPivViewHolder) holder).choice.setOnCheckStateChangedListener(new ImageViewCheckBox.OnCheckStateChangedListener() {
+                    ((GroupChatLeftNormalViewHolder) holder).msg_content.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
                         @Override
-                        public void onCheckStateChanged(boolean isChecked) {
-                            choices[position] = isChecked;
+                        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                            return false;
                         }
-                    });
-                } else {
-                    ((UserChatRightPivViewHolder) holder).choice.setVisibility(View.GONE);
-                }
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((UserChatRightPivViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((UserChatRightPivViewHolder) holder).tv_send_time.setText("");
-                }
-                if (msg.getIsSend()) {
-                    ((UserChatRightPivViewHolder) holder).sendFailed.setVisibility(View.GONE);
-                } else {
-                    ((UserChatRightPivViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
-                    ((UserChatRightPivViewHolder) holder).sendFailed.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (mOnRecyclerViewItemClickListener != null)
-                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                        }
-                    });
-                }
-                Glide.with(mContext)
-                        .load(me.getU_head_img())
 
-
-                        .into(((UserChatRightPivViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((UserChatRightPivViewHolder) holder).headImg.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
-                            mOnRecyclerViewItemClickListener.onItemClick(v, position);
+                        public void onDestroyActionMode(ActionMode mode) {
+                        }
+
+                        @Override
+                        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                            //这里可以添加自己的菜单选项（前提是要返回true的）
+                            menu.add(1, 2, 0, "删除");
+                            return true;//返回false 就是屏蔽ActionMode菜单
+                        }
+
+                        @Override
+                        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                            mOnRecyclerViewItemClickListener.onItemMenuClick(((GroupChatLeftNormalViewHolder) holder).msg_content, position, item.getItemId());
+                            return false;
                         }
                     });
-                }
-                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
-                if (msgFile != null) {
-                    String link = null;
-                    if (msgFile.getLink().contains("http"))
-                        link = proxyCacheServer.getProxyUrl(msgFile.getLink());
+                    ((GroupChatLeftNormalViewHolder) holder).msg_content.setText(StringUtil.formatFileMessage(msg.getM_content()));
+                } else if (holder instanceof GroupChatRightNormalViewHolder) {
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((GroupChatRightNormalViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
+                    } else {
+                        ((GroupChatRightNormalViewHolder) holder).tv_send_time.setText("");
+                    }
+                    if (groupMember != null)
+                        ((GroupChatRightNormalViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
                     else
-                        link = msgFile.getLink();
-                    if (!photoMaps.contains(new photoMap(position, link)))
-                        photoMaps.add(new photoMap(position, link));
+                        ((GroupChatRightNormalViewHolder) holder).tv_group_member_name.setText(me.getU_nick_name() + "");
+                    if (msg.getIsSend()) {
+                        ((GroupChatRightNormalViewHolder) holder).sendFailed.setVisibility(View.GONE);
+                    } else {
+                        ((GroupChatRightNormalViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
+                        ((GroupChatRightNormalViewHolder) holder).sendFailed.setOnClickListener(v -> {
+                            if (mOnRecyclerViewItemClickListener != null)
+                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
+                        });
+                    }
                     Glide.with(mContext)
-                            .asBitmap()
-                            .load(link)
-
-
-                            .into(new SimpleTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                    resource = getRoundedCornerBitmap(resource, 30f);
-                                    ((UserChatRightPivViewHolder) holder).msg_pic.setImageBitmap(resource);
-                                }
-                            });
+                            .load(me.getU_head_img())
+                            .into(((GroupChatRightNormalViewHolder) holder).headImg);
                     if (mOnRecyclerViewItemClickListener != null) {
-                        ((UserChatRightPivViewHolder) holder).msg_pic.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                            }
-                        });
-                        ((UserChatRightPivViewHolder) holder).msg_pic.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                            @Override
-                            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                                menu.add(0, position, 0, "删除");
-                            }
-                        });
+                        ((GroupChatRightNormalViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
                     }
-                }
-            } else if (holder instanceof UserChatLeftVoiceViewHolder) {
-                if (showChoice) {
-                    ((UserChatLeftVoiceViewHolder) holder).choice.setVisibility(View.VISIBLE);
-                    ((UserChatLeftVoiceViewHolder) holder).choice.setChecked(choices[position]);
-                    ((UserChatLeftVoiceViewHolder) holder).choice.setOnCheckStateChangedListener(new ImageViewCheckBox.OnCheckStateChangedListener() {
+                    ((GroupChatRightNormalViewHolder) holder).msg_content.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
                         @Override
-                        public void onCheckStateChanged(boolean isChecked) {
-                            choices[position] = isChecked;
+                        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                            return false;
+                        }
+
+                        @Override
+                        public void onDestroyActionMode(ActionMode mode) {
+                        }
+
+                        @Override
+                        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                            //这里可以添加自己的菜单选项（前提是要返回true的）
+                            menu.add(1, 2, 0, "删除");
+                            return true;//返回false 就是屏蔽ActionMode菜单
+                        }
+
+                        @Override
+                        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                            mOnRecyclerViewItemClickListener.onItemMenuClick(((GroupChatRightNormalViewHolder) holder).msg_content, position, item.getItemId());
+                            return false;
                         }
                     });
-                } else {
-                    ((UserChatLeftVoiceViewHolder) holder).choice.setVisibility(View.GONE);
-                }
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((UserChatLeftVoiceViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((UserChatLeftVoiceViewHolder) holder).tv_send_time.setText("");
-                }
-                Glide.with(mContext)
-                        .load(other.getU_head_img())
-
-
-                        .into(((UserChatLeftVoiceViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((UserChatLeftVoiceViewHolder) holder).headImg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                        }
-                    });
-                }
-                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
-                if (msgFile != null) {
-                    ((UserChatLeftVoiceViewHolder) holder).voice_msg_view.setVisibility(View.VISIBLE);
-                    ((UserChatLeftVoiceViewHolder) holder).voice_play_state.setText("" + getVoiceLength(msgFile.getLink()));
-                    if (UserChatActivity.viocePlay.length > position && UserChatActivity.viocePlay[position]) {
-                        ((UserChatLeftVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.pause));
+                    ((GroupChatRightNormalViewHolder) holder).msg_content.setText(StringUtil.formatFileMessage(msg.getM_content()));
+                } else if (holder instanceof GroupChatLeftFileViewHolder) {
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((GroupChatLeftFileViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
                     } else {
-                        ((UserChatLeftVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.play));
+                        ((GroupChatLeftFileViewHolder) holder).tv_send_time.setText("");
                     }
+                    if (groupMember != null)
+                        ((GroupChatLeftFileViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
+                    else if (other != null)
+                        ((GroupChatLeftFileViewHolder) holder).tv_group_member_name.setText(other.getU_nick_name() + "");
+                    else
+                        ((GroupChatLeftFileViewHolder) holder).tv_group_member_name.setText("UnKnown");
+                    Glide.with(mContext)
+                            .load(other.getU_head_img())
+                            .into(((GroupChatLeftFileViewHolder) holder).headImg);
                     if (mOnRecyclerViewItemClickListener != null) {
-                        ((UserChatLeftVoiceViewHolder) holder).voice_msg_view.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
+                        ((GroupChatLeftFileViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                    }
+                    StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
+                    if (msgFile != null) {
+                        ((GroupChatLeftFileViewHolder) holder).tv_file_name.setText("" + msgFile.getFilename());
+                        if (msgFile.getLink().contains("http")) {
+                            if (msg.getDownloadState() == 0)
+                                ((GroupChatLeftFileViewHolder) holder).tv_file_msg.setText("在线文件");
+                            else if (msg.getDownloadState() == 1) {
+                                ((GroupChatLeftFileViewHolder) holder).tv_file_msg.setText("正在下载");
+                            } else if (msg.getDownloadState() == 2) {
+                                ((GroupChatLeftFileViewHolder) holder).tv_file_msg.setText("下载失败");
+                            } else if (msg.getDownloadState() == 3) {
+                                ((GroupChatLeftFileViewHolder) holder).tv_file_msg.setText("下载暂停");
+                            } else if (msg.getDownloadState() == 4) {
+                                ((GroupChatLeftFileViewHolder) holder).tv_file_msg.setText("已下载");
                             }
-                        });
-                        ((UserChatLeftVoiceViewHolder) holder).voice_msg_view.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                            @Override
-                            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                                menu.add(0, position, 0, "删除");
-                            }
-                        });
-                    }
-                }
-            } else if (holder instanceof UserChatRightVoiceViewHolder) {
-                if (showChoice) {
-                    ((UserChatRightVoiceViewHolder) holder).choice.setVisibility(View.VISIBLE);
-                    ((UserChatRightVoiceViewHolder) holder).choice.setChecked(choices[position]);
-                    ((UserChatRightVoiceViewHolder) holder).choice.setOnCheckStateChangedListener(new ImageViewCheckBox.OnCheckStateChangedListener() {
-                        @Override
-                        public void onCheckStateChanged(boolean isChecked) {
-                            choices[position] = isChecked;
-                        }
-                    });
-                } else {
-                    ((UserChatRightVoiceViewHolder) holder).choice.setVisibility(View.GONE);
-                }
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((UserChatRightVoiceViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((UserChatRightVoiceViewHolder) holder).tv_send_time.setText("");
-                }
-                if (msg.getIsSend()) {
-                    ((UserChatRightVoiceViewHolder) holder).sendFailed.setVisibility(View.GONE);
-                } else {
-                    ((UserChatRightVoiceViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
-                    ((UserChatRightVoiceViewHolder) holder).sendFailed.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (mOnRecyclerViewItemClickListener != null)
-                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                        }
-                    });
-                }
-                Glide.with(mContext)
-                        .load(me.getU_head_img())
-
-
-                        .into(((UserChatRightVoiceViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((UserChatRightVoiceViewHolder) holder).headImg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                        }
-                    });
-                }
-                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
-                if (msgFile != null) {
-                    ((UserChatRightVoiceViewHolder) holder).voice_msg_view.setVisibility(View.VISIBLE);
-                    ((UserChatRightVoiceViewHolder) holder).voice_play_state.setText("" + getVoiceLength(msgFile.getLink()));
-                    if (UserChatActivity.viocePlay.length > position && UserChatActivity.viocePlay[position]) {
-                        ((UserChatRightVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.pause));
-                    } else {
-                        ((UserChatRightVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.play));
-                    }
-                    if (mOnRecyclerViewItemClickListener != null) {
-                        ((UserChatRightVoiceViewHolder) holder).voice_msg_view.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                            }
-                        });
-                        ((UserChatRightVoiceViewHolder) holder).voice_msg_view.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                            @Override
-                            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                                menu.add(0, position, 0, "删除");
-                            }
-                        });
-                    }
-                }
-            }
-        } else {
-            List<GroupMember> members = groupMemberDao.queryBuilder()
-                    .where(GroupMemberDao.Properties.U_id.eq(msg.getM_source_id()))
-                    .where(GroupMemberDao.Properties.G_id.eq(msg.getM_source_g_id()))
-                    .list();
-            GroupMember groupMember = null;
-            if (members.size() > 0) {
-                groupMember = members.get(0);
-            }
-            if (holder instanceof GroupChatLeftNormalViewHolder) {
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((GroupChatLeftNormalViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((GroupChatLeftNormalViewHolder) holder).tv_send_time.setText("");
-                }
-                if (groupMember != null)
-                    ((GroupChatLeftNormalViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
-                else if (other != null)
-                    ((GroupChatLeftNormalViewHolder) holder).tv_group_member_name.setText(other.getU_nick_name() + "");
-                else
-                    ((GroupChatLeftNormalViewHolder) holder).tv_group_member_name.setText("UnKnown");
-                Glide.with(mContext)
-                        .load(other.getU_head_img())
-
-
-                        .into(((GroupChatLeftNormalViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((GroupChatLeftNormalViewHolder) holder).headImg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                        }
-                    });
-                }
-                ((GroupChatLeftNormalViewHolder) holder).msg_content.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
-                    @Override
-                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onDestroyActionMode(ActionMode mode) {
-                    }
-
-                    @Override
-                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                        //这里可以添加自己的菜单选项（前提是要返回true的）
-                        menu.add(1, 2, 0, "删除");
-                        return true;//返回false 就是屏蔽ActionMode菜单
-                    }
-
-                    @Override
-                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                        mOnRecyclerViewItemClickListener.onItemMenuClick(((GroupChatLeftNormalViewHolder) holder).msg_content, position, item.getItemId());
-                        return false;
-                    }
-                });
-                ((GroupChatLeftNormalViewHolder) holder).msg_content.setText(StringUtil.formatFileMessage(msg.getM_content()));
-            } else if (holder instanceof GroupChatRightNormalViewHolder) {
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((GroupChatRightNormalViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((GroupChatRightNormalViewHolder) holder).tv_send_time.setText("");
-                }
-                if (groupMember != null)
-                    ((GroupChatRightNormalViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
-                else
-                    ((GroupChatRightNormalViewHolder) holder).tv_group_member_name.setText(me.getU_nick_name() + "");
-                if (msg.getIsSend()) {
-                    ((GroupChatRightNormalViewHolder) holder).sendFailed.setVisibility(View.GONE);
-                } else {
-                    ((GroupChatRightNormalViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
-                    ((GroupChatRightNormalViewHolder) holder).sendFailed.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (mOnRecyclerViewItemClickListener != null)
-                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                        }
-                    });
-                }
-                Glide.with(mContext)
-                        .load(me.getU_head_img())
-
-
-                        .into(((GroupChatRightNormalViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((GroupChatRightNormalViewHolder) holder).headImg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                        }
-                    });
-                }
-                ((GroupChatRightNormalViewHolder) holder).msg_content.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
-                    @Override
-                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onDestroyActionMode(ActionMode mode) {
-                    }
-
-                    @Override
-                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                        //这里可以添加自己的菜单选项（前提是要返回true的）
-                        menu.add(1, 2, 0, "删除");
-                        return true;//返回false 就是屏蔽ActionMode菜单
-                    }
-
-                    @Override
-                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                        mOnRecyclerViewItemClickListener.onItemMenuClick(((GroupChatRightNormalViewHolder) holder).msg_content, position, item.getItemId());
-                        return false;
-                    }
-                });
-                ((GroupChatRightNormalViewHolder) holder).msg_content.setText(StringUtil.formatFileMessage(msg.getM_content()));
-            } else if (holder instanceof GroupChatLeftFileViewHolder) {
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((GroupChatLeftFileViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((GroupChatLeftFileViewHolder) holder).tv_send_time.setText("");
-                }
-                if (groupMember != null)
-                    ((GroupChatLeftFileViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
-                else if (other != null)
-                    ((GroupChatLeftFileViewHolder) holder).tv_group_member_name.setText(other.getU_nick_name() + "");
-                else
-                    ((GroupChatLeftFileViewHolder) holder).tv_group_member_name.setText("UnKnown");
-                Glide.with(mContext)
-                        .load(other.getU_head_img())
-
-
-                        .into(((GroupChatLeftFileViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((GroupChatLeftFileViewHolder) holder).headImg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                        }
-                    });
-                }
-                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
-                if (msgFile != null) {
-                    ((GroupChatLeftFileViewHolder) holder).tv_file_name.setText("" + msgFile.getFilename());
-                    if (msgFile.getLink().contains("http")) {
-                        if (msg.getDownloadState() == 0)
-                            ((GroupChatLeftFileViewHolder) holder).tv_file_msg.setText("在线文件");
-                        else if (msg.getDownloadState() == 1) {
-                            ((GroupChatLeftFileViewHolder) holder).tv_file_msg.setText("正在下载");
-                        } else if (msg.getDownloadState() == 2) {
-                            ((GroupChatLeftFileViewHolder) holder).tv_file_msg.setText("下载失败");
-                        } else if (msg.getDownloadState() == 3) {
-                            ((GroupChatLeftFileViewHolder) holder).tv_file_msg.setText("下载暂停");
-                        } else if (msg.getDownloadState() == 4) {
+                        } else {
                             ((GroupChatLeftFileViewHolder) holder).tv_file_msg.setText("已下载");
                         }
-                    } else {
-                        ((GroupChatLeftFileViewHolder) holder).tv_file_msg.setText("已下载");
-                    }
-                    int fileHeadResource = -1;
-                    if (msgFile.getFileType().equals("word")) {
-                        fileHeadResource = R.drawable.word;
-                    } else if (msgFile.getFileType().equals("ppt")) {
-                        fileHeadResource = R.drawable.ppt;
-                    } else if (msgFile.getFileType().equals("excel")) {
-                        fileHeadResource = R.drawable.excel;
-                    } else if (msgFile.getFileType().equals("pdf")) {
-                        fileHeadResource = R.drawable.pdf;
-                    } else if (msgFile.getFileType().equals("music")) {
-                        fileHeadResource = R.drawable.music;
-                    } else if (msgFile.getFileType().equals("video")) {
-                        fileHeadResource = R.drawable.video;
-                    } else if (msgFile.getFileType().equals("file")) {
-                        fileHeadResource = R.drawable.unknow;
-                    }
-                    Glide.with(mContext)
-                            .load(fileHeadResource)
-
-
-                            .into(((GroupChatLeftFileViewHolder) holder).file_type_img);
-                    if (mOnRecyclerViewItemClickListener != null) {
-                        ((GroupChatLeftFileViewHolder) holder).file_msg_view.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                            }
-                        });
-                        ((GroupChatLeftFileViewHolder) holder).file_msg_view.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                            @Override
-                            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                        int fileHeadResource = -1;
+                        switch (msgFile.getFileType()) {
+                            case "word":
+                                fileHeadResource = R.drawable.word;
+                                break;
+                            case "ppt":
+                                fileHeadResource = R.drawable.ppt;
+                                break;
+                            case "excel":
+                                fileHeadResource = R.drawable.excel;
+                                break;
+                            case "pdf":
+                                fileHeadResource = R.drawable.pdf;
+                                break;
+                            case "music":
+                                fileHeadResource = R.drawable.music;
+                                break;
+                            case "video":
+                                fileHeadResource = R.drawable.video;
+                                break;
+                            case "file":
+                                fileHeadResource = R.drawable.unknow;
+                                break;
+                        }
+                        Glide.with(mContext)
+                                .load(fileHeadResource)
+                                .into(((GroupChatLeftFileViewHolder) holder).file_type_img);
+                        if (mOnRecyclerViewItemClickListener != null) {
+                            ((GroupChatLeftFileViewHolder) holder).file_msg_view.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                            ((GroupChatLeftFileViewHolder) holder).file_msg_view.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
                                 menu.add(0, position, 0, "删除");
                                 menu.add(0, position, 1, "下载");
-                            }
-                        });
+                            });
+                        }
+                    } else {
+                        ((GroupChatLeftFileViewHolder) holder).tv_file_msg.setVisibility(View.GONE);
+                        ((GroupChatLeftFileViewHolder) holder).tv_file_name.setText("获取文件失败");
+                        if (mOnRecyclerViewItemClickListener != null) {
+                            ((GroupChatLeftFileViewHolder) holder).file_msg_view.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                            ((GroupChatLeftFileViewHolder) holder).file_msg_view.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
+                        }
                     }
-                } else {
-                    ((GroupChatLeftFileViewHolder) holder).tv_file_msg.setVisibility(View.GONE);
-                    ((GroupChatLeftFileViewHolder) holder).tv_file_name.setText("获取文件失败");
-                    if (mOnRecyclerViewItemClickListener != null) {
-                        ((GroupChatLeftFileViewHolder) holder).file_msg_view.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                            }
-                        });
-                        ((GroupChatLeftFileViewHolder) holder).file_msg_view.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                            @Override
-                            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                                menu.add(0, position, 0, "删除");
-                            }
-                        });
+                } else if (holder instanceof GroupChatRightFileViewHolder) {
+                    User me = userDao.load(LoginActivity.loginUser.getU_id());
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((GroupChatRightFileViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
+                    } else {
+                        ((GroupChatRightFileViewHolder) holder).tv_send_time.setText("");
                     }
-                }
-            } else if (holder instanceof GroupChatRightFileViewHolder) {
-                User me = userDao.load(LoginActivity.loginUser.getU_id());
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((GroupChatRightFileViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((GroupChatRightFileViewHolder) holder).tv_send_time.setText("");
-                }
-                if (groupMember != null)
-                    ((GroupChatRightFileViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
-                else
-                    ((GroupChatRightFileViewHolder) holder).tv_group_member_name.setText(me.getU_nick_name() + "");
-                if (msg.getIsSend()) {
-                    ((GroupChatRightFileViewHolder) holder).sendFailed.setVisibility(View.GONE);
-                } else {
-                    ((GroupChatRightFileViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
-                    ((GroupChatRightFileViewHolder) holder).sendFailed.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                    if (groupMember != null)
+                        ((GroupChatRightFileViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
+                    else
+                        ((GroupChatRightFileViewHolder) holder).tv_group_member_name.setText(me.getU_nick_name() + "");
+                    if (msg.getIsSend()) {
+                        ((GroupChatRightFileViewHolder) holder).sendFailed.setVisibility(View.GONE);
+                    } else {
+                        ((GroupChatRightFileViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
+                        ((GroupChatRightFileViewHolder) holder).sendFailed.setOnClickListener(v -> {
                             if (mOnRecyclerViewItemClickListener != null)
                                 mOnRecyclerViewItemClickListener.onItemClick(v, position);
+                        });
+                    }
+                    Glide.with(mContext)
+                            .load(me.getU_head_img())
+                            .into(((GroupChatRightFileViewHolder) holder).headImg);
+                    if (mOnRecyclerViewItemClickListener != null) {
+                        ((GroupChatRightFileViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                    }
+                    StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
+                    if (msgFile != null) {
+                        ((GroupChatRightFileViewHolder) holder).tv_file_name.setText("" + msgFile.getFilename());
+                        if (msg.getIsSend()) {
+                            ((GroupChatRightFileViewHolder) holder).tv_file_msg.setText("发送成功");
+                        } else {
+                            ((GroupChatRightFileViewHolder) holder).tv_file_msg.setText("发送失败");
                         }
-                    });
-                }
-                Glide.with(mContext)
-                        .load(me.getU_head_img())
-
-
-                        .into(((GroupChatRightFileViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((GroupChatRightFileViewHolder) holder).headImg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mOnRecyclerViewItemClickListener.onItemClick(v, position);
+                        int fileHeadResource = -1;
+                        switch (msgFile.getFileType()) {
+                            case "word":
+                                fileHeadResource = R.drawable.word;
+                                break;
+                            case "ppt":
+                                fileHeadResource = R.drawable.ppt;
+                                break;
+                            case "excel":
+                                fileHeadResource = R.drawable.excel;
+                                break;
+                            case "pdf":
+                                fileHeadResource = R.drawable.pdf;
+                                break;
+                            case "music":
+                                fileHeadResource = R.drawable.music;
+                                break;
+                            case "video":
+                                fileHeadResource = R.drawable.video;
+                                break;
+                            case "file":
+                                fileHeadResource = R.drawable.unknow;
+                                break;
                         }
-                    });
-                }
-                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
-                if (msgFile != null) {
-                    ((GroupChatRightFileViewHolder) holder).tv_file_name.setText("" + msgFile.getFilename());
+                        Glide.with(mContext)
+                                .load(fileHeadResource)
+                                .into(((GroupChatRightFileViewHolder) holder).file_type_img);
+                        if (mOnRecyclerViewItemClickListener != null) {
+                            ((GroupChatRightFileViewHolder) holder).file_msg_view.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                            ((GroupChatRightFileViewHolder) holder).file_msg_view.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
+                        }
+                    } else {
+                        ((GroupChatRightFileViewHolder) holder).tv_file_msg.setVisibility(View.GONE);
+                        ((GroupChatRightFileViewHolder) holder).tv_file_name.setText("获取文件失败");
+                        if (mOnRecyclerViewItemClickListener != null) {
+                            ((GroupChatRightFileViewHolder) holder).file_msg_view.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                            ((GroupChatRightFileViewHolder) holder).file_msg_view.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
+                        }
+                    }
+                } else if (holder instanceof GroupChatLeftPicViewHolder) {
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((GroupChatLeftPicViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
+                    } else {
+                        ((GroupChatLeftPicViewHolder) holder).tv_send_time.setText("");
+                    }
+                    if (groupMember != null)
+                        ((GroupChatLeftPicViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
+                    else if (other != null)
+                        ((GroupChatLeftPicViewHolder) holder).tv_group_member_name.setText(other.getU_nick_name() + "");
+                    else
+                        ((GroupChatLeftPicViewHolder) holder).tv_group_member_name.setText("UnKnown");
+                    Glide.with(mContext)
+                            .load(other.getU_head_img())
+                            .into(((GroupChatLeftPicViewHolder) holder).headImg);
+                    if (mOnRecyclerViewItemClickListener != null) {
+                        ((GroupChatLeftPicViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                    }
+                    StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
+                    if (msgFile != null) {
+                        ViewGroup.LayoutParams params = ((GroupChatLeftPicViewHolder) holder).msg_pic.getLayoutParams();
+                        params.width = width;
+                        ((GroupChatLeftPicViewHolder) holder).msg_pic.setLayoutParams(params);
+                        ((GroupChatLeftPicViewHolder) holder).msg_pic.setVisibility(View.VISIBLE);
+                        String link;
+                        if (msgFile.getLink().contains("http"))
+                            link = proxyCacheServer.getProxyUrl(msgFile.getLink());
+                        else
+                            link = msgFile.getLink();
+                        if (!photoMaps.contains(new photoMap(position, link)))
+                            photoMaps.add(new photoMap(position, link));
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(link)
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                        resource = getRoundedCornerBitmap(resource, 30f);
+                                        ((GroupChatLeftPicViewHolder) holder).msg_pic.setImageBitmap(resource);
+                                    }
+                                });
+                        if (mOnRecyclerViewItemClickListener != null) {
+                            ((GroupChatLeftPicViewHolder) holder).msg_pic.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                            ((GroupChatLeftPicViewHolder) holder).msg_pic.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
+                        }
+                    }
+                } else if (holder instanceof GroupChatRightPicViewHolder) {
+                    User me = userDao.load(LoginActivity.loginUser.getU_id());
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((GroupChatRightPicViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
+                    } else {
+                        ((GroupChatRightPicViewHolder) holder).tv_send_time.setText("");
+                    }
+                    if (groupMember != null)
+                        ((GroupChatRightPicViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
+                    else
+                        ((GroupChatRightPicViewHolder) holder).tv_group_member_name.setText(me.getU_nick_name() + "");
                     if (msg.getIsSend()) {
-                        ((GroupChatRightFileViewHolder) holder).tv_file_msg.setText("发送成功");
+                        ((GroupChatRightPicViewHolder) holder).sendFailed.setVisibility(View.GONE);
                     } else {
-                        ((GroupChatRightFileViewHolder) holder).tv_file_msg.setText("发送失败");
-                    }
-                    int fileHeadResource = -1;
-                    if (msgFile.getFileType().equals("word")) {
-                        fileHeadResource = R.drawable.word;
-                    } else if (msgFile.getFileType().equals("ppt")) {
-                        fileHeadResource = R.drawable.ppt;
-                    } else if (msgFile.getFileType().equals("excel")) {
-                        fileHeadResource = R.drawable.excel;
-                    } else if (msgFile.getFileType().equals("pdf")) {
-                        fileHeadResource = R.drawable.pdf;
-                    } else if (msgFile.getFileType().equals("music")) {
-                        fileHeadResource = R.drawable.music;
-                    } else if (msgFile.getFileType().equals("video")) {
-                        fileHeadResource = R.drawable.video;
-                    } else if (msgFile.getFileType().equals("file")) {
-                        fileHeadResource = R.drawable.unknow;
-                    }
-                    Glide.with(mContext)
-                            .load(fileHeadResource)
-
-
-                            .into(((GroupChatRightFileViewHolder) holder).file_type_img);
-                    if (mOnRecyclerViewItemClickListener != null) {
-                        ((GroupChatRightFileViewHolder) holder).file_msg_view.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                        ((GroupChatRightPicViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
+                        ((GroupChatRightPicViewHolder) holder).sendFailed.setOnClickListener(v -> {
+                            if (mOnRecyclerViewItemClickListener != null)
                                 mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                            }
-                        });
-                        ((GroupChatRightFileViewHolder) holder).file_msg_view.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                            @Override
-                            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                                menu.add(0, position, 0, "删除");
-                            }
                         });
                     }
-                } else {
-                    ((GroupChatRightFileViewHolder) holder).tv_file_msg.setVisibility(View.GONE);
-                    ((GroupChatRightFileViewHolder) holder).tv_file_name.setText("获取文件失败");
-                    if (mOnRecyclerViewItemClickListener != null) {
-                        ((GroupChatRightFileViewHolder) holder).file_msg_view.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
-                        ((GroupChatRightFileViewHolder) holder).file_msg_view.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
-                    }
-                }
-            } else if (holder instanceof GroupChatLeftPicViewHolder) {
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((GroupChatLeftPicViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((GroupChatLeftPicViewHolder) holder).tv_send_time.setText("");
-                }
-                if (groupMember != null)
-                    ((GroupChatLeftPicViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
-                else if (other != null)
-                    ((GroupChatLeftPicViewHolder) holder).tv_group_member_name.setText(other.getU_nick_name() + "");
-                else
-                    ((GroupChatLeftPicViewHolder) holder).tv_group_member_name.setText("UnKnown");
-                Glide.with(mContext)
-                        .load(other.getU_head_img())
-
-
-                        .into(((GroupChatLeftPicViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((GroupChatLeftPicViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
-                }
-                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
-                if (msgFile != null) {
-                    ViewGroup.LayoutParams params = ((GroupChatLeftPicViewHolder) holder).msg_pic.getLayoutParams();
-                    params.width = width;
-                    ((GroupChatLeftPicViewHolder) holder).msg_pic.setLayoutParams(params);
-                    ((GroupChatLeftPicViewHolder) holder).msg_pic.setVisibility(View.VISIBLE);
-                    String link = null;
-                    if (msgFile.getLink().contains("http"))
-                        link = proxyCacheServer.getProxyUrl(msgFile.getLink());
-                    else
-                        link = msgFile.getLink();
-                    if (!photoMaps.contains(new photoMap(position, link)))
-                        photoMaps.add(new photoMap(position, link));
                     Glide.with(mContext)
-                            .asBitmap()
-                            .load(link)
-                            .into(new SimpleTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                    resource = getRoundedCornerBitmap(resource, 30f);
-                                    ((GroupChatLeftPicViewHolder) holder).msg_pic.setImageBitmap(resource);
-                                }
-                            });
+                            .load(me.getU_head_img())
+                            .into(((GroupChatRightPicViewHolder) holder).headImg);
                     if (mOnRecyclerViewItemClickListener != null) {
-                        ((GroupChatLeftPicViewHolder) holder).msg_pic.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
-                        ((GroupChatLeftPicViewHolder) holder).msg_pic.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
+                        ((GroupChatRightPicViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
                     }
-                }
-            } else if (holder instanceof GroupChatRightPicViewHolder) {
-                User me = userDao.load(LoginActivity.loginUser.getU_id());
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((GroupChatRightPicViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((GroupChatRightPicViewHolder) holder).tv_send_time.setText("");
-                }
-                if (groupMember != null)
-                    ((GroupChatRightPicViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
-                else
-                    ((GroupChatRightPicViewHolder) holder).tv_group_member_name.setText(me.getU_nick_name() + "");
-                if (msg.getIsSend()) {
-                    ((GroupChatRightPicViewHolder) holder).sendFailed.setVisibility(View.GONE);
-                } else {
-                    ((GroupChatRightPicViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
-                    ((GroupChatRightPicViewHolder) holder).sendFailed.setOnClickListener(v -> {
-                        if (mOnRecyclerViewItemClickListener != null)
-                            mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                    });
-                }
-                Glide.with(mContext)
-                        .load(me.getU_head_img())
-
-
-                        .into(((GroupChatRightPicViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((GroupChatRightPicViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
-                }
-                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
-                if (msgFile != null) {
-                    String link = null;
-                    if (msgFile.getLink().contains("http"))
-                        link = proxyCacheServer.getProxyUrl(msgFile.getLink());
-                    else
-                        link = msgFile.getLink();
-                    if (!photoMaps.contains(new photoMap(position, link)))
-                        photoMaps.add(new photoMap(position, link));
-                    Glide.with(mContext)
-                            .asBitmap()
-                            .load(link)
-
-
-                            .into(new SimpleTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                    resource = getRoundedCornerBitmap(resource, 30f);
-                                    ((GroupChatRightPicViewHolder) holder).msg_pic.setImageBitmap(resource);
-                                }
-                            });
-                    if (mOnRecyclerViewItemClickListener != null) {
-                        ((GroupChatRightPicViewHolder) holder).msg_pic.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
-                        ((GroupChatRightPicViewHolder) holder).msg_pic.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
+                    StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
+                    if (msgFile != null) {
+                        String link = null;
+                        if (msgFile.getLink().contains("http"))
+                            link = proxyCacheServer.getProxyUrl(msgFile.getLink());
+                        else
+                            link = msgFile.getLink();
+                        if (!photoMaps.contains(new photoMap(position, link)))
+                            photoMaps.add(new photoMap(position, link));
+                        Glide.with(mContext)
+                                .asBitmap()
+                                .load(link)
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                        resource = getRoundedCornerBitmap(resource, 30f);
+                                        ((GroupChatRightPicViewHolder) holder).msg_pic.setImageBitmap(resource);
+                                    }
+                                });
+                        if (mOnRecyclerViewItemClickListener != null) {
+                            ((GroupChatRightPicViewHolder) holder).msg_pic.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                            ((GroupChatRightPicViewHolder) holder).msg_pic.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
+                        }
                     }
-                }
-            } else if (holder instanceof GroupChatLeftVoiceViewHolder) {
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((GroupChatLeftVoiceViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((GroupChatLeftVoiceViewHolder) holder).tv_send_time.setText("");
-                }
-                if (groupMember != null)
-                    ((GroupChatLeftVoiceViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
-                else if (other != null)
-                    ((GroupChatLeftVoiceViewHolder) holder).tv_group_member_name.setText(other.getU_nick_name() + "");
-                else
-                    ((GroupChatLeftVoiceViewHolder) holder).tv_group_member_name.setText("UnKnown");
-                Glide.with(mContext)
-                        .load(other.getU_head_img())
-
-
-                        .into(((GroupChatLeftVoiceViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((GroupChatLeftVoiceViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
-                }
-                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
-                if (msgFile != null) {
-                    ((GroupChatLeftVoiceViewHolder) holder).voice_msg_view.setVisibility(View.VISIBLE);
-                    ((GroupChatLeftVoiceViewHolder) holder).voice_play_state.setText("" + getVoiceLength(msgFile.getLink()));
-                    if (GroupChatActivity.viocePlay.length > position && GroupChatActivity.viocePlay[position]) {
-                        ((GroupChatLeftVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.pause));
+                } else if (holder instanceof GroupChatLeftVoiceViewHolder) {
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((GroupChatLeftVoiceViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
                     } else {
-                        ((GroupChatLeftVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.play));
+                        ((GroupChatLeftVoiceViewHolder) holder).tv_send_time.setText("");
                     }
+                    if (groupMember != null)
+                        ((GroupChatLeftVoiceViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
+                    else if (other != null)
+                        ((GroupChatLeftVoiceViewHolder) holder).tv_group_member_name.setText(other.getU_nick_name() + "");
+                    else
+                        ((GroupChatLeftVoiceViewHolder) holder).tv_group_member_name.setText("UnKnown");
+                    Glide.with(mContext)
+                            .load(other.getU_head_img())
+                            .into(((GroupChatLeftVoiceViewHolder) holder).headImg);
                     if (mOnRecyclerViewItemClickListener != null) {
-                        ((GroupChatLeftVoiceViewHolder) holder).voice_msg_view.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
-                        ((GroupChatLeftVoiceViewHolder) holder).voice_msg_view.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                            @Override
-                            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                                menu.add(0, position, 0, "删除");
-                            }
+                        ((GroupChatLeftVoiceViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                    }
+                    StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
+                    if (msgFile != null) {
+                        ((GroupChatLeftVoiceViewHolder) holder).voice_msg_view.setVisibility(View.VISIBLE);
+                        ((GroupChatLeftVoiceViewHolder) holder).voice_play_state.setText("" + getVoiceLength(msgFile.getLink()));
+                        if (GroupChatActivity.viocePlay.length > position && GroupChatActivity.viocePlay[position]) {
+                            ((GroupChatLeftVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.pause));
+                        } else {
+                            ((GroupChatLeftVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.play));
+                        }
+                        if (mOnRecyclerViewItemClickListener != null) {
+                            ((GroupChatLeftVoiceViewHolder) holder).voice_msg_view.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                            ((GroupChatLeftVoiceViewHolder) holder).voice_msg_view.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
+                        }
+                    }
+                } else if (holder instanceof GroupChatRightVoiceViewHolder) {
+                    User me = userDao.load(LoginActivity.loginUser.getU_id());
+                    if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
+                        //第一条消息或两条信息之间超过10分钟则显示发送时间
+                        ((GroupChatRightVoiceViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
+                    } else {
+                        ((GroupChatRightVoiceViewHolder) holder).tv_send_time.setText("");
+                    }
+                    if (groupMember != null)
+                        ((GroupChatRightVoiceViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
+                    else
+                        ((GroupChatRightVoiceViewHolder) holder).tv_group_member_name.setText(me.getU_nick_name() + "");
+                    if (msg.getIsSend()) {
+                        ((GroupChatRightVoiceViewHolder) holder).sendFailed.setVisibility(View.GONE);
+                    } else {
+                        ((GroupChatRightVoiceViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
+                        ((GroupChatRightVoiceViewHolder) holder).sendFailed.setOnClickListener(v -> {
+                            if (mOnRecyclerViewItemClickListener != null)
+                                mOnRecyclerViewItemClickListener.onItemClick(v, position);
                         });
                     }
-                }
-            } else if (holder instanceof GroupChatRightVoiceViewHolder) {
-                User me = userDao.load(LoginActivity.loginUser.getU_id());
-                if (lastMsg == null || (msg.getM_send_time() - lastMsg.getM_send_time()) > 10 * 60 * 1000) {
-                    //第一条消息或两条信息之间超过10分钟则显示发送时间
-                    ((GroupChatRightVoiceViewHolder) holder).tv_send_time.setText(TimeUtil.QQFormatTime(msg.getM_send_time()));
-                } else {
-                    ((GroupChatRightVoiceViewHolder) holder).tv_send_time.setText("");
-                }
-                if (groupMember != null)
-                    ((GroupChatRightVoiceViewHolder) holder).tv_group_member_name.setText(groupMember.getG_nick_name() + "");
-                else
-                    ((GroupChatRightVoiceViewHolder) holder).tv_group_member_name.setText(me.getU_nick_name() + "");
-                if (msg.getIsSend()) {
-                    ((GroupChatRightVoiceViewHolder) holder).sendFailed.setVisibility(View.GONE);
-                } else {
-                    ((GroupChatRightVoiceViewHolder) holder).sendFailed.setVisibility(View.VISIBLE);
-                    ((GroupChatRightVoiceViewHolder) holder).sendFailed.setOnClickListener(v -> {
-                        if (mOnRecyclerViewItemClickListener != null)
-                            mOnRecyclerViewItemClickListener.onItemClick(v, position);
-                    });
-                }
-                Glide.with(mContext)
-                        .load(me.getU_head_img())
-
-
-                        .into(((GroupChatRightVoiceViewHolder) holder).headImg);
-                if (mOnRecyclerViewItemClickListener != null) {
-                    ((GroupChatRightVoiceViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
-                }
-                StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
-                if (msgFile != null) {
-                    ((GroupChatRightVoiceViewHolder) holder).voice_msg_view.setVisibility(View.VISIBLE);
-                    ((GroupChatRightVoiceViewHolder) holder).voice_play_state.setText("" + getVoiceLength(msgFile.getLink()));
-                    if (GroupChatActivity.viocePlay.length > position && GroupChatActivity.viocePlay[position]) {
-                        ((GroupChatRightVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.pause));
-                    } else {
-                        ((GroupChatRightVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.play));
-                    }
+                    Glide.with(mContext)
+                            .load(me.getU_head_img())
+                            .into(((GroupChatRightVoiceViewHolder) holder).headImg);
                     if (mOnRecyclerViewItemClickListener != null) {
-                        ((GroupChatRightVoiceViewHolder) holder).voice_msg_view.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
-                        ((GroupChatRightVoiceViewHolder) holder).voice_msg_view.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
+                        ((GroupChatRightVoiceViewHolder) holder).headImg.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                    }
+                    StringUtil.MsgFile msgFile = StringUtil.getMsgFile(msg.getM_content());
+                    if (msgFile != null) {
+                        ((GroupChatRightVoiceViewHolder) holder).voice_msg_view.setVisibility(View.VISIBLE);
+                        ((GroupChatRightVoiceViewHolder) holder).voice_play_state.setText("" + getVoiceLength(msgFile.getLink()));
+                        if (GroupChatActivity.viocePlay.length > position && GroupChatActivity.viocePlay[position]) {
+                            ((GroupChatRightVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.pause));
+                        } else {
+                            ((GroupChatRightVoiceViewHolder) holder).voice_play_control.setImageDrawable(mContext.getResources().getDrawable(R.drawable.play));
+                        }
+                        if (mOnRecyclerViewItemClickListener != null) {
+                            ((GroupChatRightVoiceViewHolder) holder).voice_msg_view.setOnClickListener(v -> mOnRecyclerViewItemClickListener.onItemClick(v, position));
+                            ((GroupChatRightVoiceViewHolder) holder).voice_msg_view.setOnCreateContextMenuListener((menu, v, menuInfo) -> menu.add(0, position, 0, "删除"));
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -1339,9 +1122,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     /**
      * 获取在线音频时间长度
-     *
-     * @param url
-     * @return
      */
     private String getVoiceLength(String url) {
         if (url.contains("http"))
@@ -1373,7 +1153,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         else return 0;
     }
 
-    public class photoMap {
+    public static class photoMap {
         public photoMap(int position, String url) {
             this.position = position;
             this.url = url;
@@ -1413,7 +1193,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class UserChatLeftNormalViewHolder extends RecyclerView.ViewHolder {
+
         @BindView(R.id.l_u_head_img)
         ImageView headImg;
         @BindView(R.id.tv_send_time)
@@ -1429,6 +1211,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class UserChatRightNormalViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.r_u_head_img)
         ImageView headImg;
@@ -1447,6 +1230,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class UserChatLeftFileViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.l_u_head_img)
         ImageView headImg;
@@ -1469,6 +1253,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class UserChatRightFileViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.r_u_head_img)
         ImageView headImg;
@@ -1493,6 +1278,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class UserChatLeftPicViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.l_u_head_img)
         ImageView headImg;
@@ -1509,6 +1295,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class UserChatRightPivViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.r_u_head_img)
         ImageView headImg;
@@ -1527,6 +1314,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class UserChatLeftVoiceViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.l_u_head_img)
         ImageView headImg;
@@ -1547,6 +1335,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class UserChatRightVoiceViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.r_u_head_img)
         ImageView headImg;
@@ -1569,6 +1358,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class GroupChatLeftNormalViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.l_g_head_img)
         ImageView headImg;
@@ -1585,6 +1375,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class GroupChatRightNormalViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.r_g_head_img)
         ImageView headImg;
@@ -1603,6 +1394,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class GroupChatLeftFileViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.l_g_head_img)
         ImageView headImg;
@@ -1625,6 +1417,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class GroupChatRightFileViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.r_g_head_img)
         ImageView headImg;
@@ -1649,6 +1442,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class GroupChatLeftPicViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.l_g_head_img)
         ImageView headImg;
@@ -1665,6 +1459,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class GroupChatRightPicViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.r_g_head_img)
         ImageView headImg;
@@ -1683,6 +1478,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class GroupChatLeftVoiceViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.l_g_head_img)
         ImageView headImg;
@@ -1703,6 +1499,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class GroupChatRightVoiceViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.r_g_head_img)
         ImageView headImg;
@@ -1724,5 +1521,4 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ButterKnife.bind(this, view);
         }
     }
-
 }

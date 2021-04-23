@@ -15,7 +15,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class PostPresenter extends RxPresenter<ShowPostContract.View> implements ShowPostContract.Presenter<ShowPostContract.View> {
-    private FlyMessageApi flyMessageApi;
+    private final FlyMessageApi flyMessageApi;
 
     @Inject
     public PostPresenter(FlyMessageApi flyMessageApi) {

@@ -24,24 +24,25 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MessageRecordPresenter extends RxPresenter<MessageRecordContract.View> implements MessageRecordContract.Presenter<MessageRecordContract.View>{
-    private MessageDao messageDao= FlyMessageApplication.getInstances().getDaoSession().getMessageDao();
-    private ChatDao chatDao=FlyMessageApplication.getInstances().getDaoSession().getChatDao();
+public class MessageRecordPresenter extends RxPresenter<MessageRecordContract.View> implements MessageRecordContract.Presenter<MessageRecordContract.View> {
+    private final MessageDao messageDao = FlyMessageApplication.getInstances().getDaoSession().getMessageDao();
+    private final ChatDao chatDao = FlyMessageApplication.getInstances().getDaoSession().getChatDao();
     private Chat userChat;
-    private FlyMessageApi flyMessageApi;
+    private final FlyMessageApi flyMessageApi;
+
     @Inject
     public MessageRecordPresenter(FlyMessageApi flyMessageApi) {
         this.flyMessageApi = flyMessageApi;
     }
 
     @Override
-    public void getMessages(int pageSize, int pageIndex,long object_u_id) {
-        userChat=chatDao.queryBuilder()
+    public void getMessages(int pageSize, int pageIndex, long object_u_id) {
+        userChat = chatDao.queryBuilder()
                 .where(ChatDao.Properties.Source_id.eq(object_u_id))
                 .where(ChatDao.Properties.Object_u_id.eq(LoginActivity.loginUser.getU_id()))
                 .where(ChatDao.Properties.Chat_type.eq(0))
                 .unique();
-        Subscription rxSubscription = flyMessageApi.getRecordMessage(pageSize,pageIndex,object_u_id).subscribeOn(Schedulers.io())
+        Subscription rxSubscription = flyMessageApi.getRecordMessage(pageSize, pageIndex, object_u_id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<MessageModel>() {
                     @Override
@@ -59,19 +60,19 @@ public class MessageRecordPresenter extends RxPresenter<MessageRecordContract.Vi
 
                     public void onNext(MessageModel messageModel) {
                         if (messageModel != null && mView != null && messageModel.code == Constant.SUCCESS) {
-                            List<Message> messages=messageModel.getMessages();
-                            for (Message message:
-                                 messages) {
+                            List<Message> messages = messageModel.getMessages();
+                            for (Message message :
+                                    messages) {
                                 message.setLogin_u_id(LoginActivity.loginUser.getU_id());
                                 message.setIsSend(true);
                                 message.setCId(userChat.getC_id());
                                 messageDao.insertOrReplace(message);
                             }
                             mView.initMessages((ArrayList<Message>) messages);
-                            UserChatActivity.resultRefresh=true;
-                        }else if (messageModel!=null){
+                            UserChatActivity.resultRefresh = true;
+                        } else if (messageModel != null) {
                             mView.showError(messageModel.msg);
-                        }else {
+                        } else {
                             mView.showError("获取聊天记录失败");
                         }
                     }
@@ -101,9 +102,9 @@ public class MessageRecordPresenter extends RxPresenter<MessageRecordContract.Vi
                         if (base != null && mView != null && base.code == Constant.SUCCESS) {
                             messageDao.delete(message);
                             mView.complete();
-                        }else if (base!=null){
-                            mView.showError(base.msg+"M_Id:"+message.getM_id());
-                        }else {
+                        } else if (base != null) {
+                            mView.showError(base.msg + "M_Id:" + message.getM_id());
+                        } else {
                             mView.showError("删除聊天记录失败");
                         }
                     }

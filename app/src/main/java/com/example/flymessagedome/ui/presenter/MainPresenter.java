@@ -1,7 +1,5 @@
 package com.example.flymessagedome.ui.presenter;
 
-import android.text.TextUtils;
-
 import com.example.flymessagedome.api.FlyMessageApi;
 import com.example.flymessagedome.base.RxPresenter;
 import com.example.flymessagedome.model.GroupModel;
@@ -18,8 +16,8 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainPresenter extends RxPresenter<MainContract.View>  implements MainContract.Presenter<MainContract.View>{
-    private FlyMessageApi flyMessageApi;
+public class MainPresenter extends RxPresenter<MainContract.View> implements MainContract.Presenter<MainContract.View> {
+    private final FlyMessageApi flyMessageApi;
 
     @Inject
     public MainPresenter(FlyMessageApi flyMessageApi) {
@@ -28,9 +26,9 @@ public class MainPresenter extends RxPresenter<MainContract.View>  implements Ma
 
     @Override
     public void reConnectService(MessageService.MessageServiceBinder serviceBinder) {
-        String u_name=SharedPreferencesUtil.getInstance().getString(Constant.U_NAME);
-        String u_pass=SharedPreferencesUtil.getInstance().getString(Constant.U_PASS);
-        Subscription rxSubscription = flyMessageApi.getLogin(u_name,u_pass).subscribeOn(Schedulers.io())
+        String u_name = SharedPreferencesUtil.getInstance().getString(Constant.U_NAME);
+        String u_pass = SharedPreferencesUtil.getInstance().getString(Constant.U_PASS);
+        Subscription rxSubscription = flyMessageApi.getLogin(u_name, u_pass).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Login>() {
                     @Override
@@ -47,9 +45,9 @@ public class MainPresenter extends RxPresenter<MainContract.View>  implements Ma
                     @Override
                     public void onNext(Login login) {
                         if (login != null && mView != null && login.code == Constant.SUCCESS) {
-                            SharedPreferencesUtil.getInstance().putString(Constant.LOGIN_TOKEN,login.getToken());
+                            SharedPreferencesUtil.getInstance().putString(Constant.LOGIN_TOKEN, login.getToken());
                             serviceBinder.connect();
-                        }else {
+                        } else {
                             mView.reConnectFailed(login);
                         }
                     }
@@ -59,8 +57,8 @@ public class MainPresenter extends RxPresenter<MainContract.View>  implements Ma
 
     @Override
     public void getGroupMsg(int g_id) {
-        String loginToken= SharedPreferencesUtil.getInstance().getString("loginToken");
-        Subscription rxSubscription = flyMessageApi.getGroupMsg(g_id,loginToken).subscribeOn(Schedulers.io())
+        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+        Subscription rxSubscription = flyMessageApi.getGroupMsg(g_id, loginToken).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<GroupModel>() {
                     @Override
@@ -78,9 +76,9 @@ public class MainPresenter extends RxPresenter<MainContract.View>  implements Ma
                     public void onNext(GroupModel groupModel) {
                         if (groupModel != null && mView != null && groupModel.code == Constant.SUCCESS) {
                             mView.initGroupMsg(groupModel.getGroup());
-                        }else if (groupModel!=null){
+                        } else if (groupModel != null) {
                             mView.showError(groupModel.msg);
-                        }else {
+                        } else {
                             mView.showError("获取群聊信息失败");
                         }
                     }

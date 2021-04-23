@@ -149,59 +149,88 @@ public class EditPostActivity extends BaseActivity implements EditPostContract.V
 
     @Override
     public void editSuccess() {
-        ArrayList<Integer> removeItemIds = new ArrayList<>();
-        for (String photo : mPhotosSnpl.getData()) {
-            if (photo.contains("com.example.flymessagedome/cache/video-cache")) {
-                for (int i = 0; i < postBean.getPostItems().size(); i++) {
-                    Post.PostBean.PostItemsBean postItem = postBean.getPostItems().get(i);
-                    if (proxy.getProxyUrl(postItem.getCommunity_post_item_url()).equals(photo)) {
-                        postBean.getPostItems().remove(i);
-                        break;
+        try {
+            ArrayList<Integer> removeItemIds = new ArrayList<>();
+            for (String photo : mPhotosSnpl.getData()) {
+                if (photo.contains("com.example.flymessagedome/cache/video-cache")) {
+                    for (int i = 0; i < postBean.getPostItems().size(); i++) {
+                        Post.PostBean.PostItemsBean postItem = postBean.getPostItems().get(i);
+                        if (proxy.getProxyUrl(postItem.getCommunity_post_item_url()).equals(photo)) {
+                            postBean.getPostItems().remove(i);
+                            break;
+                        }
                     }
+                } else {
+                    addPhotos.add(photo);
                 }
-            } else {
-                addPhotos.add(photo);
             }
-        }
-        for (Post.PostBean.PostItemsBean postItem : postBean.getPostItems()) {
-            removeItemIds.add(postItem.getCommunity_post_item_id());
-        }
-        Intent result = new Intent();
-        result.putStringArrayListExtra("photos", addPhotos);
-        setResult(2, result);
-        if (removeItemIds.size() > 0) {
-            postPresenter.removeItems(removeItemIds);
-        } else {
-            dismissLoadingDialog();
-            finish();
+            for (Post.PostBean.PostItemsBean postItem : postBean.getPostItems()) {
+                removeItemIds.add(postItem.getCommunity_post_item_id());
+            }
+            Intent result = new Intent();
+            result.putStringArrayListExtra("photos", addPhotos);
+            setResult(2, result);
+            if (removeItemIds.size() > 0) {
+                postPresenter.removeItems(removeItemIds);
+            } else {
+                dismissLoadingDialog();
+                finish();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void removeFailed() {
-        dismissLoadingDialog();
-        finish();
+        try {
+            dismissLoadingDialog();
+            finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public void removeSuccess() {
-        dismissLoadingDialog();
-        finish();
+        try {
+            dismissLoadingDialog();
+            finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public void showError() {
-        dismissLoadingDialog();
+        try {
+            dismissLoadingDialog();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public void showError(String msg) {
-        dismissLoadingDialog();
+        try {
+            dismissLoadingDialog();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public void complete() {
-        dismissLoadingDialog();
+        try {
+            dismissLoadingDialog();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

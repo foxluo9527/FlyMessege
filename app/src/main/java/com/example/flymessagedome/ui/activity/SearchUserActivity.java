@@ -1,10 +1,8 @@
 package com.example.flymessagedome.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -15,7 +13,6 @@ import android.widget.TextView;
 import com.example.flymessagedome.R;
 import com.example.flymessagedome.base.BaseActivity;
 import com.example.flymessagedome.component.AppComponent;
-import com.example.flymessagedome.model.GroupModel;
 import com.example.flymessagedome.model.Users;
 import com.example.flymessagedome.utils.Constant;
 import com.example.flymessagedome.utils.HttpRequest;
@@ -25,7 +22,9 @@ import com.example.flymessagedome.utils.ToastUtils;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+@SuppressLint("NonConstantResourceId")
 public class SearchUserActivity extends BaseActivity {
+
     @BindView(R.id.search_person)
     View person;
     @BindView(R.id.search_person_tv)
@@ -44,10 +43,11 @@ public class SearchUserActivity extends BaseActivity {
         return R.layout.activity_search_user;
     }
 
-    @OnClick({R.id.cancel,R.id.cancel_btn,R.id.search_group,R.id.search_person})
-    public void onViewClick(View view){
-        String words=searchEt.getText().toString();
-        switch (view.getId()){
+    @SuppressLint("StaticFieldLeak")
+    @OnClick({R.id.cancel, R.id.cancel_btn, R.id.search_group, R.id.search_person})
+    public void onViewClick(View view) {
+        String words = searchEt.getText().toString();
+        switch (view.getId()) {
             case R.id.cancel:
                 person.setVisibility(View.GONE);
                 group.setVisibility(View.GONE);
@@ -58,42 +58,47 @@ public class SearchUserActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.search_person:
-                new AsyncTask<Void,Void, Users>() {
+                new AsyncTask<Void, Void, Users>() {
                     @Override
                     protected Users doInBackground(Void... voids) {
-                        String loginToken= SharedPreferencesUtil.getInstance().getString("loginToken");
-                        if (loginToken==null){
+                        String loginToken = SharedPreferencesUtil.getInstance().getString("loginToken");
+                        if (loginToken == null) {
                             return null;
                         }
-                        return HttpRequest.getUserMsg(words,loginToken);
+                        return HttpRequest.getUserMsg(words, loginToken);
                     }
+
                     @Override
                     protected void onPostExecute(Users users) {
-                        if (users!=null&&users.code== Constant.SUCCESS){
-                            if (users.getUser()!=null){
-                                if (users.getUser().getU_id()!=LoginActivity.loginUser.getU_id()){
-                                    Intent intent=new Intent(SearchUserActivity.this,ShowUserActivity.class);
-                                    intent.putExtra("userName",users.getUser().getU_name());
-                                    startActivity(intent);
-                                }else {
-                                    startActivity(new Intent(mContext,LoginUserMsgActivity.class));
+                        try {
+                            if (users != null && users.code == Constant.SUCCESS) {
+                                if (users.getUser() != null) {
+                                    if (users.getUser().getU_id() != LoginActivity.loginUser.getU_id()) {
+                                        Intent intent = new Intent(SearchUserActivity.this, ShowUserActivity.class);
+                                        intent.putExtra("userName", users.getUser().getU_name());
+                                        startActivity(intent);
+                                    } else {
+                                        startActivity(new Intent(mContext, LoginUserMsgActivity.class));
+                                    }
                                 }
+                            } else if (users == null || users.code == Constant.NOT_LOGIN || users.code == Constant.TOKEN_EXCEED) {
+                                ToastUtils.showToast("获取登录用户信息失败");
+                                finish();
+                            } else {
+                                Intent intent = new Intent(SearchUserActivity.this, SearchResultActivity.class);
+                                intent.putExtra("searchWords", words);
+                                startActivity(intent);
+                                finish();
                             }
-                        }else if (users==null||users.code==Constant.NOT_LOGIN||users.code==Constant.TOKEN_EXCEED){
-                            ToastUtils.showToast("获取登录用户信息失败");
-                            finish();
-                        }else {
-                            Intent intent=new Intent(SearchUserActivity.this,SearchResultActivity.class);
-                            intent.putExtra("searchWords",words);
-                            startActivity(intent);
-                            finish();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 }.execute();
                 break;
             case R.id.search_group:
-                Intent intent=new Intent(SearchUserActivity.this,SearchGroupResultActivity.class);
-                intent.putExtra("searchWords",words);
+                Intent intent = new Intent(SearchUserActivity.this, SearchGroupResultActivity.class);
+                intent.putExtra("searchWords", words);
                 startActivity(intent);
                 finish();
                 break;
@@ -120,15 +125,16 @@ public class SearchUserActivity extends BaseActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().length()>0){
-                    personTv.setText("找人"+s);
-                    groupTv.setText("找群"+s);
+                if (s.toString().length() > 0) {
+                    personTv.setText("找人" + s);
+                    groupTv.setText("找群" + s);
                     person.setVisibility(View.VISIBLE);
                     group.setVisibility(View.VISIBLE);
                     cancel.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     person.setVisibility(View.GONE);
                     group.setVisibility(View.GONE);
                     cancel.setVisibility(View.GONE);

@@ -17,10 +17,11 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class ContractAddPresenter extends RxPresenter<AddContract.View> implements AddContract.Presenter<AddContract.View>{
-    private FlyMessageApi flyMessageApi;
-    private int nowIndex=0;
-    private int allIndex=0;
+public class ContractAddPresenter extends RxPresenter<AddContract.View> implements AddContract.Presenter<AddContract.View> {
+    private final FlyMessageApi flyMessageApi;
+    private int nowIndex = 0;
+    private int allIndex = 0;
+
     @Inject
     public ContractAddPresenter(FlyMessageApi flyMessageApi) {
         this.flyMessageApi = flyMessageApi;
@@ -36,8 +37,9 @@ public class ContractAddPresenter extends RxPresenter<AddContract.View> implemen
             }
         }
     }
-    private void getUser(PhoneInfo info){
-        Subscription rxSubscription = flyMessageApi.searchUser(info.getPhone(),1,1).subscribeOn(Schedulers.io())
+
+    private void getUser(PhoneInfo info) {
+        Subscription rxSubscription = flyMessageApi.searchUser(info.getPhone(), 1, 1).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<SearchUserModel>() {
                     @Override
@@ -54,8 +56,8 @@ public class ContractAddPresenter extends RxPresenter<AddContract.View> implemen
                     public void onNext(SearchUserModel searchUserModel) {
                         nowIndex++;
                         if (searchUserModel != null && mView != null && searchUserModel.code == Constant.SUCCESS) {
-                            if (searchUserModel.getResult().size()>0){
-                                mView.initResult(searchUserModel.getResult().get(0),info,nowIndex>=allIndex);
+                            if (searchUserModel.getResult().size() > 0) {
+                                mView.initResult(searchUserModel.getResult().get(0), info, nowIndex >= allIndex);
                             }
                         }
                     }

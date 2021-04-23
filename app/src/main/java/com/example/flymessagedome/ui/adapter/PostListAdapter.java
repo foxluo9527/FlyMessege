@@ -18,7 +18,6 @@ import com.example.flymessagedome.FlyMessageApplication;
 import com.example.flymessagedome.R;
 import com.example.flymessagedome.model.PostListResult;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
     ArrayList<PostListResult.PostsBean> postsBeans;
     OnPostClickListener listener;
     Context context;
-    private HttpProxyCacheServer proxyCacheServer;
+    private final HttpProxyCacheServer proxyCacheServer;
 
     public PostListAdapter(ArrayList<PostListResult.PostsBean> postsBeans, Context context) {
         this.postsBeans = postsBeans;
@@ -53,36 +52,40 @@ public class PostListAdapter extends RecyclerView.Adapter {
     @SuppressLint({"SimpleDateFormat", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ViewHolder viewHolder = (ViewHolder) holder;
-        PostListResult.PostsBean post = postsBeans.get(position);
-        Glide.with(context).load(proxyCacheServer.getProxyUrl(post.getU_head())).into(viewHolder.uHead);
-        viewHolder.uName.setText(post.getU_nick_name());
-        viewHolder.time.setText(QQFormatTime(post.getCreateTime()));
-        viewHolder.content.setText(post.getCommunityPostContent());
-        viewHolder.content.setVisibility(TextUtils.isEmpty(post.getCommunityPostContent()) ? View.GONE : View.VISIBLE);
-        viewHolder.discussNum.setText("" + post.getCommentCount());
-        viewHolder.zanNum.setText("" + post.getZanCount());
-        viewHolder.sawNum.setText("" + post.getShowCount());
-        viewHolder.zanState.setImageDrawable(post.getZan_state() == 0 ? context.getResources().getDrawable(R.drawable.zan) : context.getResources().getDrawable(R.drawable.zan_sel));
-        ArrayList<String> items = new ArrayList<>();
-        for (PostListResult.PostsBean.PostItemsBean postItem : post.getPostItems()) {
-            items.add(proxyCacheServer.getProxyUrl(postItem.getCommunity_post_item_url()));
+        try {
+            ViewHolder viewHolder = (ViewHolder) holder;
+            PostListResult.PostsBean post = postsBeans.get(position);
+            Glide.with(context).load(proxyCacheServer.getProxyUrl(post.getU_head())).into(viewHolder.uHead);
+            viewHolder.uName.setText(post.getU_nick_name());
+            viewHolder.time.setText(QQFormatTime(post.getCreateTime()));
+            viewHolder.content.setText(post.getCommunityPostContent());
+            viewHolder.content.setVisibility(TextUtils.isEmpty(post.getCommunityPostContent()) ? View.GONE : View.VISIBLE);
+            viewHolder.discussNum.setText("" + post.getCommentCount());
+            viewHolder.zanNum.setText("" + post.getZanCount());
+            viewHolder.sawNum.setText("" + post.getShowCount());
+            viewHolder.zanState.setImageDrawable(post.getZan_state() == 0 ? context.getResources().getDrawable(R.drawable.zan) : context.getResources().getDrawable(R.drawable.zan_sel));
+            ArrayList<String> items = new ArrayList<>();
+            for (PostListResult.PostsBean.PostItemsBean postItem : post.getPostItems()) {
+                items.add(proxyCacheServer.getProxyUrl(postItem.getCommunity_post_item_url()));
+            }
+            viewHolder.items.setData(items);
+            viewHolder.items.setDelegate(new BGANinePhotoLayout.Delegate() {
+                @Override
+                public void onClickNinePhotoItem(BGANinePhotoLayout ninePhotoLayout, View view, int index, String model, List<String> models) {
+                    listener.clickItemPosition(ninePhotoLayout.getData(), index, position);
+                }
+
+                @Override
+                public void onClickExpand(BGANinePhotoLayout ninePhotoLayout, View view, int position, String model, List<String> models) {
+
+                }
+            });
+            viewHolder.zanView.setOnClickListener(v -> listener.clickZan(position));
+            viewHolder.itemView.setOnClickListener(v -> listener.clickPost(position));
+            viewHolder.uHead.setOnClickListener(v -> listener.clickHead(position));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        viewHolder.items.setData(items);
-        viewHolder.items.setDelegate(new BGANinePhotoLayout.Delegate() {
-            @Override
-            public void onClickNinePhotoItem(BGANinePhotoLayout ninePhotoLayout, View view, int index, String model, List<String> models) {
-                listener.clickItemPosition(ninePhotoLayout.getData(),index,position);
-            }
-
-            @Override
-            public void onClickExpand(BGANinePhotoLayout ninePhotoLayout, View view, int position, String model, List<String> models) {
-
-            }
-        });
-        viewHolder.zanView.setOnClickListener(v -> listener.clickZan(position));
-        viewHolder.itemView.setOnClickListener(v -> listener.clickPost(position));
-        viewHolder.uHead.setOnClickListener(v -> listener.clickHead(position));
     }
 
     @Override
@@ -91,6 +94,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
     }
 
     @SuppressLint("NonConstantResourceId")
+    static
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.head)
         ImageView uHead;
@@ -112,6 +116,7 @@ public class PostListAdapter extends RecyclerView.Adapter {
         BGANinePhotoLayout items;
         @BindView(R.id.zan_view)
         View zanView;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -136,8 +141,9 @@ public class PostListAdapter extends RecyclerView.Adapter {
 
         /**
          * 点击图片
+         *
          * @param itemPosition 图片位置
          */
-        void clickItemPosition(ArrayList<String> datas,int itemPosition,int position);
+        void clickItemPosition(ArrayList<String> datas, int itemPosition, int position);
     }
 }

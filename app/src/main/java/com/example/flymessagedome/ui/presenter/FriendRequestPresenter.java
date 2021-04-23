@@ -19,7 +19,7 @@ import rx.schedulers.Schedulers;
 
 public class FriendRequestPresenter extends RxPresenter<FriendRequestContract.View> implements FriendRequestContract.Presenter<FriendRequestContract.View> {
     ArrayList<FriendRequestModel.FriendRequestsBean> friendRequests;
-    private FlyMessageApi flyMessageApi;
+    private final FlyMessageApi flyMessageApi;
 
     @Inject
     public FriendRequestPresenter(FlyMessageApi flyMessageApi) {
@@ -132,10 +132,8 @@ public class FriendRequestPresenter extends RxPresenter<FriendRequestContract.Vi
                                 case Constant.TOKEN_EXCEED:
                                     String u_name = SharedPreferencesUtil.getInstance().getString(Constant.U_NAME);
                                     String u_pass = SharedPreferencesUtil.getInstance().getString(Constant.U_PASS);
-                                    if (u_name != null && u_pass != null) {
-                                        mView.initFriendRequest(null);
-                                    } else {
-                                        mView.initFriendRequest(null);
+                                    mView.initFriendRequest(null);
+                                    if (u_name == null || u_pass == null) {
                                         friendRequests = null;
                                     }
                                     break;

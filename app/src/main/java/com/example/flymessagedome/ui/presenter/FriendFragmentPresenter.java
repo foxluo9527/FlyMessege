@@ -1,12 +1,12 @@
 package com.example.flymessagedome.ui.presenter;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
 import com.example.flymessagedome.FlyMessageApplication;
 import com.example.flymessagedome.api.FlyMessageApi;
 import com.example.flymessagedome.base.RxPresenter;
 import com.example.flymessagedome.bean.FriendRequest;
-import com.example.flymessagedome.bean.FriendRequestDao;
 import com.example.flymessagedome.bean.FriendsBean;
 import com.example.flymessagedome.bean.FriendsBeanDao;
 import com.example.flymessagedome.bean.UserBean;
@@ -33,11 +33,10 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class FriendFragmentPresenter extends RxPresenter<FriendContract.View> implements FriendContract.Presenter<FriendContract.View> {
-    private FlyMessageApi flyMessageApi;
+    private final FlyMessageApi flyMessageApi;
     ArrayList<FriendsBean> friendsBeans;
     ArrayList<FriendRequest> friendRequests;
     FriendsBeanDao friendsBeanDao = FlyMessageApplication.getInstances().getDaoSession().getFriendsBeanDao();
-    FriendRequestDao friendRequestDao = FlyMessageApplication.getInstances().getDaoSession().getFriendRequestDao();
     UserBeanDao userBeanDao = FlyMessageApplication.getInstances().getDaoSession().getUserBeanDao();
     int nowPage = 1;
 
@@ -47,6 +46,7 @@ public class FriendFragmentPresenter extends RxPresenter<FriendContract.View> im
     }
 
     @Override
+    @SuppressLint("StaticFieldLeak")
     public void getFriendList() {
         if (LoginActivity.loginUser == null) {
             mView.loginFailed(null);
@@ -75,9 +75,14 @@ public class FriendFragmentPresenter extends RxPresenter<FriendContract.View> im
                 return null;
             }
 
+
             @Override
             protected void onPostExecute(Void aVoid) {
-                mView.initFriendList(friendsBeans);
+                try {
+                    mView.initFriendList(friendsBeans);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }.execute();
         mView.initFriendList(friendsBeans);

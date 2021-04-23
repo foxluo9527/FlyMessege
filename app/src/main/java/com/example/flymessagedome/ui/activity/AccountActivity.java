@@ -1,7 +1,7 @@
 package com.example.flymessagedome.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.view.View;
@@ -64,6 +64,7 @@ public class AccountActivity extends BaseActivity {
 
     }
 
+    @SuppressLint("NonConstantResourceId")
     @OnClick({R.id.back, R.id.log_out, R.id.exit, R.id.edit_account, R.id.auto_login_view, R.id.remember_view})
     public void onViewClick(View v) {
         switch (v.getId()) {
@@ -88,29 +89,23 @@ public class AccountActivity extends BaseActivity {
                             ActivityCollector.finishAll();
                             SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
                             LoginActivity.startActivity(mContext);
-                            dialog1.cancel();//取消弹出框
+                            dialog1.cancel();
                         })
                         .setNegativeButton(R.string.cancel, (dialog12, which) -> {
-                            dialog12.cancel();//取消弹出框
+                            dialog12.cancel();
                         })
                         .create().show();
                 break;
             case R.id.exit:
                 AlertDialog.Builder exitDialog = new AlertDialog.Builder(mContext);
                 exitDialog.setMessage("确认退出应用?")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                MainActivity.serviceBinder.closeConnect();
-                                ActivityCollector.finishAll();
-                                System.exit(0);
-                            }
+                        .setPositiveButton("确定", (dialog13, which) -> {
+                            MainActivity.serviceBinder.closeConnect();
+                            ActivityCollector.finishAll();
+                            System.exit(0);
                         })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
-                            }
+                        .setNegativeButton("取消", (dialog14, which) -> {
+                            dialog14.cancel();
                         })
                         .create().show();
                 break;
@@ -123,6 +118,8 @@ public class AccountActivity extends BaseActivity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void initDatas() {
         users = (ArrayList<User>) userDao.loadAll();
@@ -133,33 +130,31 @@ public class AccountActivity extends BaseActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setNestedScrollingEnabled(false);
-        adapter.setOnRecyclerViewItemClickListener(new AccountAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                if (view.getId() == R.id.del_account) {
-                    userDao.delete(users.get(position));
-                    if (users.get(position).getU_id() == LoginActivity.loginUser.getU_id()) {
-                        SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
-                        SharedPreferencesUtil.getInstance().putString(Constant.U_NAME, "");
-                        SharedPreferencesUtil.getInstance().putString(Constant.U_PASS, "");
-                        MainActivity.serviceBinder.closeConnect();
-                        ActivityCollector.finishAll();
-                        LoginActivity.startActivity(mContext);
-                    } else {
-                        initDatas();
-                    }
-                } else if (users.get(position).getU_id() != LoginActivity.loginUser.getU_id()) {
-                    showLoadingDialog(false, "切换账号中");
-                    new AsyncTask<Void, Void, Login>() {
-                        @RequiresApi(api = Build.VERSION_CODES.O)
-                        @Override
-                        protected Login doInBackground(Void... voids) {
-                            return HttpRequest.Login(users.get(position).getU_name(), Base64Util.decode(users.get(position).getU_pass()));
-                        }
+        adapter.setOnRecyclerViewItemClickListener((view, position) -> {
+            if (view.getId() == R.id.del_account) {
+                userDao.delete(users.get(position));
+                if (users.get(position).getU_id() == LoginActivity.loginUser.getU_id()) {
+                    SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
+                    SharedPreferencesUtil.getInstance().putString(Constant.U_NAME, "");
+                    SharedPreferencesUtil.getInstance().putString(Constant.U_PASS, "");
+                    MainActivity.serviceBinder.closeConnect();
+                    ActivityCollector.finishAll();
+                    LoginActivity.startActivity(mContext);
+                } else {
+                    initDatas();
+                }
+            } else if (users.get(position).getU_id() != LoginActivity.loginUser.getU_id()) {
+                showLoadingDialog(false, "切换账号中");
+                new AsyncTask<Void, Void, Login>() {
 
-                        @RequiresApi(api = Build.VERSION_CODES.O)
-                        @Override
-                        protected void onPostExecute(Login login) {
+                    @Override
+                    protected Login doInBackground(Void... voids) {
+                        return HttpRequest.Login(users.get(position).getU_name(), Base64Util.decode(users.get(position).getU_pass()));
+                    }
+
+                    @Override
+                    protected void onPostExecute(Login login) {
+                        try{
                             dismissLoadingDialog();
                             if (login != null && login.code == Constant.SUCCESS) {
                                 SharedPreferencesUtil.getInstance().putString(Constant.U_NAME, login.loginUser.getU_name());
@@ -180,27 +175,23 @@ public class AccountActivity extends BaseActivity {
                             } else {
                                 ToastUtils.showToast("切换账号失败");
                             }
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
-                    }.execute();
-                }
+                    }
+                }.execute();
             }
         });
-        remember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferencesUtil.getInstance().putBoolean(Constant.REMEMBER_ACCOUNT, isChecked);
-                if (!isChecked) {
-                    autoLogin.setChecked(false);
-                }
+        remember.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferencesUtil.getInstance().putBoolean(Constant.REMEMBER_ACCOUNT, isChecked);
+            if (!isChecked) {
+                autoLogin.setChecked(false);
             }
         });
-        autoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, isChecked);
-                if (isChecked) {
-                    remember.setChecked(true);
-                }
+        autoLogin.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, isChecked);
+            if (isChecked) {
+                remember.setChecked(true);
             }
         });
         remember.setChecked(SharedPreferencesUtil.getInstance().getBoolean(Constant.REMEMBER_ACCOUNT, true));

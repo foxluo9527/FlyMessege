@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.SpannableString;
@@ -35,13 +34,14 @@ import com.example.flymessagedome.utils.Constant;
 import com.example.flymessagedome.utils.NetworkUtils;
 import com.example.flymessagedome.utils.SharedPreferencesUtil;
 import com.example.flymessagedome.utils.ToastUtils;
+import com.tencent.bugly.beta.Beta;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-@SuppressLint("NonConstantResourceId")
+@SuppressLint({"NonConstantResourceId", "HandlerLeak", "SetTextI18n"})
 public class LoginActivity extends BaseActivity implements LoginContract.View {
     public static User loginUser = null;
     @BindView(R.id.et_user_name)
@@ -110,6 +110,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                 }
             }
         }
+        Beta.checkAppUpgrade(false, false);
     }
 
     @Override
@@ -211,40 +212,60 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     @Override
     public void showError() {
-        dismissLoadingDialog();
-        toastServerEx(NetworkUtils.isConnected(this), null);
+        try {
+            dismissLoadingDialog();
+            toastServerEx(NetworkUtils.isConnected(this), null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void showError(String msg) {
-        dismissLoadingDialog();
-        toastServerEx(NetworkUtils.isConnected(this), msg);
+        try {
+            dismissLoadingDialog();
+            toastServerEx(NetworkUtils.isConnected(this), msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void complete() {
-        dismissLoadingDialog();
+        try {
+            dismissLoadingDialog();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void tokenExceed() {
-        dismissLoadingDialog();
-        ToastUtils.showToast(getString(R.string.login_time_out));
-        SharedPreferencesUtil.getInstance().removeAll();
-        ActivityCollector.finishAll();
+        try {
+            dismissLoadingDialog();
+            ToastUtils.showToast(getString(R.string.login_time_out));
+            SharedPreferencesUtil.getInstance().removeAll();
+            ActivityCollector.finishAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void loginSuccess(Login login) {
-        dismissLoadingDialog();
-        SharedPreferencesUtil.getInstance().putBoolean(Constant.IS_LOGIN, true);
-        if (login.loginUser != null) {
-            loginUser = login.loginUser;
-            UserDao userDao = FlyMessageApplication.getInstances().getDaoSession().getUserDao();
-            userDao.insertOrReplace(loginUser);
+        try {
+            dismissLoadingDialog();
+            SharedPreferencesUtil.getInstance().putBoolean(Constant.IS_LOGIN, true);
+            if (login.loginUser != null) {
+                loginUser = login.loginUser;
+                UserDao userDao = FlyMessageApplication.getInstances().getDaoSession().getUserDao();
+                userDao.insertOrReplace(loginUser);
+            }
+            MainActivity.startActivity(mContext);
+            finish();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        MainActivity.startActivity(mContext);
-        finish();
     }
 
     @Override
@@ -253,17 +274,21 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             @Override
             public void run() {
                 super.run();
-                for (int s = 60; s >= 0; s--) {
-                    Message msg = new Message();
-                    msg.what = s;
-                    setCountDown.sendMessage(msg);
-                    if (s == 60)
-                        dismissLoadingDialog();
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                try {
+                    for (int s = 60; s >= 0; s--) {
+                        Message msg = new Message();
+                        msg.what = s;
+                        setCountDown.sendMessage(msg);
+                        if (s == 60)
+                            dismissLoadingDialog();
+                        try {
+                            sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }.start();
@@ -271,8 +296,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     @Override
     public void sendLoginCodeFailed() {
-        dismissLoadingDialog();
-        btnSendCode.setEnabled(true);
-        btnSendCode.setText(R.string.get);
+        try {
+            dismissLoadingDialog();
+            btnSendCode.setEnabled(true);
+            btnSendCode.setText(R.string.get);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

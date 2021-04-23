@@ -3,6 +3,7 @@ package com.example.flymessagedome.ui.fragment;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MenuInflater;
@@ -12,6 +13,7 @@ import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -142,10 +144,15 @@ public class FriendFragment extends BaseFragment implements FriendContract.View,
 
     @Override
     protected void receiveFriendRequest() {
-        super.receiveFriendRequest();
-        friendFragmentPresenter.getFriendList();
+        try {
+            super.receiveFriendRequest();
+            friendFragmentPresenter.getFriendList();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void initFriendList(ArrayList<FriendsBean> friendsBeans) {
         try {
@@ -187,54 +194,78 @@ public class FriendFragment extends BaseFragment implements FriendContract.View,
 
     @Override
     public void showError() {
-        ((BaseActivity) mContext).dismissLoadingDialog();
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void showError(String msg) {
-        ((BaseActivity) mContext).dismissLoadingDialog();
-        ToastUtils.showToast(msg);
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+            ToastUtils.showToast(msg);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void complete() {
-        ((BaseActivity) mContext).dismissLoadingDialog();
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void tokenExceed() {
-        ((BaseActivity) mContext).dismissLoadingDialog();
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void loginFailed(Login login) {
-        refreshLayout.setRefreshing(false);
-        if (!NetworkUtils.isConnected(mContext) || login == null) {
-            Intent actionIntent = new Intent(SOCKET_SERVICE_ACTION);
-            actionIntent.putExtra(MSG_TYPE, SERVICE_DISCONNECT);
-            mContext.sendBroadcast(actionIntent);
-        } else if (login != null && login.code == Constant.FAILED) {
-            Log.e(TAG, "获取用户登录信息失败，请重新登录");
-            ToastUtils.showToast("获取用户登录信息失败，请重新登录");
-            SharedPreferencesUtil.getInstance().removeAll();
-            ActivityCollector.finishAll();
-            SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
-            LoginActivity.startActivity(mContext);
+        try {
+            refreshLayout.setRefreshing(false);
+            if (!NetworkUtils.isConnected(mContext) || login == null) {
+                Intent actionIntent = new Intent(SOCKET_SERVICE_ACTION);
+                actionIntent.putExtra(MSG_TYPE, SERVICE_DISCONNECT);
+                mContext.sendBroadcast(actionIntent);
+            } else if (login != null && login.code == Constant.FAILED) {
+                Log.e(TAG, "获取用户登录信息失败，请重新登录");
+                ToastUtils.showToast("获取用户登录信息失败，请重新登录");
+                SharedPreferencesUtil.getInstance().removeAll();
+                ActivityCollector.finishAll();
+                SharedPreferencesUtil.getInstance().putBoolean(Constant.AUTO_LOGIN, false);
+                LoginActivity.startActivity(mContext);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public void initFriendRequest(ArrayList<FriendRequest> frq_list) {
-        ((BaseActivity) mContext).dismissLoadingDialog();
-        if (frq_list != null) {
-            if (frq_list.size() > 0)
-                frq_count.setVisibility(View.VISIBLE);
-            else
-                frq_count.setVisibility(View.GONE);
-            frq_count.setText(frq_list.size() + "");
-        } else {
-            ToastUtils.showToast("获取好友申请失败");
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+            if (frq_list != null) {
+                if (frq_list.size() > 0)
+                    frq_count.setVisibility(View.VISIBLE);
+                else
+                    frq_count.setVisibility(View.GONE);
+                frq_count.setText(frq_list.size() + "");
+            } else {
+                ToastUtils.showToast("获取好友申请失败");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -264,9 +295,7 @@ public class FriendFragment extends BaseFragment implements FriendContract.View,
                             ((BaseActivity) mContext).showLoadingDialog(false, "删除好友中");
                             friendFragmentPresenter.delFriend(f);
                         })
-                        .setNegativeButton("取消", (dialog12, which) -> {
-                            dialog12.cancel();//取消弹出框
-                        })
+                        .setNegativeButton("取消", (dialog12, which) -> dialog12.cancel())
                         .create().show();
                 break;
         }

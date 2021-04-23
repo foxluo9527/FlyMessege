@@ -1,5 +1,6 @@
 package com.example.flymessagedome.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -18,7 +19,6 @@ import com.example.flymessagedome.FlyMessageApplication;
 import com.example.flymessagedome.R;
 import com.example.flymessagedome.bean.Message;
 import com.example.flymessagedome.ui.activity.LoginActivity;
-import com.example.flymessagedome.utils.StringUtil;
 import com.example.flymessagedome.utils.TextSpanUtil;
 import com.example.flymessagedome.utils.TimeUtil;
 import com.example.flymessagedome.view.CircleImageView;
@@ -33,35 +33,35 @@ public class RecordMessageAdapter extends RecyclerView.Adapter {
     String uName;
     String myName;
     String uHead;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
     Context context;
     private OnRecyclerViewItemClickListener listener;
-    private HttpProxyCacheServer proxyCacheServer;
-    String searchString="";
+    private final HttpProxyCacheServer proxyCacheServer;
+    String searchString;
 
-    public RecordMessageAdapter(ArrayList<Message> messages,String searchString, String uName,String uHead,Context context) {
+    public RecordMessageAdapter(ArrayList<Message> messages, String searchString, String uName, String uHead, Context context) {
         this.messages = messages;
         this.uName = uName;
-        this.searchString=searchString;
-        this.uHead=uHead;
-        myName=LoginActivity.loginUser.getU_nick_name();
-        this.mLayoutInflater=LayoutInflater.from(context);
+        this.searchString = searchString;
+        this.uHead = uHead;
+        myName = LoginActivity.loginUser.getU_nick_name();
+        this.mLayoutInflater = LayoutInflater.from(context);
         this.context = context;
-        this.listener = listener;
-        proxyCacheServer= FlyMessageApplication.getProxy(context);
+        proxyCacheServer = FlyMessageApplication.getProxy(context);
     }
-    public void setKeyString(String searchString){
-        this.searchString=searchString;
-    }
-    public String getSearchString(){
+
+    public String getSearchString() {
         return searchString;
     }
+
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int position);
     }
-    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener){
-        listener=onRecyclerViewItemClickListener;
+
+    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
+        listener = onRecyclerViewItemClickListener;
     }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -71,37 +71,39 @@ public class RecordMessageAdapter extends RecyclerView.Adapter {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        SearchRecordViewHolder viewHolder=(SearchRecordViewHolder)holder;
-        Message message=messages.get(position);
-        if (message.getM_source_id()!= LoginActivity.loginUser.getU_id()){
-            viewHolder.name.setText(uName);
-            Glide.with(context).load(proxyCacheServer.getProxyUrl(uHead))
+        try {
+            SearchRecordViewHolder viewHolder = (SearchRecordViewHolder) holder;
+            Message message = messages.get(position);
+            if (message.getM_source_id() != LoginActivity.loginUser.getU_id()) {
+                viewHolder.name.setText(uName);
+                Glide.with(context).load(proxyCacheServer.getProxyUrl(uHead))
 
 
-                    .into(viewHolder.headImg);
-        }else {
-            viewHolder.name.setText(myName);
-            Glide.with(context).load(proxyCacheServer.getProxyUrl(LoginActivity.loginUser.getU_head_img()))
+                        .into(viewHolder.headImg);
+            } else {
+                viewHolder.name.setText(myName);
+                Glide.with(context).load(proxyCacheServer.getProxyUrl(LoginActivity.loginUser.getU_head_img()))
 
 
-                    .into(viewHolder.headImg);
-        }
-        viewHolder.m_content.setText(TextSpanUtil.getInstant().setColor(message.getM_content()+" ",
-                searchString,context.getApplicationContext().getColor(R.color.blue_1)));
-        viewHolder.time.setText(TimeUtil.QQFormatTime(message.getM_send_time()));
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onItemClick(v,position);
+                        .into(viewHolder.headImg);
             }
-        });
+            viewHolder.m_content.setText(TextSpanUtil.getInstant().setColor(message.getM_content() + " ",
+                    searchString, context.getApplicationContext().getColor(R.color.blue_1)));
+            viewHolder.time.setText(TimeUtil.QQFormatTime(message.getM_send_time()));
+            viewHolder.itemView.setOnClickListener(v -> listener.onItemClick(v, position));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int getItemCount() {
         return messages.size();
     }
-    static class SearchRecordViewHolder extends RecyclerView.ViewHolder{
+
+    @SuppressLint("NonConstantResourceId")
+    static class SearchRecordViewHolder extends RecyclerView.ViewHolder {
+
         @Nullable
         @BindView(R.id.user_head_img)
         CircleImageView headImg;
@@ -111,6 +113,7 @@ public class RecordMessageAdapter extends RecyclerView.Adapter {
         TextView m_content;
         @BindView(R.id.tv_msg_time)
         TextView time;
+
         public SearchRecordViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

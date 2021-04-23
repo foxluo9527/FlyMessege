@@ -17,7 +17,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class CommunityPresenter extends RxPresenter<CommunityContract.View> implements CommunityContract.Presenter<CommunityContract.View> {
-    private FlyMessageApi flyMessageApi;
+    private final FlyMessageApi flyMessageApi;
 
     @Inject
     public CommunityPresenter(FlyMessageApi flyMessageApi) {
@@ -111,7 +111,7 @@ public class CommunityPresenter extends RxPresenter<CommunityContract.View> impl
                                     } else {
                                         mView.addPostList(result.getPosts());
                                     }
-                                }else
+                                } else
                                     mView.showError(result.msg);
                             } else {
                                 mView.showError("获取社区帖子失败");
@@ -144,7 +144,7 @@ public class CommunityPresenter extends RxPresenter<CommunityContract.View> impl
                             if (result != null) {
                                 if (result.code == Constant.SUCCESS) {
                                     mView.zanPostSuccess(postId);
-                                }else
+                                } else
                                     mView.showError(result.msg);
                             } else {
                                 mView.showError("点赞帖子失败");
@@ -177,7 +177,7 @@ public class CommunityPresenter extends RxPresenter<CommunityContract.View> impl
                             if (result != null) {
                                 if (result.code == Constant.SUCCESS) {
                                     mView.cancelZanPostSuccess(postId);
-                                }else
+                                } else
                                     mView.showError(result.msg);
                             } else {
                                 mView.showError("取消点赞帖子失败");

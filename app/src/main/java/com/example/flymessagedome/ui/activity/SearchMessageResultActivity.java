@@ -1,14 +1,14 @@
 package com.example.flymessagedome.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.flymessagedome.FlyMessageApplication;
 import com.example.flymessagedome.R;
@@ -24,7 +24,9 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+@SuppressLint("NonConstantResourceId")
 public class SearchMessageResultActivity extends BaseActivity {
+
     @BindView(R.id.record_msg)
     TextView recordMsg;
     @BindView(R.id.name)
@@ -35,6 +37,7 @@ public class SearchMessageResultActivity extends BaseActivity {
     RecyclerView record_list;
     String uName;
     String keyString;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_search_message_result;
@@ -44,40 +47,40 @@ public class SearchMessageResultActivity extends BaseActivity {
     protected void setupActivityComponent(AppComponent appComponent) {
 
     }
+
     @OnClick({R.id.back})
-    public void onViewClick(View v){
+    public void onViewClick(View v) {
         finish();
     }
+
+    @SuppressLint("SetTextI18n")
     @Override
     public void initDatas() {
-        Bundle bundle=getIntent().getExtras();
-        long userId=bundle.getLong("userId",-1);
-        messages=bundle.getParcelableArrayList("listMessage");
-        if (messages.size()==0){
+        Bundle bundle = getIntent().getExtras();
+        long userId = bundle.getLong("userId", -1);
+        messages = bundle.getParcelableArrayList("listMessage");
+        if (messages.size() == 0) {
             ToastUtils.showToast("获取记录失败");
             finish();
             return;
         }
-        userBean= FlyMessageApplication.getInstances().getDaoSession().getUserBeanDao().load(userId);
-        uName=bundle.getString("uName");
-        keyString=bundle.getString("keyString");
+        userBean = FlyMessageApplication.getInstances().getDaoSession().getUserBeanDao().load(userId);
+        uName = bundle.getString("uName");
+        keyString = bundle.getString("keyString");
         name.setText(uName.toString());
-        recordMsg.setText("共"+messages.size()+"条关于'"+keyString+"'的聊天记录");
-        RecordMessageAdapter adapter=new RecordMessageAdapter(messages,keyString,uName,userBean.getU_head_img(),mContext);
-        StaggeredGridLayoutManager recordGridLayoutManager=new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        recordMsg.setText("共" + messages.size() + "条关于'" + keyString + "'的聊天记录");
+        RecordMessageAdapter adapter = new RecordMessageAdapter(messages, keyString, uName, userBean.getU_head_img(), mContext);
+        StaggeredGridLayoutManager recordGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         record_list.setLayoutManager(recordGridLayoutManager);
-        ((SimpleItemAnimator)record_list.getItemAnimator()).setSupportsChangeAnimations(false);
+        ((SimpleItemAnimator) record_list.getItemAnimator()).setSupportsChangeAnimations(false);
         record_list.setAdapter(adapter);
         record_list.setHasFixedSize(true);
         record_list.setNestedScrollingEnabled(false);
-        adapter.setOnRecyclerViewItemClickListener(new RecordMessageAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent=new Intent(mContext,UserChatActivity.class);
-                intent.putExtra("userId",userBean.getU_id());
-                intent.putExtra("positionMId",messages.get(position).getM_id());
-                startActivity(intent);
-            }
+        adapter.setOnRecyclerViewItemClickListener((view, position) -> {
+            Intent intent = new Intent(mContext, UserChatActivity.class);
+            intent.putExtra("userId", userBean.getU_id());
+            intent.putExtra("positionMId", messages.get(position).getM_id());
+            startActivity(intent);
         });
     }
 

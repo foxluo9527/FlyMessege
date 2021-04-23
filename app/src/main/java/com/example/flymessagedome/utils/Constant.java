@@ -39,9 +39,6 @@ public class Constant {
 
     public static final String protocolUrl="http://www.foxluo.cn/protocol.html";
 
-    //检查更新
-    public static final String APP_UPDATE_API="http://www.foxluo.cn/myapp/AppUpdate?version=";
-
     public static final int SUCCESS = 200;
 
     public static final int FAILED = 500;

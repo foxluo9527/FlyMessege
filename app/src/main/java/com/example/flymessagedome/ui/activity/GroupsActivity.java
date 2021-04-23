@@ -1,11 +1,8 @@
 package com.example.flymessagedome.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 
 import com.example.flymessagedome.R;
@@ -25,25 +22,29 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+@SuppressLint("NonConstantResourceId")
 public class GroupsActivity extends BaseActivity implements GroupContract.View {
+
     @BindView(R.id.group_list)
     ExpandableListView listView;
-    ArrayList<ArrayList<GroupBean>> groups=new ArrayList<>();
+    ArrayList<ArrayList<GroupBean>> groups = new ArrayList<>();
     @Inject
     GroupPresenter groupPresenter;
     GroupExpendListAdapter adapter;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_groups;
     }
-    @OnClick({R.id.back,R.id.create_group})
-    public void onViewClick(View v){
-        switch (v.getId()){
+
+    @OnClick({R.id.back, R.id.create_group})
+    public void onViewClick(View v) {
+        switch (v.getId()) {
             case R.id.back:
                 finish();
                 break;
             case R.id.create_group:
-                startActivity(new Intent(mContext,CreateGroupActivity.class));
+                startActivity(new Intent(mContext, CreateGroupActivity.class));
                 break;
         }
     }
@@ -56,13 +57,13 @@ public class GroupsActivity extends BaseActivity implements GroupContract.View {
     @Override
     public void initDatas() {
         groupPresenter.getGroups();
-        showLoadingDialog(true,"加载中");
+        showLoadingDialog(true, "加载中");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        groupPresenter.getGroupsByPage(20,1);
+        groupPresenter.getGroupsByPage(20, 1);
     }
 
     @Override
@@ -72,18 +73,19 @@ public class GroupsActivity extends BaseActivity implements GroupContract.View {
 
     @Override
     public void initGroups(ArrayList<ArrayList<GroupBean>> groupBeans) {
-        dismissLoadingDialog();
-        groups=groupBeans;
-        adapter=new GroupExpendListAdapter(mContext,groups);
-        listView.setAdapter(adapter);
-        adapter.setOnGroupItemClickListener(new GroupExpendListAdapter.OnGroupItemClickListener() {
-            @Override
-            public void onClick(int groupPosition, int childPosition) {
-                Intent intent=new Intent(mContext, GroupChatActivity.class);
-                intent.putExtra("groupId",groups.get(groupPosition).get(childPosition).getG_id());
+        try {
+            dismissLoadingDialog();
+            groups = groupBeans;
+            adapter = new GroupExpendListAdapter(mContext, groups);
+            listView.setAdapter(adapter);
+            adapter.setOnGroupItemClickListener((groupPosition, childPosition) -> {
+                Intent intent = new Intent(mContext, GroupChatActivity.class);
+                intent.putExtra("groupId", groups.get(groupPosition).get(childPosition).getG_id());
                 startActivity(intent);
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -93,8 +95,12 @@ public class GroupsActivity extends BaseActivity implements GroupContract.View {
 
     @Override
     public void showError(String msg) {
-        dismissLoadingDialog();
-        ToastUtils.showToast(msg);
+        try {
+            dismissLoadingDialog();
+            ToastUtils.showToast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

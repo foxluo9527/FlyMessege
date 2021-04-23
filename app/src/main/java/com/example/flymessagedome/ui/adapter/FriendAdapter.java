@@ -1,6 +1,8 @@
 package com.example.flymessagedome.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,7 +23,6 @@ import com.example.flymessagedome.view.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,14 +38,21 @@ public class FriendAdapter extends RecyclerView.Adapter {
     private final LayoutInflater mLayoutInflater;
     private HttpProxyCacheServer proxyCacheServer;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public FriendAdapter(ArrayList<FriendsBean> friendsBeans, Context context) {
         this.context = context;
         this.friendsBeans = friendsBeans;
         mLayoutInflater = LayoutInflater.from(context);
         proxyCacheServer = FlyMessageApplication.getProxy(context);
-        initFriendMsg(friendsBeans);
+        try {
+            initFriendMsg(friendsBeans);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void initFriendMsg(ArrayList<FriendsBean> friendsBeans) {
         ArrayList<Character> groups = new ArrayList<>();
         friendGroupMaps = new ArrayList<>();
@@ -92,7 +101,7 @@ public class FriendAdapter extends RecyclerView.Adapter {
             return diff == 0 ? o2.getFriendsBean().getF_remarks_name().compareTo(o1.getFriendsBean().getF_remarks_name()) : diff;
         };
         try {
-            Collections.sort(friendGroupMaps, orderlyGroupComparator);
+            friendGroupMaps.sort(orderlyGroupComparator);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -107,66 +116,63 @@ public class FriendAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         if (viewType == 1) {
-            view = mLayoutInflater.inflate(R.layout.friend_list_first_item, null, false);
+            view = mLayoutInflater.inflate(R.layout.friend_list_first_item, parent, false);
             return new TopFriendViewHolder(view);
         } else {
-            view = mLayoutInflater.inflate(R.layout.friend_list_item, null, false);
+            view = mLayoutInflater.inflate(R.layout.friend_list_item, parent, false);
             return new NormalFriendViewHolder(view);
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        FriendGroupMap map = friendGroupMaps.get(position);
-        if (map.friendsBean.getFriendUser() == null) {
-            return;
-        }
-        proxyCacheServer = FlyMessageApplication.getProxy(context);
-        if (holder instanceof TopFriendViewHolder) {
-            ((TopFriendViewHolder) holder).topTv.setText(friendGroupMaps.get(position).getTopKey());
-            ((TopFriendViewHolder) holder).name.setText(friendGroupMaps.get(position).friendsBean.getF_remarks_name());
-            if (friendGroupMaps.get(position).friendsBean.isIsOnline())
-                ((TopFriendViewHolder) holder).state.setText("[在线]" + friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
-            else
-                ((TopFriendViewHolder) holder).state.setText("[离线]" + friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
-            String headUrl = friendGroupMaps.get(position).friendsBean.getFriendUser().getU_head_img();
-            if (headUrl.contains("http")) {
-                headUrl = proxyCacheServer.getProxyUrl(headUrl);
+        try {
+            FriendGroupMap map = friendGroupMaps.get(position);
+            if (map.friendsBean.getFriendUser() == null) {
+                return;
             }
-            Glide.with(context).load(headUrl).into(((TopFriendViewHolder) holder).head);
-            if (listener != null) {
-                ((TopFriendViewHolder) holder).main.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
+            proxyCacheServer = FlyMessageApplication.getProxy(context);
+            if (holder instanceof TopFriendViewHolder) {
+                ((TopFriendViewHolder) holder).topTv.setText(friendGroupMaps.get(position).getTopKey());
+                ((TopFriendViewHolder) holder).name.setText(friendGroupMaps.get(position).friendsBean.getF_remarks_name());
+                if (friendGroupMaps.get(position).friendsBean.isIsOnline())
+                    ((TopFriendViewHolder) holder).state.setText("[在线]" + friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
+                else
+                    ((TopFriendViewHolder) holder).state.setText("[离线]" + friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
+                String headUrl = friendGroupMaps.get(position).friendsBean.getFriendUser().getU_head_img();
+                if (headUrl.contains("http")) {
+                    headUrl = proxyCacheServer.getProxyUrl(headUrl);
+                }
+                Glide.with(context).load(headUrl).into(((TopFriendViewHolder) holder).head);
+                if (listener != null) {
+                    ((TopFriendViewHolder) holder).main.setOnLongClickListener(v -> {
                         listener.onItemLongClick(v, position);
                         return false;
-                    }
-                });
-                ((TopFriendViewHolder) holder).main.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        listener.onItemClick(v, position);
-                    }
-                });
+                    });
+                    ((TopFriendViewHolder) holder).main.setOnClickListener(v -> listener.onItemClick(v, position));
+                }
+            } else {
+                ((NormalFriendViewHolder) holder).name.setText(friendGroupMaps.get(position).friendsBean.getF_remarks_name());
+                if (friendGroupMaps.get(position).friendsBean.isIsOnline())
+                    ((NormalFriendViewHolder) holder).state.setText("[在线]" + friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
+                else
+                    ((NormalFriendViewHolder) holder).state.setText("[离线]" + friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
+                String headUrl = friendGroupMaps.get(position).friendsBean.getFriendUser().getU_head_img();
+                if (headUrl.contains("http")) {
+                    headUrl = proxyCacheServer.getProxyUrl(headUrl);
+                }
+                Glide.with(context).load(headUrl).into(((NormalFriendViewHolder) holder).head);
+                if (listener != null) {
+                    ((NormalFriendViewHolder) holder).main.setOnLongClickListener(v -> {
+                        listener.onItemLongClick(v, position);
+                        return false;
+                    });
+                    ((NormalFriendViewHolder) holder).main.setOnClickListener(v -> listener.onItemClick(v, position));
+                }
             }
-        } else {
-            ((NormalFriendViewHolder) holder).name.setText(friendGroupMaps.get(position).friendsBean.getF_remarks_name());
-            if (friendGroupMaps.get(position).friendsBean.isIsOnline())
-                ((NormalFriendViewHolder) holder).state.setText("[在线]" + friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
-            else
-                ((NormalFriendViewHolder) holder).state.setText("[离线]" + friendGroupMaps.get(position).friendsBean.getFriendUser().getU_sign());
-            String headUrl = friendGroupMaps.get(position).friendsBean.getFriendUser().getU_head_img();
-            if (headUrl.contains("http")) {
-                headUrl = proxyCacheServer.getProxyUrl(headUrl);
-            }
-            Glide.with(context).load(headUrl).into(((NormalFriendViewHolder) holder).head);
-            if (listener != null) {
-                ((NormalFriendViewHolder) holder).main.setOnLongClickListener(v -> {
-                    listener.onItemLongClick(v, position);
-                    return false;
-                });
-                ((NormalFriendViewHolder) holder).main.setOnClickListener(v -> listener.onItemClick(v, position));
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -192,7 +198,9 @@ public class FriendAdapter extends RecyclerView.Adapter {
         void onItemLongClick(View view, int position);
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class NormalFriendViewHolder extends RecyclerView.ViewHolder {
+
         @BindView(R.id.f_head)
         CircleImageView head;
         @BindView(R.id.f_name)
@@ -208,7 +216,9 @@ public class FriendAdapter extends RecyclerView.Adapter {
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class TopFriendViewHolder extends RecyclerView.ViewHolder {
+
         @BindView(R.id.f_group)
         TextView topTv;
         @BindView(R.id.f_head)
@@ -226,14 +236,11 @@ public class FriendAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public class FriendGroupMap {
+    public static class FriendGroupMap {
         FriendsBean friendsBean;
         String topKey;
         boolean isTop;
         int position;
-
-        public FriendGroupMap() {
-        }
 
         public FriendGroupMap(FriendsBean friendsBean, String topKey, boolean isTop) {
             this.friendsBean = friendsBean;

@@ -1,9 +1,7 @@
 package com.example.flymessagedome.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +23,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+@SuppressLint("NonConstantResourceId")
 public class AddSignActivity extends BaseActivity implements UserSignContract.View {
     @BindView(R.id.sign_edit_view)
     MultiAutoCompleteTextView signEditView;
@@ -44,17 +43,19 @@ public class AddSignActivity extends BaseActivity implements UserSignContract.Vi
     public int getLayoutId() {
         return R.layout.activity_add_sign;
     }
-    @OnClick({R.id.back,R.id.sign_history,R.id.sign_send_btn})
-    public void onViewClick(View v){
-        if (R.id.back==v.getId()){
+
+    @OnClick({R.id.back, R.id.sign_history, R.id.sign_send_btn})
+    public void onViewClick(View v) {
+        if (R.id.back == v.getId()) {
             finish();
-        }else if (R.id.sign_send_btn==v.getId()){
-            sign=signEditView.getText().toString();
+        } else if (R.id.sign_send_btn == v.getId()) {
+            sign = signEditView.getText().toString();
             userSignPresenter.addUserSign(sign);
-        }else {
-            startActivity(new Intent(mContext,ShowHistorySignActivity.class));
+        } else {
+            startActivity(new Intent(mContext, ShowHistorySignActivity.class));
         }
     }
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerMessageComponent.builder().appComponent(appComponent).build().inject(this);
@@ -62,8 +63,8 @@ public class AddSignActivity extends BaseActivity implements UserSignContract.Vi
 
     @Override
     public void initDatas() {
-        sign=LoginActivity.loginUser.getU_sign();
-        if (!TextUtils.isEmpty(sign)){
+        sign = LoginActivity.loginUser.getU_sign();
+        if (!TextUtils.isEmpty(sign)) {
             signEditView.setText(sign);
         }
     }
@@ -85,15 +86,23 @@ public class AddSignActivity extends BaseActivity implements UserSignContract.Vi
 
     @Override
     public void showError(String msg) {
-        dismissLoadingDialog();
-        ToastUtils.showToast(msg);
+        try {
+            dismissLoadingDialog();
+            ToastUtils.showToast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void complete() {
-        dismissLoadingDialog();
-        ToastUtils.showToast("发表签名成功");
-        LoginActivity.loginUser.setU_sign(sign);
+        try {
+            dismissLoadingDialog();
+            ToastUtils.showToast("发表签名成功");
+            LoginActivity.loginUser.setU_sign(sign);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

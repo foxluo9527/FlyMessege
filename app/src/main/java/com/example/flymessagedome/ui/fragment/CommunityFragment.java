@@ -324,61 +324,81 @@ public class CommunityFragment extends BaseFragment implements BGARefreshLayout.
 
     @Override
     public void addPostSuccess(int postId) {
-        ((BaseActivity) mContext).dismissLoadingDialog();
-        if (unUploadPhotos != null && unUploadPhotos.size() > 0) {
-            ArrayList<UploadService.UploadTaskBean> taskBeans = new ArrayList<>();
-            for (String photo : unUploadPhotos) {
-                taskBeans.add(new UploadService.UploadTaskBean(postId, photo));
-                FlyMessageApplication.getInstances().uploadService.initUploadTask(taskBeans);
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+            if (unUploadPhotos != null && unUploadPhotos.size() > 0) {
+                ArrayList<UploadService.UploadTaskBean> taskBeans = new ArrayList<>();
+                for (String photo : unUploadPhotos) {
+                    taskBeans.add(new UploadService.UploadTaskBean(postId, photo));
+                    FlyMessageApplication.getInstances().uploadService.initUploadTask(taskBeans);
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
     @Override
     public void initPostList(List<PostListResult.PostsBean> result) {
-        if (result.size() == 0)
-            none.setVisibility(View.VISIBLE);
-        else
-            none.setVisibility(View.GONE);
-        mRefreshLayout.endRefreshing();
-        mRefreshLayout.endLoadingMore();
-        postsBeans.clear();
-        postsBeans.addAll(result);
-        adapter.notifyDataSetChanged();
+        try {
+            if (result.size() == 0)
+                none.setVisibility(View.VISIBLE);
+            else
+                none.setVisibility(View.GONE);
+            mRefreshLayout.endRefreshing();
+            mRefreshLayout.endLoadingMore();
+            postsBeans.clear();
+            postsBeans.addAll(result);
+            adapter.notifyDataSetChanged();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void addPostList(List<PostListResult.PostsBean> result) {
-        none.setVisibility(View.GONE);
-        mRefreshLayout.endRefreshing();
-        mRefreshLayout.endLoadingMore();
-        postsBeans.addAll(result);
-        adapter.notifyDataSetChanged();
+        try {
+            none.setVisibility(View.GONE);
+            mRefreshLayout.endRefreshing();
+            mRefreshLayout.endLoadingMore();
+            postsBeans.addAll(result);
+            adapter.notifyDataSetChanged();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void zanPostSuccess(int postId) {
-        ((BaseActivity) mContext).dismissLoadingDialog();
-        for (int i = 0; i < postsBeans.size(); i++) {
-            if (postsBeans.get(i).getCommunity_post_id() == postId) {
-                postsBeans.get(i).setZan_state(1);
-                postsBeans.get(i).setZanCount(postsBeans.get(i).getZanCount() + 1);
-                adapter.notifyItemChanged(i);
-                break;
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+            for (int i = 0; i < postsBeans.size(); i++) {
+                if (postsBeans.get(i).getCommunity_post_id() == postId) {
+                    postsBeans.get(i).setZan_state(1);
+                    postsBeans.get(i).setZanCount(postsBeans.get(i).getZanCount() + 1);
+                    adapter.notifyItemChanged(i);
+                    break;
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
     @Override
     public void cancelZanPostSuccess(int postId) {
-        ((BaseActivity) mContext).dismissLoadingDialog();
-        for (int i = 0; i < postsBeans.size(); i++) {
-            if (postsBeans.get(i).getCommunity_post_id() == postId) {
-                postsBeans.get(i).setZan_state(0);
-                postsBeans.get(i).setZanCount(postsBeans.get(i).getZanCount() - 1);
-                adapter.notifyItemChanged(i);
-                break;
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+            for (int i = 0; i < postsBeans.size(); i++) {
+                if (postsBeans.get(i).getCommunity_post_id() == postId) {
+                    postsBeans.get(i).setZan_state(0);
+                    postsBeans.get(i).setZanCount(postsBeans.get(i).getZanCount() - 1);
+                    adapter.notifyItemChanged(i);
+                    break;
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -482,28 +502,44 @@ public class CommunityFragment extends BaseFragment implements BGARefreshLayout.
 
     @Override
     public void showError() {
-        mRefreshLayout.endRefreshing();
-        mRefreshLayout.endLoadingMore();
-        ((BaseActivity) mContext).dismissLoadingDialog();
+        try {
+            mRefreshLayout.endRefreshing();
+            mRefreshLayout.endLoadingMore();
+            ((BaseActivity) mContext).dismissLoadingDialog();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void showError(String msg) {
-        mRefreshLayout.endRefreshing();
-        mRefreshLayout.endLoadingMore();
-        ((BaseActivity) mContext).dismissLoadingDialog();
-        ToastUtils.showToast(msg);
+        try {
+            mRefreshLayout.endRefreshing();
+            mRefreshLayout.endLoadingMore();
+            ((BaseActivity) mContext).dismissLoadingDialog();
+            ToastUtils.showToast(msg);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void complete() {
-        mRefreshLayout.endRefreshing();
-        mRefreshLayout.endLoadingMore();
-        ((BaseActivity) mContext).dismissLoadingDialog();
+        try {
+            mRefreshLayout.endRefreshing();
+            mRefreshLayout.endLoadingMore();
+            ((BaseActivity) mContext).dismissLoadingDialog();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void tokenExceed() {
-        ((BaseActivity) mContext).dismissLoadingDialog();
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

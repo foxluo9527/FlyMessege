@@ -1,6 +1,7 @@
 package com.example.flymessagedome.ui.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -21,7 +22,6 @@ import com.example.flymessagedome.model.SearchUserModel;
 import com.example.flymessagedome.ui.adapter.ContractAdapter;
 import com.example.flymessagedome.ui.contract.AddContract;
 import com.example.flymessagedome.ui.presenter.ContractAddPresenter;
-import com.example.flymessagedome.utils.CommUtil;
 import com.example.flymessagedome.utils.Constant;
 import com.example.flymessagedome.utils.NetworkUtils;
 import com.example.flymessagedome.utils.ToastUtils;
@@ -36,9 +36,11 @@ import butterknife.OnClick;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+@SuppressLint("NonConstantResourceId")
 public class ContractAddActivity extends BaseActivity implements AddContract.View {
     private ArrayList<PhoneInfo> phoneInfos = new ArrayList<>();
     private ArrayList<SearchUserModel.ResultBean> resultBeans = new ArrayList<>();
+
     @BindView(R.id.contract_list)
     RecyclerView recyclerView;
     @BindView(R.id.none)
@@ -90,6 +92,7 @@ public class ContractAddActivity extends BaseActivity implements AddContract.Vie
         getContract();
     }
 
+    @SuppressLint("StaticFieldLeak")
     @AfterPermissionGranted(Constant.READ_CONTRACT)
     private void getContract() {
         phoneInfos = new ArrayList<>();
@@ -121,7 +124,14 @@ public class ContractAddActivity extends BaseActivity implements AddContract.Vie
 
                 @Override
                 protected void onPostExecute(ArrayList<PhoneInfo> phoneInfos) {
-                    if (phoneInfos.size()==0){
+                    try {
+                        if (phoneInfos.size() == 0) {
+                            dismissLoadingDialog();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (phoneInfos.size() == 0) {
                         dismissLoadingDialog();
                     }
                 }
@@ -138,17 +148,22 @@ public class ContractAddActivity extends BaseActivity implements AddContract.Vie
     }
 
     @Override
-    public void initResult(SearchUserModel.ResultBean resultBean, PhoneInfo info,boolean last) {
-        if (last)
-            dismissLoadingDialog();
-        else
-            showLoadingDialog(true, "读取联系人信息中");
-        if (resultBean != null) {
-            none.setVisibility(View.GONE);
-            resultBean.setU_sign(info.getName());
-            resultBeans.add(resultBean);
-            adapter.notifyDataSetChanged();
+    public void initResult(SearchUserModel.ResultBean resultBean, PhoneInfo info, boolean last) {
+        try {
+            if (last)
+                dismissLoadingDialog();
+            else
+                showLoadingDialog(true, "读取联系人信息中");
+            if (resultBean != null) {
+                none.setVisibility(View.GONE);
+                resultBean.setU_sign(info.getName());
+                resultBeans.add(resultBean);
+                adapter.notifyDataSetChanged();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
 
@@ -164,7 +179,11 @@ public class ContractAddActivity extends BaseActivity implements AddContract.Vie
 
     @Override
     public void complete() {
-        dismissLoadingDialog();
+        try {
+            dismissLoadingDialog();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

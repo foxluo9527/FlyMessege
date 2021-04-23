@@ -1,17 +1,16 @@
 package com.example.flymessagedome.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.flymessagedome.R;
 import com.example.flymessagedome.base.BaseActivity;
@@ -30,19 +29,22 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SearchFriendActivity extends BaseActivity implements SearchFriendContract.View{
+@SuppressLint("NonConstantResourceId")
+public class SearchFriendActivity extends BaseActivity implements SearchFriendContract.View {
+
     @BindView(R.id.et_search)
     EditText searchEt;
     @BindView(R.id.cancel)
     ImageView cancel;
     @BindView(R.id.contract_list)
     RecyclerView contract_list;
-    ArrayList<FriendsBean> friendBeans=new ArrayList<>();
+    ArrayList<FriendsBean> friendBeans = new ArrayList<>();
     SearchFriendAdapter friendAdapter;
     @BindView(R.id.contract_view)
     View contract_view;
     @Inject
     SearchFriendPresenter searchFriendPresenter;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_search_friend;
@@ -52,9 +54,10 @@ public class SearchFriendActivity extends BaseActivity implements SearchFriendCo
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerMessageComponent.builder().appComponent(appComponent).build().inject(this);
     }
-    @OnClick({R.id.cancel,R.id.back})
-    public void onViewClick(View v){
-        switch (v.getId()){
+
+    @OnClick({R.id.cancel, R.id.back})
+    public void onViewClick(View v) {
+        switch (v.getId()) {
             case R.id.cancel:
                 cancel.setVisibility(View.GONE);
                 searchEt.setText("");
@@ -64,6 +67,7 @@ public class SearchFriendActivity extends BaseActivity implements SearchFriendCo
                 break;
         }
     }
+
     @Override
     public void initDatas() {
         cancel.setVisibility(View.GONE);
@@ -79,33 +83,30 @@ public class SearchFriendActivity extends BaseActivity implements SearchFriendCo
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().length()>0){
+                if (s.toString().length() > 0) {
                     cancel.setVisibility(View.VISIBLE);
-                    showLoadingDialog(true,"搜索中");
+                    showLoadingDialog(true, "搜索中");
                     searchFriendPresenter.getFriendList(s.toString());
                     friendAdapter.setkeyString(s.toString());
-                }else {
+                } else {
                     cancel.setVisibility(View.GONE);
                     contract_view.setVisibility(View.GONE);
                 }
             }
         });
-        friendAdapter=new SearchFriendAdapter(friendBeans,mContext);
-        StaggeredGridLayoutManager contractGridLayoutManager=new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        friendAdapter = new SearchFriendAdapter(friendBeans, mContext);
+        StaggeredGridLayoutManager contractGridLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         contract_list.setLayoutManager(contractGridLayoutManager);
-        ((SimpleItemAnimator)contract_list.getItemAnimator()).setSupportsChangeAnimations(false);
+        ((SimpleItemAnimator) contract_list.getItemAnimator()).setSupportsChangeAnimations(false);
         contract_list.setAdapter(friendAdapter);
         contract_list.setHasFixedSize(true);
         contract_list.setNestedScrollingEnabled(false);
-        friendAdapter.setOnRecyclerViewItemClickListener(new SearchFriendAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent=new Intent(mContext,ShowUserActivity.class);
-                intent.putExtra("userName",friendBeans.get(position).getFriendUser().getU_name());
-                startActivity(intent);
-            }
+        friendAdapter.setOnRecyclerViewItemClickListener((view, position) -> {
+            Intent intent = new Intent(mContext, ShowUserActivity.class);
+            intent.putExtra("userName", friendBeans.get(position).getFriendUser().getU_name());
+            startActivity(intent);
         });
-        String searchString=getIntent().getStringExtra("searchString");
+        String searchString = getIntent().getStringExtra("searchString");
         searchEt.setText(searchString);
     }
 
@@ -116,14 +117,18 @@ public class SearchFriendActivity extends BaseActivity implements SearchFriendCo
 
     @Override
     public void initFriendList(ArrayList<FriendsBean> friendsBeans) {
-        dismissLoadingDialog();
-        if (friendsBeans.size()==0){
-            contract_view.setVisibility(View.GONE);
-        }else{
-            contract_view.setVisibility(View.VISIBLE);
-            friendBeans.clear();
-            friendBeans.addAll(friendsBeans);
-            friendAdapter.notifyDataSetChanged();
+        try {
+            dismissLoadingDialog();
+            if (friendsBeans.size() == 0) {
+                contract_view.setVisibility(View.GONE);
+            } else {
+                contract_view.setVisibility(View.VISIBLE);
+                friendBeans.clear();
+                friendBeans.addAll(friendsBeans);
+                friendAdapter.notifyDataSetChanged();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -134,8 +139,12 @@ public class SearchFriendActivity extends BaseActivity implements SearchFriendCo
 
     @Override
     public void showError(String msg) {
-        dismissLoadingDialog();
-        ToastUtils.showToast(msg);
+        try {
+            dismissLoadingDialog();
+            ToastUtils.showToast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

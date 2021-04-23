@@ -1,9 +1,7 @@
 package com.example.flymessagedome.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -15,39 +13,44 @@ import com.example.flymessagedome.view.CircleImageView;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+@SuppressLint("NonConstantResourceId")
 public class SettingActivity extends BaseActivity {
+
     @BindView(R.id.head_img)
     CircleImageView head_img;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_setting;
     }
-    @OnClick({R.id.back,R.id.account_setting,R.id.message_setting,R.id.settings,R.id.privacy_setting,R.id.self_setting,R.id.about})
-    public void onViewClick(View v){
-        switch (v.getId()){
+
+    @OnClick({R.id.back, R.id.account_setting, R.id.message_setting, R.id.settings, R.id.privacy_setting, R.id.self_setting, R.id.about})
+    public void onViewClick(View v) {
+        switch (v.getId()) {
             case R.id.back:
                 finish();
                 break;
             case R.id.account_setting:
-                startActivity(new Intent(mContext,AccountActivity.class));
+                startActivity(new Intent(mContext, AccountActivity.class));
                 break;
             case R.id.self_setting:
-                startActivity(new Intent(mContext,SecuritySettingsActivity.class));
+                startActivity(new Intent(mContext, SecuritySettingsActivity.class));
                 break;
             case R.id.message_setting:
-                startActivity(new Intent(mContext,NotificationActivity.class));
+                startActivity(new Intent(mContext, NotificationActivity.class));
                 break;
             case R.id.privacy_setting:
-                startActivity(new Intent(mContext,PrivacyActivity.class));
+                startActivity(new Intent(mContext, PrivacyActivity.class));
                 break;
             case R.id.settings:
-                startActivity(new Intent(mContext,CommonSettingActivity.class));
+                startActivity(new Intent(mContext, CommonSettingActivity.class));
                 break;
             case R.id.about:
-                startActivity(new Intent(mContext,AboutActivity.class));
+                startActivity(new Intent(mContext, AboutActivity.class));
                 break;
         }
     }
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
 
@@ -60,8 +63,8 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     public void initDatas() {
-        if (LoginActivity.loginUser!=null)
-        Glide.with(mContext).load(LoginActivity.loginUser.getU_head_img()).into(head_img);
+        if (LoginActivity.loginUser != null)
+            Glide.with(mContext).load(LoginActivity.loginUser.getU_head_img()).into(head_img);
     }
 
     @Override

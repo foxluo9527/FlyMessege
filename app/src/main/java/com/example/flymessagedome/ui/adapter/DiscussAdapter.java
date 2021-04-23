@@ -52,32 +52,36 @@ public class DiscussAdapter extends RecyclerView.Adapter {
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ViewHolder viewHolder = (ViewHolder) holder;
-        Post.PostBean.CommentsBean comment = comments.get(position);
-        viewHolder.uName.setText(comment.getSend_u_nick_name());
-        viewHolder.content.setText(comment.getCommunity_post_comment_content());
-        viewHolder.time.setText(TimeUtil.QQFormatTime(comment.getCreate_time()));
-        viewHolder.zanNum.setText(comment.getZan_num() + "");
-        viewHolder.zanNum.setVisibility(comment.getZan_num() > 0 ? View.VISIBLE : View.INVISIBLE);
-        viewHolder.zanState.setImageDrawable(context.getResources().getDrawable(comment.getZan_state() == 0 ? R.drawable.zan : R.drawable.zan_sel));
-        Glide.with(context).load(proxy.getProxyUrl(comment.getSend_u_head())).into(viewHolder.uHead);
-        DiscussReplyAdapter adapter
-                = new DiscussReplyAdapter((ArrayList<Post.PostBean.CommentsBean.RepliesBean>) comment.getReplies(), position);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
-        viewHolder.replies_list.setLayoutManager(layoutManager);
-        viewHolder.replies_list.setAdapter(adapter);
-        viewHolder.zanState.setOnClickListener(v -> listener.clickZan(position));
-        viewHolder.uHead.setOnClickListener(v -> listener.clickHead(position));
-        viewHolder.itemView.setOnClickListener(v -> listener.clickComment(position));
-        viewHolder.zanState.setOnClickListener(v -> listener.clickZan(position));
-        viewHolder.itemView.setOnLongClickListener(v -> {
-            if (comment.getSend_u_id() == LoginActivity.loginUser.getU_id()) {
-                v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                listener.longPressComment(viewHolder.content, position);
-                return true;
-            } else
-                return false;
-        });
+        try {
+            ViewHolder viewHolder = (ViewHolder) holder;
+            Post.PostBean.CommentsBean comment = comments.get(position);
+            viewHolder.uName.setText(comment.getSend_u_nick_name());
+            viewHolder.content.setText(comment.getCommunity_post_comment_content());
+            viewHolder.time.setText(TimeUtil.QQFormatTime(comment.getCreate_time()));
+            viewHolder.zanNum.setText(comment.getZan_num() + "");
+            viewHolder.zanNum.setVisibility(comment.getZan_num() > 0 ? View.VISIBLE : View.INVISIBLE);
+            viewHolder.zanState.setImageDrawable(context.getResources().getDrawable(comment.getZan_state() == 0 ? R.drawable.zan : R.drawable.zan_sel));
+            Glide.with(context).load(proxy.getProxyUrl(comment.getSend_u_head())).into(viewHolder.uHead);
+            DiscussReplyAdapter adapter
+                    = new DiscussReplyAdapter((ArrayList<Post.PostBean.CommentsBean.RepliesBean>) comment.getReplies(), position);
+            StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+            viewHolder.replies_list.setLayoutManager(layoutManager);
+            viewHolder.replies_list.setAdapter(adapter);
+            viewHolder.zanState.setOnClickListener(v -> listener.clickZan(position));
+            viewHolder.uHead.setOnClickListener(v -> listener.clickHead(position));
+            viewHolder.itemView.setOnClickListener(v -> listener.clickComment(position));
+            viewHolder.zanState.setOnClickListener(v -> listener.clickZan(position));
+            viewHolder.itemView.setOnLongClickListener(v -> {
+                if (comment.getSend_u_id() == LoginActivity.loginUser.getU_id()) {
+                    v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    listener.longPressComment(viewHolder.content, position);
+                    return true;
+                } else
+                    return false;
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -86,7 +90,7 @@ public class DiscussAdapter extends RecyclerView.Adapter {
     }
 
     @SuppressLint("NonConstantResourceId")
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.head)
         CircleImageView uHead;
         @BindView(R.id.name)
@@ -125,25 +129,28 @@ public class DiscussAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            ItemViewHolder viewHolder = (ItemViewHolder) holder;
-            Post.PostBean.CommentsBean.RepliesBean reply = replies.get(position);
-            viewHolder.uName.setText(reply.getSend_u_nick_name());
-            viewHolder.replier.setText(reply.getReply_u_name());
-            viewHolder.content.setText(reply.getReply_content());
-            viewHolder.time.setText(TimeUtil.QQFormatTime(reply.getCreate_time()));
-            Glide.with(context).load(proxy.getProxyUrl(reply.getSend_u_head())).into(viewHolder.uHead);
-            viewHolder.uHead.setOnClickListener(v -> listener.clickReplyHead(position, index));
-            viewHolder.itemView.setOnClickListener(v -> listener.clickReply(position, index));
+            try {
+                ItemViewHolder viewHolder = (ItemViewHolder) holder;
+                Post.PostBean.CommentsBean.RepliesBean reply = replies.get(position);
+                viewHolder.uName.setText(reply.getSend_u_nick_name());
+                viewHolder.replier.setText(reply.getReply_u_name());
+                viewHolder.content.setText(reply.getReply_content());
+                viewHolder.time.setText(TimeUtil.QQFormatTime(reply.getCreate_time()));
+                Glide.with(context).load(proxy.getProxyUrl(reply.getSend_u_head())).into(viewHolder.uHead);
+                viewHolder.uHead.setOnClickListener(v -> listener.clickReplyHead(position, index));
+                viewHolder.itemView.setOnClickListener(v -> listener.clickReply(position, index));
 
-            viewHolder.itemView.setOnLongClickListener(v -> {
-                if (reply.getSend_u_id() == LoginActivity.loginUser.getU_id()) {
-                    v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                    listener.longPressReply(viewHolder.content, position, index);
-                    return true;
-                } else
-                    return false;
-            });
-
+                viewHolder.itemView.setOnLongClickListener(v -> {
+                    if (reply.getSend_u_id() == LoginActivity.loginUser.getU_id()) {
+                        v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        listener.longPressReply(viewHolder.content, position, index);
+                        return true;
+                    } else
+                        return false;
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @Override

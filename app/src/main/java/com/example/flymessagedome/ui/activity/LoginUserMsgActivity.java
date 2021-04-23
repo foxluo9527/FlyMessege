@@ -1,10 +1,5 @@
 package com.example.flymessagedome.ui.activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.content.res.AppCompatResources;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -12,7 +7,6 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -26,6 +20,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.bumptech.glide.Glide;
 import com.example.flymessagedome.FlyMessageApplication;
@@ -59,7 +58,7 @@ import static com.example.flymessagedome.utils.Constant.RC_CHOOSE_BG_IMG;
 import static com.example.flymessagedome.utils.Constant.RC_CHOOSE_HEAD_IMG;
 
 @SuppressLint("NonConstantResourceId")
-public class LoginUserMsgActivity extends BaseActivity implements MineContract.View,EasyPermissions.PermissionCallbacks{
+public class LoginUserMsgActivity extends BaseActivity implements MineContract.View, EasyPermissions.PermissionCallbacks {
 
     @BindView(R.id.nick_name)
     TextView nickName;
@@ -91,22 +90,22 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @OnClick({R.id.back,R.id.u_head_img,R.id.sign_view,R.id.msg_view,R.id.change_msg,R.id.show_bg_view,R.id.my_qr_code,R.id.more,R.id.community})
-    public void onViewClick(View view){
-        switch (view.getId()){
+    @OnClick({R.id.back, R.id.u_head_img, R.id.sign_view, R.id.msg_view, R.id.change_msg, R.id.show_bg_view, R.id.my_qr_code, R.id.more, R.id.community})
+    public void onViewClick(View view) {
+        switch (view.getId()) {
             case R.id.back:
                 finish();
                 break;
             case R.id.msg_view:
-                Intent showMsigntent=new Intent(mContext,ShowUserMsgActivity.class);
-                showMsigntent.putExtra("userId",LoginActivity.loginUser.getU_id());
+                Intent showMsigntent = new Intent(mContext, ShowUserMsgActivity.class);
+                showMsigntent.putExtra("userId", LoginActivity.loginUser.getU_id());
                 startActivity(showMsigntent);
                 break;
             case R.id.show_bg_view:
                 showBGPopupMenu(mContext);
                 break;
             case R.id.sign_view:
-                startActivity(new Intent(mContext,AddSignActivity.class));
+                startActivity(new Intent(mContext, AddSignActivity.class));
                 break;
             case R.id.change_msg:
                 startActivity(new Intent(mContext, EditUserMsgActivity.class));
@@ -115,19 +114,20 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
                 showHeadPopupMenu(mContext);
                 break;
             case R.id.my_qr_code:
-                startActivity(new Intent(mContext,MyQrCodeActivity.class));
+                startActivity(new Intent(mContext, MyQrCodeActivity.class));
                 break;
             case R.id.more:
                 showMorePopupMenu(mContext);
                 break;
             case R.id.community:
-                Intent intent=new Intent(mContext, UserCommunityActivity.class);
-                intent.putExtra("userId",LoginActivity.loginUser.getU_id());
-                intent.putExtra("uName",LoginActivity.loginUser.getU_nick_name());
-                startActivityForResult(intent,2);
+                Intent intent = new Intent(mContext, UserCommunityActivity.class);
+                intent.putExtra("userId", LoginActivity.loginUser.getU_id());
+                intent.putExtra("uName", LoginActivity.loginUser.getU_nick_name());
+                startActivityForResult(intent, 2);
                 break;
         }
     }
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerMessageComponent.builder().appComponent(appComponent).build().inject(this);
@@ -142,14 +142,14 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
     public void initDatas() {
         u_name.setText(LoginActivity.loginUser.getU_name());
         nickName.setText(LoginActivity.loginUser.getU_nick_name());
-        if (TextUtils.isEmpty(LoginActivity.loginUser.getU_sex())){
+        if (TextUtils.isEmpty(LoginActivity.loginUser.getU_sex())) {
             sex.setVisibility(View.GONE);
-        }else {
+        } else {
             sex.setVisibility(View.VISIBLE);
-            if (LoginActivity.loginUser.getU_sex().equals("男")){
-                sex.setImageDrawable(AppCompatResources.getDrawable(mContext,R.mipmap.man));
-            }else {
-                sex.setImageDrawable(AppCompatResources.getDrawable(mContext,R.mipmap.women));
+            if (LoginActivity.loginUser.getU_sex().equals("男")) {
+                sex.setImageDrawable(AppCompatResources.getDrawable(mContext, R.mipmap.man));
+            } else {
+                sex.setImageDrawable(AppCompatResources.getDrawable(mContext, R.mipmap.women));
             }
         }
         position.setText(LoginActivity.loginUser.getU_position());
@@ -161,26 +161,24 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
                 .asDrawable()
                 .load(FlyMessageApplication.getProxy(mContext).getProxyUrl(LoginActivity.loginUser.getU_bg_img()))
                 .into(mainView);
-        u_name.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                ClipboardManager clip = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                clip.setPrimaryClip(ClipData.newPlainText("url", LoginActivity.loginUser.getU_name()));
-                ToastUtils.showToast("用户名已复制到剪切板");
-                return false;
-            }
+        u_name.setOnLongClickListener(v -> {
+            ClipboardManager clip = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+            clip.setPrimaryClip(ClipData.newPlainText("url", LoginActivity.loginUser.getU_name()));
+            ToastUtils.showToast("用户名已复制到剪切板");
+            return false;
         });
     }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void showHeadPopupMenu(Context context) {
-        final View popView = View.inflate(context,R.layout.click_head_popup,null);
-        View cancel=popView.findViewById(R.id.cancel_item);
-        View changeHead=popView.findViewById(R.id.change_head);
-        View showHead=popView.findViewById(R.id.show_head);
+        final View popView = View.inflate(context, R.layout.click_head_popup, null);
+        View cancel = popView.findViewById(R.id.cancel_item);
+        View changeHead = popView.findViewById(R.id.change_head);
+        View showHead = popView.findViewById(R.id.show_head);
         //获取屏幕宽高
         int weight = getResources().getDisplayMetrics().widthPixels;
-        int height = ImageUtils.dip2px(mContext,161);
-        PopupWindow popupWindow = new PopupWindow(popView,weight,height);
+        int height = ImageUtils.dip2px(mContext, 161);
+        PopupWindow popupWindow = new PopupWindow(popView, weight, height);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setFocusable(true);
         //点击外部popueWindow消失
@@ -189,16 +187,16 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
 
         //popupWindow消失屏幕变为不透明
         popupWindow.setOnDismissListener(() -> {
-            WindowManager.LayoutParams lp = ((Activity)context).getWindow().getAttributes();
+            WindowManager.LayoutParams lp = ((Activity) context).getWindow().getAttributes();
             lp.alpha = 1.0f;
-            ((Activity)context).getWindow().setAttributes(lp);
+            ((Activity) context).getWindow().setAttributes(lp);
         });
         //popupWindow出现屏幕变为半透明
-        WindowManager.LayoutParams lp =  ((Activity)context).getWindow().getAttributes();
+        WindowManager.LayoutParams lp = ((Activity) context).getWindow().getAttributes();
         lp.alpha = 0.5f;
-        ((Activity)context).getWindow().setAttributes(lp);
-        View.OnClickListener listener= v -> {
-            switch (v.getId()){
+        ((Activity) context).getWindow().setAttributes(lp);
+        View.OnClickListener listener = v -> {
+            switch (v.getId()) {
                 case R.id.cancel_item:
                     popupWindow.dismiss();
                     break;
@@ -208,7 +206,7 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
                     break;
                 case R.id.show_head:
                     popupWindow.dismiss();
-                    startActivity(new Intent(mContext,ShowLoginHeadActivity.class));
+                    startActivity(new Intent(mContext, ShowLoginHeadActivity.class));
                     break;
             }
         };
@@ -216,18 +214,19 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
         changeHead.setOnClickListener(listener);
         showHead.setOnClickListener(listener);
 
-        popupWindow.showAtLocation(popView, Gravity.BOTTOM,0,0);
+        popupWindow.showAtLocation(popView, Gravity.BOTTOM, 0, 0);
     }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void showBGPopupMenu(Context context) {
-        final View popView = View.inflate(context,R.layout.show_login_bg_popup,null);
-        View change_head_item=popView.findViewById(R.id.change_head_item);
-        View change_bg_item=popView.findViewById(R.id.change_bg_item);
-        View cancel_item=popView.findViewById(R.id.cancel_item);
+        final View popView = View.inflate(context, R.layout.show_login_bg_popup, null);
+        View change_head_item = popView.findViewById(R.id.change_head_item);
+        View change_bg_item = popView.findViewById(R.id.change_bg_item);
+        View cancel_item = popView.findViewById(R.id.cancel_item);
         //获取屏幕宽高
         int weight = getResources().getDisplayMetrics().widthPixels;
-        int height = ImageUtils.dip2px(mContext,163);
-        PopupWindow popupWindow = new PopupWindow(popView,weight,height);
+        int height = ImageUtils.dip2px(mContext, 163);
+        PopupWindow popupWindow = new PopupWindow(popView, weight, height);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setFocusable(true);
         //点击外部popueWindow消失
@@ -235,55 +234,50 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
         popupWindow.update();
 
         //popupWindow消失屏幕变为不透明
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                WindowManager.LayoutParams lp = ((Activity)context).getWindow().getAttributes();
-                lp.alpha = 1.0f;
-                ((Activity)context).getWindow().setAttributes(lp);
-            }
+        popupWindow.setOnDismissListener(() -> {
+            WindowManager.LayoutParams lp = ((Activity) context).getWindow().getAttributes();
+            lp.alpha = 1.0f;
+            ((Activity) context).getWindow().setAttributes(lp);
         });
         //popupWindow出现屏幕变为半透明
-        WindowManager.LayoutParams lp =  ((Activity)context).getWindow().getAttributes();
+        WindowManager.LayoutParams lp = ((Activity) context).getWindow().getAttributes();
         lp.alpha = 0.5f;
-        ((Activity)context).getWindow().setAttributes(lp);
-        View.OnClickListener listener=new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.cancel_item:
-                        popupWindow.dismiss();
-                        break;
-                    case R.id.change_bg_item:
-                        choiceBgImg();
-                        popupWindow.dismiss();
-                        break;
-                    case R.id.change_head_item:
-                        showBGImg();
-                        popupWindow.dismiss();
-                        break;
-                }
+        ((Activity) context).getWindow().setAttributes(lp);
+        View.OnClickListener listener = v -> {
+            switch (v.getId()) {
+                case R.id.cancel_item:
+                    popupWindow.dismiss();
+                    break;
+                case R.id.change_bg_item:
+                    choiceBgImg();
+                    popupWindow.dismiss();
+                    break;
+                case R.id.change_head_item:
+                    showBGImg();
+                    popupWindow.dismiss();
+                    break;
             }
         };
         cancel_item.setOnClickListener(listener);
         change_bg_item.setOnClickListener(listener);
         change_head_item.setOnClickListener(listener);
-        popupWindow.showAtLocation(popView, Gravity.BOTTOM,0,0);
+        popupWindow.showAtLocation(popView, Gravity.BOTTOM, 0, 0);
     }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void showMorePopupMenu(Context context) {
-        final View popView = View.inflate(context,R.layout.show_login_msg_more_popup,null);
-        View show_bg_item=popView.findViewById(R.id.show_bg_item);
-        View change_bg_item=popView.findViewById(R.id.change_bg_item);
-        View changeHead=popView.findViewById(R.id.change_head);
-        View showHead=popView.findViewById(R.id.show_head);
-        View show_msg_item=popView.findViewById(R.id.show_msg_item);
-        View change_msg_item=popView.findViewById(R.id.change_msg_item);
-        View cancel_item=popView.findViewById(R.id.cancel_item);
+        final View popView = View.inflate(context, R.layout.show_login_msg_more_popup, null);
+        View show_bg_item = popView.findViewById(R.id.show_bg_item);
+        View change_bg_item = popView.findViewById(R.id.change_bg_item);
+        View changeHead = popView.findViewById(R.id.change_head);
+        View showHead = popView.findViewById(R.id.show_head);
+        View show_msg_item = popView.findViewById(R.id.show_msg_item);
+        View change_msg_item = popView.findViewById(R.id.change_msg_item);
+        View cancel_item = popView.findViewById(R.id.cancel_item);
         //获取屏幕宽高
         int weight = getResources().getDisplayMetrics().widthPixels;
-        int height = ImageUtils.dip2px(mContext,390);
-        PopupWindow popupWindow = new PopupWindow(popView,weight,height);
+        int height = ImageUtils.dip2px(mContext, 390);
+        PopupWindow popupWindow = new PopupWindow(popView, weight, height);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setFocusable(true);
         //点击外部popueWindow消失
@@ -291,52 +285,46 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
         popupWindow.update();
 
         //popupWindow消失屏幕变为不透明
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                WindowManager.LayoutParams lp = ((Activity)context).getWindow().getAttributes();
-                lp.alpha = 1.0f;
-                ((Activity)context).getWindow().setAttributes(lp);
-            }
+        popupWindow.setOnDismissListener(() -> {
+            WindowManager.LayoutParams lp = ((Activity) context).getWindow().getAttributes();
+            lp.alpha = 1.0f;
+            ((Activity) context).getWindow().setAttributes(lp);
         });
         //popupWindow出现屏幕变为半透明
-        WindowManager.LayoutParams lp =  ((Activity)context).getWindow().getAttributes();
+        WindowManager.LayoutParams lp = ((Activity) context).getWindow().getAttributes();
         lp.alpha = 0.5f;
-        ((Activity)context).getWindow().setAttributes(lp);
-        View.OnClickListener listener=new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.cancel_item:
-                        popupWindow.dismiss();
-                        break;
-                    case R.id.change_bg_item:
-                        choiceBgImg();
-                        popupWindow.dismiss();
-                        break;
-                    case R.id.show_bg_item:
-                        showBGImg();
-                        popupWindow.dismiss();
-                        break;
-                    case R.id.change_head:
-                        popupWindow.dismiss();
-                        choiceHeadImg();
-                        break;
-                    case R.id.show_head:
-                        popupWindow.dismiss();
-                        startActivity(new Intent(mContext,ShowLoginHeadActivity.class));
-                        break;
-                    case R.id.show_msg_item:
-                        popupWindow.dismiss();
-                        Intent showMsigntent=new Intent(mContext,ShowUserMsgActivity.class);
-                        showMsigntent.putExtra("userId",LoginActivity.loginUser.getU_id());
-                        startActivity(showMsigntent);
-                        break;
-                    case R.id.change_msg_item:
-                        popupWindow.dismiss();
-                        startActivity(new Intent(mContext,EditUserMsgActivity.class));
-                        break;
-                }
+        ((Activity) context).getWindow().setAttributes(lp);
+        View.OnClickListener listener = v -> {
+            switch (v.getId()) {
+                case R.id.cancel_item:
+                    popupWindow.dismiss();
+                    break;
+                case R.id.change_bg_item:
+                    choiceBgImg();
+                    popupWindow.dismiss();
+                    break;
+                case R.id.show_bg_item:
+                    showBGImg();
+                    popupWindow.dismiss();
+                    break;
+                case R.id.change_head:
+                    popupWindow.dismiss();
+                    choiceHeadImg();
+                    break;
+                case R.id.show_head:
+                    popupWindow.dismiss();
+                    startActivity(new Intent(mContext, ShowLoginHeadActivity.class));
+                    break;
+                case R.id.show_msg_item:
+                    popupWindow.dismiss();
+                    Intent showMsigntent = new Intent(mContext, ShowUserMsgActivity.class);
+                    showMsigntent.putExtra("userId", LoginActivity.loginUser.getU_id());
+                    startActivity(showMsigntent);
+                    break;
+                case R.id.change_msg_item:
+                    popupWindow.dismiss();
+                    startActivity(new Intent(mContext, EditUserMsgActivity.class));
+                    break;
             }
         };
         cancel_item.setOnClickListener(listener);
@@ -347,17 +335,18 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
         show_msg_item.setOnClickListener(listener);
         change_msg_item.setOnClickListener(listener);
 
-        popupWindow.showAtLocation(popView, Gravity.BOTTOM,0,0);
+        popupWindow.showAtLocation(popView, Gravity.BOTTOM, 0, 0);
     }
+
     @AfterPermissionGranted(Constant.REQUEST_CODE_PERMISSION_TAKE_PHOTO)
     private void choiceHeadImg() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
         if (EasyPermissions.hasPermissions(mContext, perms)) {
             // 拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话就没有拍照功能
             File takePhotoDir = new File(Environment.getExternalStorageDirectory(), "FlyMessage/File/photograph");
-            ArrayList<String> checkPhotos=new ArrayList<>();
+            ArrayList<String> checkPhotos = new ArrayList<>();
             Intent photoPickerIntent = new BGAPhotoPickerActivity.IntentBuilder(mContext)
-                    .cameraFileDir(true ? takePhotoDir : null) // 拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话则不开启图库里的拍照功能
+                    .cameraFileDir(takePhotoDir) // 拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话则不开启图库里的拍照功能
                     .maxChooseCount(1) // 图片选择张数的最大值
                     .selectedPhotos(null) // 当前已选中的图片路径集合
                     .pauseOnScroll(false) // 滚动列表时是否暂停加载图片
@@ -367,15 +356,15 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
             EasyPermissions.requestPermissions(this, "图片选择需要以下权限:\n\n1.访问设备上的照片\n\n2.拍照", Constant.REQUEST_CODE_PERMISSION_TAKE_PHOTO, perms);
         }
     }
+
     @AfterPermissionGranted(Constant.REQUEST_CODE_PERMISSION_TAKE_PHOTO)
     private void choiceBgImg() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
         if (EasyPermissions.hasPermissions(mContext, perms)) {
             // 拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话就没有拍照功能
             File takePhotoDir = new File(Environment.getExternalStorageDirectory(), "FlyMessage/File/photograph/");
-            ArrayList<String> checkPhotos=new ArrayList<>();
             Intent photoPickerIntent = new BGAPhotoPickerActivity.IntentBuilder(mContext)
-                    .cameraFileDir(true ? takePhotoDir : null) // 拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话则不开启图库里的拍照功能
+                    .cameraFileDir(takePhotoDir) // 拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话则不开启图库里的拍照功能
                     .maxChooseCount(1) // 图片选择张数的最大值
                     .selectedPhotos(null) // 当前已选中的图片路径集合
                     .pauseOnScroll(false) // 滚动列表时是否暂停加载图片
@@ -385,6 +374,7 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
             EasyPermissions.requestPermissions(this, "图片选择需要以下权限:\n\n1.访问设备上的照片\n\n2.拍照", Constant.REQUEST_CODE_PERMISSION_TAKE_PHOTO, perms);
         }
     }
+
     @AfterPermissionGranted(Constant.REQUEST_CODE_SHOW_PHOTOS)
     public void showBGImg() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -401,61 +391,45 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode== UCrop.REQUEST_CROP){
-            if (resultCode == RESULT_OK){
+        if (requestCode == UCrop.REQUEST_CROP) {
+            if (resultCode == RESULT_OK) {
                 final Uri resultUri = UCrop.getOutput(data);
                 AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                 dialog.setMessage("是否更换头像")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
-                                ((BaseActivity)mContext).showLoadingDialog(false,"更换头像中");
-                                mineFragmentPresenter.changeHead(resultUri.getPath());
-                            }
+                        .setPositiveButton("确定", (dialog1, which) -> {
+                            dialog1.cancel();
+                            ((BaseActivity) mContext).showLoadingDialog(false, "更换头像中");
+                            mineFragmentPresenter.changeHead(resultUri.getPath());
                         })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
-                            }
-                        })
+                        .setNegativeButton("取消", (dialog12, which) -> dialog12.cancel())
                         .create().show();
-            }else if (resultCode == UCrop.RESULT_ERROR) {
+            } else if (resultCode == UCrop.RESULT_ERROR) {
                 final Throwable cropError = UCrop.getError(data);
                 cropError.printStackTrace();
             }
-        }else if (resultCode == RESULT_OK && requestCode == RC_CHOOSE_HEAD_IMG) {
+        } else if (resultCode == RESULT_OK && requestCode == RC_CHOOSE_HEAD_IMG) {
             List<String> selectedPhotos = BGAPhotoPickerActivity.getSelectedPhotos(data);
-            if (selectedPhotos.size()>0){
-                File file=new File(Environment.getExternalStorageDirectory()+"/FlyMessage/temp/");
-                if(!file.exists()){
+            if (selectedPhotos.size() > 0) {
+                File file = new File(Environment.getExternalStorageDirectory() + "/FlyMessage/temp/");
+                if (!file.exists()) {
                     file.mkdirs();
                 }
-                file=new File(Environment.getExternalStorageDirectory()+"/FlyMessage/temp/"+ UUID.randomUUID()+".jpg");
+                file = new File(Environment.getExternalStorageDirectory() + "/FlyMessage/temp/" + UUID.randomUUID() + ".jpg");
                 UCrop.of(Uri.fromFile(new File(selectedPhotos.get(0))), Uri.fromFile(file))
                         .withAspectRatio(1, 1)
-                        .start((LoginUserMsgActivity)mContext);
+                        .start((LoginUserMsgActivity) mContext);
             }
-        }else if(resultCode == RESULT_OK&&requestCode==RC_CHOOSE_BG_IMG){
+        } else if (resultCode == RESULT_OK && requestCode == RC_CHOOSE_BG_IMG) {
             List<String> selectedPhotos = BGAPhotoPickerActivity.getSelectedPhotos(data);
-            if (selectedPhotos.size()>0){
+            if (selectedPhotos.size() > 0) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                 dialog.setMessage("是否更换名片背景")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
-                                ((BaseActivity)mContext).showLoadingDialog(false,"更换名片背景中");
-                                mineFragmentPresenter.changeBgImg(selectedPhotos.get(0));
-                            }
+                        .setPositiveButton("确定", (dialog13, which) -> {
+                            dialog13.cancel();
+                            ((BaseActivity) mContext).showLoadingDialog(false, "更换名片背景中");
+                            mineFragmentPresenter.changeBgImg(selectedPhotos.get(0));
                         })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();//取消弹出框
-                            }
-                        })
+                        .setNegativeButton("取消", (dialog14, which) -> dialog14.cancel())
                         .create().show();
             }
         }
@@ -464,20 +438,28 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
 
     @Override
     public void initHeadImg(String headUrl) {
-        ((BaseActivity)mContext).dismissLoadingDialog();
-        ToastUtils.showToast("修改头像成功");
-        Glide.with(mContext).load(FlyMessageApplication.getProxy(mContext).getProxyUrl(headUrl)).into(headImg);
-        LoginActivity.loginUser.setU_head_img(headUrl);
-        FlyMessageApplication.getInstances().getDaoSession().getUserDao().update(LoginActivity.loginUser);
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+            ToastUtils.showToast("修改头像成功");
+            Glide.with(mContext).load(FlyMessageApplication.getProxy(mContext).getProxyUrl(headUrl)).into(headImg);
+            LoginActivity.loginUser.setU_head_img(headUrl);
+            FlyMessageApplication.getInstances().getDaoSession().getUserDao().update(LoginActivity.loginUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void initBgImg(String bgUrl) {
-        ((BaseActivity)mContext).dismissLoadingDialog();
-        ToastUtils.showToast("修改名片背景成功");
-        Glide.with(mContext).load(FlyMessageApplication.getProxy(mContext).getProxyUrl(bgUrl)).into(mainView);
-        LoginActivity.loginUser.setU_bg_img(bgUrl);
-        FlyMessageApplication.getInstances().getDaoSession().getUserDao().update(LoginActivity.loginUser);
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+            ToastUtils.showToast("修改名片背景成功");
+            Glide.with(mContext).load(FlyMessageApplication.getProxy(mContext).getProxyUrl(bgUrl)).into(mainView);
+            LoginActivity.loginUser.setU_bg_img(bgUrl);
+            FlyMessageApplication.getInstances().getDaoSession().getUserDao().update(LoginActivity.loginUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -487,13 +469,21 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
 
     @Override
     public void showError(String msg) {
-        ((BaseActivity)mContext).dismissLoadingDialog();
-        ToastUtils.showToast(msg);
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+            ToastUtils.showToast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void complete() {
-        ((BaseActivity)mContext).dismissLoadingDialog();
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -506,17 +496,18 @@ public class LoginUserMsgActivity extends BaseActivity implements MineContract.V
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-        if (requestCode==Constant.REQUEST_CODE_PERMISSION_CHOICE_PHOTO){
+        if (requestCode == Constant.REQUEST_CODE_PERMISSION_CHOICE_PHOTO) {
             ToastUtils.showToast("你拒绝了读写存储空间权限");
-        }else if (requestCode==Constant.REQUEST_CODE_PERMISSION_TAKE_PHOTO){
+        } else if (requestCode == Constant.REQUEST_CODE_PERMISSION_TAKE_PHOTO) {
             ToastUtils.showToast("你拒绝了摄像头权限");
-        }else if (requestCode==Constant.REQUEST_CODE_PERMISSION_CHOICE_FILE){
+        } else if (requestCode == Constant.REQUEST_CODE_PERMISSION_CHOICE_FILE) {
             ToastUtils.showToast("你拒绝了读写存储空间权限");
-        }else if (requestCode==Constant.REQUEST_CODE_PERMISSION_RECORD_AUDIO){
+        } else if (requestCode == Constant.REQUEST_CODE_PERMISSION_RECORD_AUDIO) {
             ToastUtils.showToast("你拒绝了录音和麦克风权限");
-        }else if (requestCode==Constant.REQUEST_CODE_SHOW_PHOTOS){
+        } else if (requestCode == Constant.REQUEST_CODE_SHOW_PHOTOS) {
             ToastUtils.showToast("访问设备上的照片权限");
         }
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {

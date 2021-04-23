@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,32 +52,26 @@ public class AccountAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        User user=users.get(position);
-        Glide.with(context).load(proxyCacheServer.getProxyUrl(user.getU_head_img())).error(R.drawable.icon).into(((AccountViewHolder)holder).head);
-        ((AccountViewHolder)holder).name.setText(user.getU_name());
-        ((AccountViewHolder)holder).nickName.setText(user.getU_nick_name());
-        if (AccountActivity.onEditAccount){
-            ((AccountViewHolder)holder).delBtn.setVisibility(View.VISIBLE);
-            ((AccountViewHolder)holder).onLogin.setVisibility(View.GONE);
-            ((AccountViewHolder)holder).delBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(v,position);
+        try{
+            User user = users.get(position);
+            Glide.with(context).load(proxyCacheServer.getProxyUrl(user.getU_head_img())).error(R.drawable.icon).into(((AccountViewHolder) holder).head);
+            ((AccountViewHolder) holder).name.setText(user.getU_name());
+            ((AccountViewHolder) holder).nickName.setText(user.getU_nick_name());
+            if (AccountActivity.onEditAccount) {
+                ((AccountViewHolder) holder).delBtn.setVisibility(View.VISIBLE);
+                ((AccountViewHolder) holder).onLogin.setVisibility(View.GONE);
+                ((AccountViewHolder) holder).delBtn.setOnClickListener(v -> listener.onItemClick(v, position));
+            } else {
+                ((AccountViewHolder) holder).itemView.setOnClickListener(v -> listener.onItemClick(v, position));
+                ((AccountViewHolder) holder).delBtn.setVisibility(View.GONE);
+                if (LoginActivity.loginUser.getU_id() == user.getU_id()) {
+                    ((AccountViewHolder) holder).onLogin.setVisibility(View.VISIBLE);
+                } else {
+                    ((AccountViewHolder) holder).onLogin.setVisibility(View.GONE);
                 }
-            });
-        }else {
-            ((AccountViewHolder)holder).itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(v,position);
-                }
-            });
-            ((AccountViewHolder)holder).delBtn.setVisibility(View.GONE);
-            if (LoginActivity.loginUser.getU_id()==user.getU_id()){
-                ((AccountViewHolder)holder).onLogin.setVisibility(View.VISIBLE);
-            }else {
-                ((AccountViewHolder)holder).onLogin.setVisibility(View.GONE);
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

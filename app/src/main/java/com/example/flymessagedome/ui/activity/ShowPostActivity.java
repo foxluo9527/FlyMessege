@@ -143,9 +143,7 @@ public class ShowPostActivity extends BaseActivity implements ShowPostContract.V
         discussList.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
         discussList.setAdapter(adapter);
         discussList.setNestedScrollingEnabled(false);
-        scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            refreshLayout.setEnabled(scrollY == 0);
-        });
+        scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> refreshLayout.setEnabled(scrollY == 0));
         comment.setHint("评论");
     }
 
@@ -156,9 +154,9 @@ public class ShowPostActivity extends BaseActivity implements ShowPostContract.V
 
     @Override
     public void initPost(Post.PostBean postBean) {
-        refreshLayout.setRefreshing(false);
-        this.postBean = postBean;
         try {
+            refreshLayout.setRefreshing(false);
+            this.postBean = postBean;
             if (postBean.getU_id() == LoginActivity.loginUser.getU_id()) {
                 edit.setVisibility(View.VISIBLE);
                 delete.setVisibility(View.VISIBLE);
@@ -197,72 +195,100 @@ public class ShowPostActivity extends BaseActivity implements ShowPostContract.V
 
     @Override
     public void zanPostSuccess(int postId) {
-        dismissLoadingDialog();
-        setResult(2);
-        postBean.setZan_state(1);
-        zanState.setImageDrawable(getResources().getDrawable(R.drawable.zan_sel));
+        try {
+            dismissLoadingDialog();
+            setResult(2);
+            postBean.setZan_state(1);
+            zanState.setImageDrawable(getResources().getDrawable(R.drawable.zan_sel));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void cancelZanPostSuccess(int postId) {
-        dismissLoadingDialog();
-        setResult(2);
-        postBean.setZan_state(0);
-        zanState.setImageDrawable(getResources().getDrawable(R.drawable.zan));
+        try {
+            dismissLoadingDialog();
+            setResult(2);
+            postBean.setZan_state(0);
+            zanState.setImageDrawable(getResources().getDrawable(R.drawable.zan));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void zanCommentSuccess(int commentId) {
-        dismissLoadingDialog();
-        setResult(2);
-        for (Post.PostBean.CommentsBean comment : postBean.getComments()) {
-            if (comment.getCommunity_post_comment_id() == commentId) {
-                comment.setZan_state(1);
-                comment.setZan_num(comment.getZan_num() + 1);
-                adapter.notifyItemChanged(postBean.getComments().indexOf(comment));
-                break;
+        try {
+            dismissLoadingDialog();
+            setResult(2);
+            for (Post.PostBean.CommentsBean comment : postBean.getComments()) {
+                if (comment.getCommunity_post_comment_id() == commentId) {
+                    comment.setZan_state(1);
+                    comment.setZan_num(comment.getZan_num() + 1);
+                    adapter.notifyItemChanged(postBean.getComments().indexOf(comment));
+                    break;
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void cancelZanCommentSuccess(int commentId) {
-        dismissLoadingDialog();
-        setResult(2);
-        for (Post.PostBean.CommentsBean comment : postBean.getComments()) {
-            if (comment.getCommunity_post_comment_id() == commentId) {
-                comment.setZan_state(0);
-                comment.setZan_num(comment.getZan_num() - 1);
-                adapter.notifyItemChanged(postBean.getComments().indexOf(comment));
-                break;
+        try {
+            dismissLoadingDialog();
+            setResult(2);
+            for (Post.PostBean.CommentsBean comment : postBean.getComments()) {
+                if (comment.getCommunity_post_comment_id() == commentId) {
+                    comment.setZan_state(0);
+                    comment.setZan_num(comment.getZan_num() - 1);
+                    adapter.notifyItemChanged(postBean.getComments().indexOf(comment));
+                    break;
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void commentSuccess() {
-        refreshLayout.setRefreshing(true);
-        postPresenter.getPost(postId);
-        dismissLoadingDialog();
-        setResult(2);
+        try {
+            refreshLayout.setRefreshing(true);
+            postPresenter.getPost(postId);
+            dismissLoadingDialog();
+            setResult(2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void deleteSuccess() {
-        dismissLoadingDialog();
-        setResult(2);
-        finish();
+        try {
+            dismissLoadingDialog();
+            setResult(2);
+            finish();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void deleteCommentSuccess() {
-        dismissLoadingDialog();
-        refreshLayout.setRefreshing(true);
-        postPresenter.getPost(postId);
-        setResult(2);
+        try {
+            dismissLoadingDialog();
+            refreshLayout.setRefreshing(true);
+            postPresenter.getPost(postId);
+            setResult(2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @OnClick({R.id.back, R.id.delete, R.id.edit, R.id.zan_state, R.id.discuss, R.id.send, R.id.content})
+    @OnClick({R.id.back, R.id.delete, R.id.edit, R.id.zan_state, R.id.discuss, R.id.send, R.id.content, R.id.head})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -276,6 +302,11 @@ public class ShowPostActivity extends BaseActivity implements ShowPostContract.V
                     showLoadingDialog(false, "取消点赞中");
                     postPresenter.cancelZanPost(postId);
                 }
+                break;
+            case R.id.head:
+                Intent showIntent = new Intent(mContext, ShowUserActivity.class);
+                showIntent.putExtra("userName", postBean.getU_name());
+                startActivity(showIntent);
                 break;
             case R.id.content:
             case R.id.discuss:
@@ -348,22 +379,34 @@ public class ShowPostActivity extends BaseActivity implements ShowPostContract.V
 
     @Override
     public void showError() {
-        dismissLoadingDialog();
-        refreshLayout.setRefreshing(false);
+        try {
+            dismissLoadingDialog();
+            refreshLayout.setRefreshing(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void showError(String msg) {
-        refreshLayout.setRefreshing(false);
-        dismissLoadingDialog();
-        ToastUtils.showToast(msg);
+        try {
+            refreshLayout.setRefreshing(false);
+            dismissLoadingDialog();
+            ToastUtils.showToast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void complete() {
-        refreshLayout.setRefreshing(true);
-        postPresenter.getPost(postId);
-        dismissLoadingDialog();
+        try {
+            refreshLayout.setRefreshing(true);
+            postPresenter.getPost(postId);
+            dismissLoadingDialog();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

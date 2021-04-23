@@ -4,7 +4,6 @@ import com.example.flymessagedome.api.FlyMessageApi;
 import com.example.flymessagedome.base.RxPresenter;
 import com.example.flymessagedome.bean.GroupBean;
 import com.example.flymessagedome.model.GroupListModel;
-import com.example.flymessagedome.model.SearchUserModel;
 import com.example.flymessagedome.ui.contract.SearchGroupContract;
 import com.example.flymessagedome.utils.Constant;
 
@@ -17,16 +16,18 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class SearchGroupPresenter extends RxPresenter<SearchGroupContract.View> implements SearchGroupContract.Presenter<SearchGroupContract.View>{
-    private FlyMessageApi flyMessageApi;
-    ArrayList<GroupBean> groupBeans=new ArrayList<>();
+public class SearchGroupPresenter extends RxPresenter<SearchGroupContract.View> implements SearchGroupContract.Presenter<SearchGroupContract.View> {
+    private final FlyMessageApi flyMessageApi;
+    ArrayList<GroupBean> groupBeans = new ArrayList<>();
+
     @Inject
     public SearchGroupPresenter(FlyMessageApi flyMessageApi) {
         this.flyMessageApi = flyMessageApi;
     }
+
     @Override
     public void search(String content, int pageSize, int pageNum) {
-        Subscription rxSubscription = flyMessageApi.queryGroup(content,pageSize,pageNum).subscribeOn(Schedulers.io())
+        Subscription rxSubscription = flyMessageApi.queryGroup(content, pageSize, pageNum).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<GroupListModel>() {
                     @Override
@@ -43,11 +44,11 @@ public class SearchGroupPresenter extends RxPresenter<SearchGroupContract.View> 
                     @Override
                     public void onNext(GroupListModel groupsModel) {
                         if (groupsModel != null && mView != null && groupsModel.code == Constant.SUCCESS) {
-                            groupBeans= (ArrayList<GroupBean>) groupsModel.getGroups();
+                            groupBeans = (ArrayList<GroupBean>) groupsModel.getGroups();
                             mView.initSearchResult(groupBeans);
-                        }else if (groupsModel!=null){
+                        } else if (groupsModel != null) {
                             mView.showError(groupsModel.msg);
-                        }else {
+                        } else {
                             mView.showError("获取数据失败，请稍后重试");
                         }
                     }

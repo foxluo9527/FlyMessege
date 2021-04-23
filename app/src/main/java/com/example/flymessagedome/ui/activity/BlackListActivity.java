@@ -56,10 +56,8 @@ public class BlackListActivity extends BaseActivity implements BGARefreshLayout.
 
     @OnClick({R.id.back})
     public void onViewClick(View v) {
-        switch (v.getId()) {
-            case R.id.back:
-                finish();
-                break;
+        if (v.getId() == R.id.back) {
+            finish();
         }
     }
 
@@ -140,11 +138,15 @@ public class BlackListActivity extends BaseActivity implements BGARefreshLayout.
 
     @Override
     public void initBlackList(ArrayList<BlackListModel.BlackListsBean> blackListBeans) {
-        blackListsBeans.addAll(blackListBeans);
-        none.setVisibility(blackListBeans.size() == 0 ? View.VISIBLE : View.GONE);
-        adapter.notifyDataSetChanged();
-        mRefreshLayout.endRefreshing();
-        mRefreshLayout.endLoadingMore();
+        try {
+            blackListsBeans.addAll(blackListBeans);
+            none.setVisibility(blackListBeans.size() == 0 ? View.VISIBLE : View.GONE);
+            adapter.notifyDataSetChanged();
+            mRefreshLayout.endRefreshing();
+            mRefreshLayout.endLoadingMore();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -154,16 +156,24 @@ public class BlackListActivity extends BaseActivity implements BGARefreshLayout.
 
     @Override
     public void showError(String msg) {
-        mRefreshLayout.endRefreshing();
-        mRefreshLayout.endLoadingMore();
-        ToastUtils.showToast(msg);
-        none.setVisibility(View.VISIBLE);
+        try {
+            mRefreshLayout.endRefreshing();
+            mRefreshLayout.endLoadingMore();
+            ToastUtils.showToast(msg);
+            none.setVisibility(View.VISIBLE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void complete() {
-        dismissLoadingDialog();
-        mRefreshLayout.beginRefreshing();
+        try {
+            dismissLoadingDialog();
+            mRefreshLayout.beginRefreshing();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

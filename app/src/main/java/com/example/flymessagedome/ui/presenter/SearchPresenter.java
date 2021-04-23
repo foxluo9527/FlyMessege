@@ -19,8 +19,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class SearchPresenter extends RxPresenter<SearchContract.View> implements SearchContract.Presenter<SearchContract.View> {
-    private FlyMessageApi flyMessageApi;
+    private final FlyMessageApi flyMessageApi;
     ArrayList<SearchUserModel.ResultBean> searchUsers;
+
     @Inject
     public SearchPresenter(FlyMessageApi flyMessageApi) {
         this.flyMessageApi = flyMessageApi;
@@ -28,7 +29,7 @@ public class SearchPresenter extends RxPresenter<SearchContract.View> implements
 
     @Override
     public void login(String userName, String password) {
-        Subscription rxSubscription = flyMessageApi.getLogin(userName,password).subscribeOn(Schedulers.io())
+        Subscription rxSubscription = flyMessageApi.getLogin(userName, password).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Login>() {
                     @Override
@@ -45,11 +46,11 @@ public class SearchPresenter extends RxPresenter<SearchContract.View> implements
                     @Override
                     public void onNext(Login login) {
                         if (login != null && mView != null && login.code == Constant.SUCCESS) {
-                            SharedPreferencesUtil.getInstance().putString(Constant.U_NAME,userName);
-                            SharedPreferencesUtil.getInstance().putString(Constant.U_PASS,password);
-                            SharedPreferencesUtil.getInstance().putString(Constant.LOGIN_TOKEN,login.getToken());
+                            SharedPreferencesUtil.getInstance().putString(Constant.U_NAME, userName);
+                            SharedPreferencesUtil.getInstance().putString(Constant.U_PASS, password);
+                            SharedPreferencesUtil.getInstance().putString(Constant.LOGIN_TOKEN, login.getToken());
                             MainActivity.serviceBinder.connect();
-                        }else {
+                        } else {
                             mView.loginFailed(login);
                         }
                     }
@@ -58,9 +59,9 @@ public class SearchPresenter extends RxPresenter<SearchContract.View> implements
     }
 
     @Override
-    public void search(String content,int pageSize, int pageNum) {
-        searchUsers=new ArrayList<>();
-        Subscription rxSubscription = flyMessageApi.searchUser(content,pageSize,pageNum).subscribeOn(Schedulers.io())
+    public void search(String content, int pageSize, int pageNum) {
+        searchUsers = new ArrayList<>();
+        Subscription rxSubscription = flyMessageApi.searchUser(content, pageSize, pageNum).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<SearchUserModel>() {
                     @Override
@@ -77,11 +78,11 @@ public class SearchPresenter extends RxPresenter<SearchContract.View> implements
                     @Override
                     public void onNext(SearchUserModel userModel) {
                         if (userModel != null && mView != null && userModel.code == Constant.SUCCESS) {
-                            searchUsers= (ArrayList<SearchUserModel.ResultBean>) userModel.getResult();
+                            searchUsers = (ArrayList<SearchUserModel.ResultBean>) userModel.getResult();
                             mView.initSearchResult(searchUsers);
-                        }else if (userModel!=null){
+                        } else if (userModel != null) {
                             mView.showError(userModel.msg);
-                        }else {
+                        } else {
                             mView.showError("获取数据失败，请稍后重试");
                         }
                     }

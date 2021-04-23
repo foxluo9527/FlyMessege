@@ -1,5 +1,6 @@
 package com.example.flymessagedome.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -26,32 +27,36 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SearchRecordAdapter extends RecyclerView.Adapter {
-    private ArrayList<Chat> chats;
-    private LayoutInflater mLayoutInflater;
+    private final ArrayList<Chat> chats;
+    private final LayoutInflater mLayoutInflater;
     Context context;
     private OnRecyclerViewItemClickListener listener;
-    private HttpProxyCacheServer proxyCacheServer;
-    String searchString="";
+    private final HttpProxyCacheServer proxyCacheServer;
+    String searchString = "";
 
     public SearchRecordAdapter(ArrayList<Chat> chats, Context context) {
         this.chats = chats;
-        this.mLayoutInflater=LayoutInflater.from(context);
+        this.mLayoutInflater = LayoutInflater.from(context);
         this.context = context;
-        this.listener = listener;
-        proxyCacheServer= FlyMessageApplication.getProxy(context);
+        proxyCacheServer = FlyMessageApplication.getProxy(context);
     }
-    public void setKeyString(String searchString){
-        this.searchString=searchString;
+
+    public void setKeyString(String searchString) {
+        this.searchString = searchString;
     }
-    public String getSearchString(){
+
+    public String getSearchString() {
         return searchString;
     }
+
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int position);
     }
-    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener){
-        listener=onRecyclerViewItemClickListener;
+
+    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener) {
+        listener = onRecyclerViewItemClickListener;
     }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -61,29 +66,28 @@ public class SearchRecordAdapter extends RecyclerView.Adapter {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        SearchRecordViewHolder viewHolder=(SearchRecordViewHolder)holder;
-        Chat chat=chats.get(position);
-        Glide.with(context).load(proxyCacheServer.getProxyUrl(chat.getChat_head()))
-
-
-                .into(viewHolder.headImg);
-        viewHolder.name.setText(TextSpanUtil.getInstant().setColor(chat.getChat_name(),
-                searchString,context.getApplicationContext().getColor(R.color.blue_1)));
-        viewHolder.m_content.setText(TextSpanUtil.getInstant().setColor(chat.getChat_content(),
-                searchString,context.getApplicationContext().getColor(R.color.blue_1)));
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onItemClick(v,position);
-            }
-        });
+        try {
+            SearchRecordViewHolder viewHolder = (SearchRecordViewHolder) holder;
+            Chat chat = chats.get(position);
+            Glide.with(context).load(proxyCacheServer.getProxyUrl(chat.getChat_head())).into(viewHolder.headImg);
+            viewHolder.name.setText(TextSpanUtil.getInstant().setColor(chat.getChat_name(),
+                    searchString, context.getApplicationContext().getColor(R.color.blue_1)));
+            viewHolder.m_content.setText(TextSpanUtil.getInstant().setColor(chat.getChat_content(),
+                    searchString, context.getApplicationContext().getColor(R.color.blue_1)));
+            viewHolder.itemView.setOnClickListener(v -> listener.onItemClick(v, position));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int getItemCount() {
         return chats.size();
     }
-    static class SearchRecordViewHolder extends RecyclerView.ViewHolder{
+
+    @SuppressLint("NonConstantResourceId")
+    static class SearchRecordViewHolder extends RecyclerView.ViewHolder {
+
         @Nullable
         @BindView(R.id.user_head_img)
         CircleImageView headImg;
@@ -91,6 +95,7 @@ public class SearchRecordAdapter extends RecyclerView.Adapter {
         TextView name;
         @BindView(R.id.m_content)
         TextView m_content;
+
         public SearchRecordViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

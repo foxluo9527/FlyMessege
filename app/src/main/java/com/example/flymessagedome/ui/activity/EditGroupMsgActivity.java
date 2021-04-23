@@ -1,9 +1,7 @@
 package com.example.flymessagedome.ui.activity;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.Glide;
 import com.example.flymessagedome.FlyMessageApplication;
 import com.example.flymessagedome.R;
@@ -23,9 +23,7 @@ import com.example.flymessagedome.bean.GroupBean;
 import com.example.flymessagedome.bean.GroupBeanDao;
 import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.component.DaggerMessageComponent;
-import com.example.flymessagedome.ui.contract.CreateGroupContract;
 import com.example.flymessagedome.ui.contract.EditGroupContract;
-import com.example.flymessagedome.ui.presenter.CreateGroupPresenter;
 import com.example.flymessagedome.ui.presenter.EditGroupPresenter;
 import com.example.flymessagedome.utils.Constant;
 import com.example.flymessagedome.utils.NetworkUtils;
@@ -48,7 +46,9 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 import static com.example.flymessagedome.utils.Constant.RC_CHOOSE_HEAD_IMG;
 
+@SuppressLint("NonConstantResourceId")
 public class EditGroupMsgActivity extends BaseActivity implements EditGroupContract.View {
+
     @BindView(R.id.cover_img)
     ImageView coverImg;
     @BindView(R.id.edit_name)
@@ -61,12 +61,13 @@ public class EditGroupMsgActivity extends BaseActivity implements EditGroupContr
     View eidtIntroduceView;
     String headPath;
     GroupBean groupBean;
-    private GroupBeanDao groupBeanDao= FlyMessageApplication.getInstances().getDaoSession().getGroupBeanDao();
+    private GroupBeanDao groupBeanDao = FlyMessageApplication.getInstances().getDaoSession().getGroupBeanDao();
     @Inject
     EditGroupPresenter editGroupPresenter;
-    @OnClick({R.id.back,R.id.change_cover_view,R.id.edit_introduce_view,R.id.cancel_btn,R.id.sure_btn,R.id.create})
+
+    @OnClick({R.id.back, R.id.change_cover_view, R.id.edit_introduce_view, R.id.cancel_btn, R.id.sure_btn, R.id.create})
     public void doClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.back:
                 finish();
                 break;
@@ -74,7 +75,7 @@ public class EditGroupMsgActivity extends BaseActivity implements EditGroupContr
                 choiceHeadImg();
                 break;
             case R.id.edit_introduce_view:
-                if (eidtIntroduceView.getVisibility()!=View.VISIBLE){
+                if (eidtIntroduceView.getVisibility() != View.VISIBLE) {
                     eidtIntroduceView.setVisibility(View.VISIBLE);
                     introduceEt.setText(introduceTv.getText());
                 }
@@ -87,22 +88,22 @@ public class EditGroupMsgActivity extends BaseActivity implements EditGroupContr
                 eidtIntroduceView.setVisibility(View.GONE);
                 break;
             case R.id.create:
-                String name=nameEt.getText().toString();
-                String introduce=introduceTv.getText().toString();
-                if (TextUtils.isEmpty(name)){
+                String name = nameEt.getText().toString();
+                String introduce = introduceTv.getText().toString();
+                if (TextUtils.isEmpty(name)) {
                     ToastUtils.showToast("请输入群聊名称");
                     return;
                 }
-                if (TextUtils.isEmpty(introduce)){
-                    introduce="暂无简介";
+                if (TextUtils.isEmpty(introduce)) {
+                    introduce = "暂无简介";
                 }
                 groupBean.setG_name(name);
                 groupBean.setG_introduce(introduce);
-                showLoadingDialog(true,"修改群聊信息中");
+                showLoadingDialog(true, "修改群聊信息中");
                 editGroupPresenter.editGroup(groupBean);
-                if (headPath!=null){
-                    showLoadingDialog(true,"修改群聊头像中");
-                    editGroupPresenter.changeGroupHead(Integer.parseInt(String.valueOf(groupBean.getG_id())),headPath);
+                if (headPath != null) {
+                    showLoadingDialog(true, "修改群聊头像中");
+                    editGroupPresenter.changeGroupHead(Integer.parseInt(String.valueOf(groupBean.getG_id())), headPath);
                 }
                 break;
         }
@@ -114,9 +115,9 @@ public class EditGroupMsgActivity extends BaseActivity implements EditGroupContr
         if (EasyPermissions.hasPermissions(mContext, perms)) {
             // 拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话就没有拍照功能
             File takePhotoDir = new File(Environment.getExternalStorageDirectory(), "FlyMessage/File/photograph");
-            ArrayList<String> checkPhotos=new ArrayList<>();
+            ArrayList<String> checkPhotos = new ArrayList<>();
             Intent photoPickerIntent = new BGAPhotoPickerActivity.IntentBuilder(mContext)
-                    .cameraFileDir(true ? takePhotoDir : null) // 拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话则不开启图库里的拍照功能
+                    .cameraFileDir(takePhotoDir) // 拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话则不开启图库里的拍照功能
                     .maxChooseCount(1) // 图片选择张数的最大值
                     .selectedPhotos(checkPhotos) // 当前已选中的图片路径集合
                     .pauseOnScroll(false) // 滚动列表时是否暂停加载图片
@@ -126,34 +127,39 @@ public class EditGroupMsgActivity extends BaseActivity implements EditGroupContr
             EasyPermissions.requestPermissions(this, "图片选择需要以下权限:\n\n1.访问设备上的照片\n\n2.拍照", Constant.REQUEST_CODE_PERMISSION_TAKE_PHOTO, perms);
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode== UCrop.REQUEST_CROP){
-            if (resultCode == RESULT_OK){
-                final Uri resultUri = UCrop.getOutput(data);
-                headPath=resultUri.getPath();
-                Glide.with(mContext).load(headPath).into(coverImg);
-            }else if (resultCode == UCrop.RESULT_ERROR) {
-                final Throwable cropError = UCrop.getError(data);
-                cropError.printStackTrace();
-            }
-        }else if (resultCode == RESULT_OK && requestCode == RC_CHOOSE_HEAD_IMG) {
-            List<String> selectedPhotos = BGAPhotoPickerActivity.getSelectedPhotos(data);
-            if (selectedPhotos.size()>0){
-                File file=new File(Environment.getExternalStorageDirectory()+"/FlyMessage/temp/");
-                if(!file.exists()){
-                    file.mkdirs();
+        try{
+            if (requestCode == UCrop.REQUEST_CROP) {
+                if (resultCode == RESULT_OK) {
+                    final Uri resultUri = UCrop.getOutput(data);
+                    headPath = resultUri.getPath();
+                    Glide.with(mContext).load(headPath).into(coverImg);
+                } else if (resultCode == UCrop.RESULT_ERROR) {
+                    final Throwable cropError = UCrop.getError(data);
+                    cropError.printStackTrace();
                 }
-                file=new File(Environment.getExternalStorageDirectory()+"/FlyMessage/temp/"+ UUID.randomUUID()+".jpg");
-                try {
-                    file.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
+            } else if (resultCode == RESULT_OK && requestCode == RC_CHOOSE_HEAD_IMG) {
+                List<String> selectedPhotos = BGAPhotoPickerActivity.getSelectedPhotos(data);
+                if (selectedPhotos.size() > 0) {
+                    File file = new File(Environment.getExternalStorageDirectory() + "/FlyMessage/temp/");
+                    if (!file.exists()) {
+                        file.mkdirs();
+                    }
+                    file = new File(Environment.getExternalStorageDirectory() + "/FlyMessage/temp/" + UUID.randomUUID() + ".jpg");
+                    try {
+                        file.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    UCrop.of(Uri.fromFile(new File(selectedPhotos.get(0))), Uri.fromFile(file))
+                            .withAspectRatio(1, 1)
+                            .start(EditGroupMsgActivity.this);
                 }
-                UCrop.of(Uri.fromFile(new File(selectedPhotos.get(0))), Uri.fromFile(file))
-                        .withAspectRatio(1, 1)
-                        .start( EditGroupMsgActivity.this);
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -170,14 +176,14 @@ public class EditGroupMsgActivity extends BaseActivity implements EditGroupContr
 
     @Override
     public void initDatas() {
-        Bundle bundle=getIntent().getExtras();
-        groupBean=bundle.getParcelable("group");
-        if (groupBean==null){
+        Bundle bundle = getIntent().getExtras();
+        groupBean = bundle.getParcelable("group");
+        if (groupBean == null) {
             ToastUtils.showToast("获取群聊信息失败");
             finish();
             return;
         }
-        if (!NetworkUtils.isConnected(mContext)){
+        if (!NetworkUtils.isConnected(mContext)) {
             ToastUtils.showToast("请检查网络连接");
         }
         nameEt.setHint(groupBean.getG_name());
@@ -197,18 +203,26 @@ public class EditGroupMsgActivity extends BaseActivity implements EditGroupContr
 
     @Override
     public void editSuccess() {
-        dismissLoadingDialog();
-        ToastUtils.showToast("修改群聊信息成功");
-        groupBeanDao.update(groupBean);
+        try{
+            dismissLoadingDialog();
+            ToastUtils.showToast("修改群聊信息成功");
+            groupBeanDao.update(groupBean);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void headSuccess(String head) {
-        dismissLoadingDialog();
-        ToastUtils.showToast("修改群聊头像成功");
-        groupBean.setG_head_img(head);
-        groupBeanDao.update(groupBean);
-        headPath=null;
+        try{
+            dismissLoadingDialog();
+            ToastUtils.showToast("修改群聊头像成功");
+            groupBean.setG_head_img(head);
+            groupBeanDao.update(groupBean);
+            headPath = null;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -218,13 +232,21 @@ public class EditGroupMsgActivity extends BaseActivity implements EditGroupContr
 
     @Override
     public void showError(String msg) {
-        dismissLoadingDialog();
-        ToastUtils.showToast(msg);
+        try{
+            dismissLoadingDialog();
+            ToastUtils.showToast(msg);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void complete() {
-        dismissLoadingDialog();
+        try{
+            dismissLoadingDialog();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

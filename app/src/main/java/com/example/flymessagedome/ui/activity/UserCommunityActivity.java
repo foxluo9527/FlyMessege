@@ -86,10 +86,13 @@ public class UserCommunityActivity extends BaseActivity implements BGARefreshLay
     @SuppressLint("SetTextI18n")
     @Override
     public void initDatas() {
-        userId = getIntent().getIntExtra("userId", 0);
+        userId = (int) getIntent().getLongExtra("userId", 0);
         if (userId <= 0) {
-            finish();
-            return;
+            userId = getIntent().getIntExtra("userId", 0);
+            if (userId <= 0) {
+                finish();
+                return;
+            }
         }
         title.setText(getIntent().getStringExtra("uName") + "的社区主页");
         initRefreshLayout();
@@ -130,7 +133,6 @@ public class UserCommunityActivity extends BaseActivity implements BGARefreshLay
         if (NetworkUtils.isConnected(mContext)) {
             nowPage = 1;
             presenter.getPosts(userId, nowPage);
-            initDatas();
         } else {
             ToastUtils.showToast("请检查网络连接");
         }
@@ -181,6 +183,7 @@ public class UserCommunityActivity extends BaseActivity implements BGARefreshLay
     public void clickItemPosition(ArrayList<String> datas, int itemPosition, int position) {
         photoPreviewWrapper(datas, itemPosition);
     }
+
     @AfterPermissionGranted(Constant.REQUEST_CODE_SHOW_PHOTOS)
     public void photoPreviewWrapper(ArrayList<String> datas, int itemPosition) {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -195,79 +198,113 @@ public class UserCommunityActivity extends BaseActivity implements BGARefreshLay
             EasyPermissions.requestPermissions(this, "图片预览需要以下权限:\n\n1.访问设备上的照片", Constant.REQUEST_CODE_SHOW_PHOTOS, perms);
         }
     }
+
     @Override
     public void initPostList(List<PostListResult.PostsBean> result) {
-        if (result.size() == 0)
-            none.setVisibility(View.VISIBLE);
-        else
-            none.setVisibility(View.GONE);
-        mRefreshLayout.endRefreshing();
-        mRefreshLayout.endLoadingMore();
-        postsBeans.clear();
-        postsBeans.addAll(result);
-        adapter.notifyDataSetChanged();
+        try {
+            if (result.size() == 0)
+                none.setVisibility(View.VISIBLE);
+            else
+                none.setVisibility(View.GONE);
+            mRefreshLayout.endRefreshing();
+            mRefreshLayout.endLoadingMore();
+            postsBeans.clear();
+            postsBeans.addAll(result);
+            adapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void addPostList(List<PostListResult.PostsBean> result) {
-        none.setVisibility(View.GONE);
-        mRefreshLayout.endRefreshing();
-        mRefreshLayout.endLoadingMore();
-        postsBeans.addAll(result);
-        adapter.notifyDataSetChanged();
+        try {
+            none.setVisibility(View.GONE);
+            mRefreshLayout.endRefreshing();
+            mRefreshLayout.endLoadingMore();
+            postsBeans.addAll(result);
+            adapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void zanPostSuccess(int postId) {
-        ((BaseActivity) mContext).dismissLoadingDialog();
-        for (int i = 0; i < postsBeans.size(); i++) {
-            if (postsBeans.get(i).getCommunity_post_id() == postId) {
-                postsBeans.get(i).setZan_state(1);
-                postsBeans.get(i).setZanCount(postsBeans.get(i).getZanCount() + 1);
-                adapter.notifyItemChanged(i);
-                break;
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+            for (int i = 0; i < postsBeans.size(); i++) {
+                if (postsBeans.get(i).getCommunity_post_id() == postId) {
+                    postsBeans.get(i).setZan_state(1);
+                    postsBeans.get(i).setZanCount(postsBeans.get(i).getZanCount() + 1);
+                    adapter.notifyItemChanged(i);
+                    break;
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         setResult(2);
     }
 
     @Override
     public void cancelZanPostSuccess(int postId) {
-        ((BaseActivity) mContext).dismissLoadingDialog();
-        for (int i = 0; i < postsBeans.size(); i++) {
-            if (postsBeans.get(i).getCommunity_post_id() == postId) {
-                postsBeans.get(i).setZan_state(0);
-                postsBeans.get(i).setZanCount(postsBeans.get(i).getZanCount() - 1);
-                adapter.notifyItemChanged(i);
-                break;
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+            for (int i = 0; i < postsBeans.size(); i++) {
+                if (postsBeans.get(i).getCommunity_post_id() == postId) {
+                    postsBeans.get(i).setZan_state(0);
+                    postsBeans.get(i).setZanCount(postsBeans.get(i).getZanCount() - 1);
+                    adapter.notifyItemChanged(i);
+                    break;
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         setResult(2);
     }
+
     @Override
     public void showError() {
-        mRefreshLayout.endRefreshing();
-        mRefreshLayout.endLoadingMore();
-        ((BaseActivity) mContext).dismissLoadingDialog();
+        try {
+            mRefreshLayout.endRefreshing();
+            mRefreshLayout.endLoadingMore();
+            ((BaseActivity) mContext).dismissLoadingDialog();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void showError(String msg) {
-        mRefreshLayout.endRefreshing();
-        mRefreshLayout.endLoadingMore();
-        ((BaseActivity) mContext).dismissLoadingDialog();
-        ToastUtils.showToast(msg);
+        try {
+            mRefreshLayout.endRefreshing();
+            mRefreshLayout.endLoadingMore();
+            ((BaseActivity) mContext).dismissLoadingDialog();
+            ToastUtils.showToast(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void complete() {
-        mRefreshLayout.endRefreshing();
-        mRefreshLayout.endLoadingMore();
-        ((BaseActivity) mContext).dismissLoadingDialog();
+        try {
+            mRefreshLayout.endRefreshing();
+            mRefreshLayout.endLoadingMore();
+            ((BaseActivity) mContext).dismissLoadingDialog();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void tokenExceed() {
-        ((BaseActivity) mContext).dismissLoadingDialog();
+        try {
+            ((BaseActivity) mContext).dismissLoadingDialog();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

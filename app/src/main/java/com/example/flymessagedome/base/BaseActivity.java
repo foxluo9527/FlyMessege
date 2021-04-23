@@ -28,7 +28,6 @@ import com.example.flymessagedome.service.MessageService;
 import com.example.flymessagedome.ui.activity.LoginActivity;
 import com.example.flymessagedome.ui.activity.MainActivity;
 import com.example.flymessagedome.utils.ActivityCollector;
-import com.example.flymessagedome.utils.AppUtils;
 import com.example.flymessagedome.utils.Constant;
 import com.example.flymessagedome.utils.NetworkType;
 import com.example.flymessagedome.utils.SharedPreferencesUtil;
@@ -57,42 +56,46 @@ public abstract class BaseActivity extends AppCompatActivity implements NetState
     @Override
     protected void onCreate(@androidx.annotation.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NetStateChangeReceiver.registerReceiver(this);
-        String className = this.getLocalClassName();
-        Log.e("className", className);
-        if (SharedPreferencesUtil.getInstance().getString("loginToken") == null) {
-            if (!className.equals("ui.activity.LoginActivity") &&
-                    !className.equals("ui.activity.WebActivity") &&
-                    !className.equals("ui.activity.WelcomeActivity")) {
-                finish();
-                ActivityCollector.finishAll();
-                LoginActivity.startActivity(this);
-                return;
+        try {
+            NetStateChangeReceiver.registerReceiver(this);
+            String className = this.getLocalClassName();
+            Log.e("className", className);
+            if (SharedPreferencesUtil.getInstance().getString("loginToken") == null) {
+                if (!className.equals("ui.activity.LoginActivity") &&
+                        !className.equals("ui.activity.WebActivity") &&
+                        !className.equals("ui.activity.WelcomeActivity")) {
+                    finish();
+                    ActivityCollector.finishAll();
+                    LoginActivity.startActivity(this);
+                    return;
+                }
             }
+            setContentView(getLayoutId());
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().hide();
+            }
+            activity = this;
+            mContext = this;
+            unbinder = ButterKnife.bind(this);
+            ActivityCollector.addActivity(this);
+            setupActivityComponent(FlyMessageApplication.getInstances().getAppComponent());
+            configViews();
+            initDatas();
+            if (serviceMessageReceiver == null) {
+                serviceMessageReceiver = new ServiceMessageReceiver(new Handler());
+                IntentFilter itFilter = new IntentFilter();
+                itFilter.addAction(MessageService.SOCKET_SERVICE_ACTION);
+                registerReceiver(serviceMessageReceiver, itFilter);
+            }
+            if (homeEventReceiver == null) {
+                homeEventReceiver = new HomeEventReceiver();
+                IntentFilter itFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+                registerReceiver(homeEventReceiver, itFilter);
+            }
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        setContentView(getLayoutId());
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-        activity = this;
-        mContext = this;
-        unbinder = ButterKnife.bind(this);
-        ActivityCollector.addActivity(this);
-        setupActivityComponent(FlyMessageApplication.getInstances().getAppComponent());
-        configViews();
-        initDatas();
-        if (serviceMessageReceiver == null) {
-            serviceMessageReceiver = new ServiceMessageReceiver(new Handler());
-            IntentFilter itFilter = new IntentFilter();
-            itFilter.addAction(MessageService.SOCKET_SERVICE_ACTION);
-            registerReceiver(serviceMessageReceiver, itFilter);
-        }
-        if (homeEventReceiver == null) {
-            homeEventReceiver = new HomeEventReceiver();
-            IntentFilter itFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-            registerReceiver(homeEventReceiver, itFilter);
-        }
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override
@@ -103,20 +106,20 @@ public abstract class BaseActivity extends AppCompatActivity implements NetState
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        ActivityCollector.removeActivity(this);
-        dismissLoadingDialog();
-        if (serviceMessageReceiver != null) {
-            unregisterReceiver(serviceMessageReceiver);
-        }
-        if (homeEventReceiver != null) {
-            unregisterReceiver(homeEventReceiver);
-        }
         try {
+            ActivityCollector.removeActivity(this);
+            dismissLoadingDialog();
+            if (serviceMessageReceiver != null) {
+                unregisterReceiver(serviceMessageReceiver);
+            }
+            if (homeEventReceiver != null) {
+                unregisterReceiver(homeEventReceiver);
+            }
             if (unbinder != null)
                 unbinder.unbind();
             NetStateChangeReceiver.unRegisterReceiver(this);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -209,31 +212,44 @@ public abstract class BaseActivity extends AppCompatActivity implements NetState
     }
 
     public void showLoadingDialog(Boolean cancelable, String msg) {
-        if (mLoadingDialog == null) {
-            mLoadingDialog = new MaterialDialog.Builder(this)
-                    .widgetColorRes(R.color.black)
-                    .progress(true, 0)
-                    .cancelable(true)
-                    .build();
+        try {
+            if (mLoadingDialog == null) {
+                mLoadingDialog = new MaterialDialog.Builder(this)
+                        .widgetColorRes(R.color.black)
+                        .progress(true, 0)
+                        .cancelable(true)
+                        .build();
+            }
+            mLoadingDialog.setCancelable(cancelable);
+            mLoadingDialog.setContent(msg);
+            mLoadingDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        mLoadingDialog.setContent(msg);
-        mLoadingDialog.show();
     }
 
     public void dismissLoadingDialog() {
-        if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
-            mLoadingDialog.dismiss();
+        try {
+            if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                mLoadingDialog.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void toastServerEx(boolean isInternet, String msg) {
-        if (isInternet) {
-            if (TextUtils.isEmpty(msg))
-                ToastUtils.showToast("请求数据失败,请稍后再试");//服务器异常,请稍后再试   请求数据失败,请稍后再试
-            else
-                ToastUtils.showToast(msg);
-        } else {
-            ToastUtils.showToast("网络异常,请检查网络是否可用");//网络异常,请检查网络是否可用
+        try {
+            if (isInternet) {
+                if (TextUtils.isEmpty(msg))
+                    ToastUtils.showToast("请求数据失败,请稍后再试");//服务器异常,请稍后再试   请求数据失败,请稍后再试
+                else
+                    ToastUtils.showToast(msg);
+            } else {
+                ToastUtils.showToast("网络异常,请检查网络是否可用");//网络异常,请检查网络是否可用
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

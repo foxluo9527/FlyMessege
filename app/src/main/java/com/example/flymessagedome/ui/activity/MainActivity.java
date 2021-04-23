@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         initFragment();
         int count = tabLayout.getTabCount();
         LinearLayout childView = (LinearLayout) tabLayout.getChildAt(0);
-        List<ImageView> tabs = new ArrayList();
+        ArrayList<ImageView> tabs = new ArrayList<>();
         for (int index = 0; index < count; index++) {
             LinearLayout child = (LinearLayout) childView.getChildAt(index);
             if (child != null)
@@ -212,11 +212,15 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     public void initGroupMsg(GroupBean group) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("group", group);
-        Intent intent = new Intent(mContext, GroupMsgActivity.class);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        try {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("group", group);
+            Intent intent = new Intent(mContext, GroupMsgActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static class MyConnection implements ServiceConnection {
@@ -245,41 +249,43 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (intentResult != null) {
-            if (intentResult.getContents() == null) {
-                //扫码失败
-            } else {
-                String content = intentResult.getContents();//返回值
-                Log.e("TAG", content);
-                if (content == null) {
-                    ToastUtils.showToast("扫描失败");
-                } else if (content.contains("http")) {
-                    Intent intent = new Intent(mContext, WebActivity.class);
-                    intent.putExtra("URLString", content);
-                    startActivity(intent);
-                } else if (content.contains("[") && content.contains("]")) {
-                    String fileContent = content.substring(content.indexOf("[") + 1, content.indexOf("]"));
-                    if (fileContent.contains(":")) {
-                        String[] fileParams = fileContent.split(":");
-                        fileContent = fileParams[0];
-                        if (fileContent.equals("FlyMessage-addFriend")) {
-                            String u_name = fileParams[1];
-                            Intent intent = new Intent(mContext, ShowUserActivity.class);
-                            intent.putExtra("userName", u_name);
-                            startActivity(intent);
-                        } else if (fileContent.equals("FlyMessage-addGroup")) {
-                            String g_id = fileParams[1];
-                            try {
-                                int gId = Integer.parseInt(g_id);
-                                mainPresenter.getGroupMsg(gId);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+        try {
+            IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if (intentResult != null) {
+                if (intentResult.getContents() != null) {
+                    String content = intentResult.getContents();//返回值
+                    Log.e("TAG", content);
+                    if (content == null) {
+                        ToastUtils.showToast("扫描失败");
+                    } else if (content.contains("http")) {
+                        Intent intent = new Intent(mContext, WebActivity.class);
+                        intent.putExtra("URLString", content);
+                        startActivity(intent);
+                    } else if (content.contains("[") && content.contains("]")) {
+                        String fileContent = content.substring(content.indexOf("[") + 1, content.indexOf("]"));
+                        if (fileContent.contains(":")) {
+                            String[] fileParams = fileContent.split(":");
+                            fileContent = fileParams[0];
+                            if (fileContent.equals("FlyMessage-addFriend")) {
+                                String u_name = fileParams[1];
+                                Intent intent = new Intent(mContext, ShowUserActivity.class);
+                                intent.putExtra("userName", u_name);
+                                startActivity(intent);
+                            } else if (fileContent.equals("FlyMessage-addGroup")) {
+                                String g_id = fileParams[1];
+                                try {
+                                    int gId = Integer.parseInt(g_id);
+                                    mainPresenter.getGroupMsg(gId);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

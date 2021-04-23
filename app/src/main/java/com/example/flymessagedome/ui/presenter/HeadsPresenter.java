@@ -3,7 +3,6 @@ package com.example.flymessagedome.ui.presenter;
 import com.example.flymessagedome.api.FlyMessageApi;
 import com.example.flymessagedome.base.RxPresenter;
 import com.example.flymessagedome.model.Base;
-import com.example.flymessagedome.model.BlackListModel;
 import com.example.flymessagedome.model.HeadModel;
 import com.example.flymessagedome.ui.contract.HeadsContract;
 import com.example.flymessagedome.utils.Constant;
@@ -17,15 +16,17 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class HeadsPresenter extends RxPresenter<HeadsContract.View> implements HeadsContract.Presenter<HeadsContract.View>{
-    private FlyMessageApi flyMessageApi;
+public class HeadsPresenter extends RxPresenter<HeadsContract.View> implements HeadsContract.Presenter<HeadsContract.View> {
+    private final FlyMessageApi flyMessageApi;
+
     @Inject
     public HeadsPresenter(FlyMessageApi flyMessageApi) {
         this.flyMessageApi = flyMessageApi;
     }
+
     @Override
     public void getHeads(int pageSize, int pageIndex) {
-        Subscription rxSubscription = flyMessageApi.getUserHeads(pageSize,pageIndex).subscribeOn(Schedulers.io())
+        Subscription rxSubscription = flyMessageApi.getUserHeads(pageSize, pageIndex).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<HeadModel>() {
                     @Override
@@ -42,9 +43,9 @@ public class HeadsPresenter extends RxPresenter<HeadsContract.View> implements H
                     public void onNext(HeadModel headModel) {
                         if (headModel != null && mView != null && headModel.code == Constant.SUCCESS) {
                             mView.initHeads((ArrayList<HeadModel.HeadsBean>) headModel.getHeads());
-                        }else if(headModel!=null){
+                        } else if (headModel != null) {
                             mView.showError(headModel.msg);
-                        }else {
+                        } else {
                             mView.showError("获取用户头像失败，请稍后重试");
                         }
                     }
@@ -71,9 +72,9 @@ public class HeadsPresenter extends RxPresenter<HeadsContract.View> implements H
                     public void onNext(Base base) {
                         if (base != null && mView != null && base.code == Constant.SUCCESS) {
                             mView.complete();
-                        }else if(base!=null){
+                        } else if (base != null) {
                             mView.showError(base.msg);
-                        }else {
+                        } else {
                             mView.showError("删除头像失败，请稍后重试");
                         }
                     }
@@ -100,9 +101,9 @@ public class HeadsPresenter extends RxPresenter<HeadsContract.View> implements H
                     public void onNext(Base base) {
                         if (base != null && mView != null && base.code == Constant.SUCCESS) {
                             mView.initLoginHead(headsBean.getHead_img_link());
-                        }else if(base!=null){
+                        } else if (base != null) {
                             mView.showError(base.msg);
-                        }else {
+                        } else {
                             mView.showError("修改头像失败，请稍后重试");
                         }
                     }

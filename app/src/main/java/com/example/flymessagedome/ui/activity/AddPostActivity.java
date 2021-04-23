@@ -24,10 +24,8 @@ import com.example.flymessagedome.R;
 import com.example.flymessagedome.base.BaseActivity;
 import com.example.flymessagedome.component.AppComponent;
 import com.example.flymessagedome.component.DaggerMessageComponent;
-import com.example.flymessagedome.ui.fragment.CommunityFragment;
 import com.example.flymessagedome.utils.Constant;
 import com.example.flymessagedome.utils.SharedPreferencesUtil;
-import com.example.flymessagedome.utils.ToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -131,9 +129,7 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
         ArrayList<String> photos = new ArrayList<>();
         HashSet<String> set = (HashSet<String>) SharedPreferencesUtil.getInstance().getStringSet("photos");
         if (set != null)
-            for (String s : set) {
-                photos.add(s);
-            }
+            photos.addAll(set);
         if (photos.size() > 0)
             mPhotosSnpl.setData(photos);
     }
@@ -148,9 +144,7 @@ public class AddPostActivity extends BaseActivity implements EasyPermissions.Per
                     .setPositiveButton("保存并退出", (dialog1, which) -> {
                         SharedPreferencesUtil.getInstance().putString("post_content", postContent);
                         Set<String> set = new HashSet<>();
-                        for (String photo : photos) {
-                            set.add(photo);
-                        }
+                        set.addAll(photos);
                         SharedPreferencesUtil.getInstance().putStringSet("photos", set);
                         super.onBackPressed();
                     })

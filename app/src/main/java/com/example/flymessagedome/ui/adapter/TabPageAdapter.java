@@ -7,14 +7,14 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import java.util.List;
 
 public class TabPageAdapter extends FragmentPagerAdapter {
-    private List<Fragment> fragments;
-    private String[] tabNames;//tab选项名字
+    private final List<Fragment> fragments;
+    private final String[] tabNames;//tab选项名字
 
 
-    public TabPageAdapter(FragmentManager fm, List<Fragment> fragments,String[] tabNames) {
+    public TabPageAdapter(FragmentManager fm, List<Fragment> fragments, String[] tabNames) {
         super(fm);
         this.fragments = fragments;
-        this.tabNames=tabNames;
+        this.tabNames = tabNames;
     }
 
     @Override
@@ -26,6 +26,7 @@ public class TabPageAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return fragments.size();
     }
+
     //重写getPageTitle()方法
     @Override
     public CharSequence getPageTitle(int position) {

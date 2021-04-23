@@ -1,6 +1,7 @@
 package com.example.flymessagedome.ui.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.KeyEvent;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -73,6 +75,7 @@ public class QrCodeActivity extends AppCompatActivity implements DecoratedBarcod
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK && requestCode == RC_CHOOSE_HEAD_IMG) {
@@ -87,10 +90,14 @@ public class QrCodeActivity extends AppCompatActivity implements DecoratedBarcod
 
                     @Override
                     protected void onPostExecute(Result result) {
-                        if (result != null)
-                            done(result.getText());
-                        else
-                            ToastUtils.showToast("扫描失败，请重试");
+                        try {
+                            if (result != null)
+                                done(result.getText());
+                            else
+                                ToastUtils.showToast("扫描失败，请重试");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }.execute();
             }
@@ -103,6 +110,7 @@ public class QrCodeActivity extends AppCompatActivity implements DecoratedBarcod
 
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void done(String content) {
         if (content == null) {
             ToastUtils.showToast("扫描失败");
@@ -134,17 +142,21 @@ public class QrCodeActivity extends AppCompatActivity implements DecoratedBarcod
 
                                 @Override
                                 protected void onPostExecute(GroupModel groupModel) {
-                                    if (groupModel != null && groupModel.code == Constant.SUCCESS) {
-                                        Bundle bundle = new Bundle();
-                                        bundle.putParcelable("group", groupModel.getGroup());
-                                        Intent intent = new Intent(mContext, GroupMsgActivity.class);
-                                        intent.putExtras(bundle);
-                                        startActivity(intent);
-                                        finish();
-                                    } else if (groupModel != null) {
-                                        ToastUtils.showToast(groupModel.msg);
-                                    } else {
-                                        ToastUtils.showToast("获取群聊信息失败");
+                                    try {
+                                        if (groupModel != null && groupModel.code == Constant.SUCCESS) {
+                                            Bundle bundle = new Bundle();
+                                            bundle.putParcelable("group", groupModel.getGroup());
+                                            Intent intent = new Intent(mContext, GroupMsgActivity.class);
+                                            intent.putExtras(bundle);
+                                            startActivity(intent);
+                                            finish();
+                                        } else if (groupModel != null) {
+                                            ToastUtils.showToast(groupModel.msg);
+                                        } else {
+                                            ToastUtils.showToast("获取群聊信息失败");
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
                                     }
                                 }
                             }.execute();
@@ -168,26 +180,42 @@ public class QrCodeActivity extends AppCompatActivity implements DecoratedBarcod
 
     @Override
     protected void onPause() {
-        super.onPause();
-        captureManager.onPause();
+        try {
+            super.onPause();
+            captureManager.onPause();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void onResume() {
-        super.onResume();
-        captureManager.onResume();
+        try {
+            super.onResume();
+            captureManager.onResume();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        captureManager.onDestroy();
+        try {
+            super.onDestroy();
+            captureManager.onDestroy();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-        captureManager.onSaveInstanceState(outState);
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        try {
+            super.onSaveInstanceState(outState, outPersistentState);
+            captureManager.onSaveInstanceState(outState);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

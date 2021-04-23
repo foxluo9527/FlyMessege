@@ -1,5 +1,6 @@
 package com.example.flymessagedome.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +29,8 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
     public ArrayList<FriendRequestModel.FriendRequestsBean> friendRequests;
     Context context;
     private OnRecyclerViewItemClickListener listener;
-    private LayoutInflater mLayoutInflater;
-    private HttpProxyCacheServer proxyCacheServer;
+    private final LayoutInflater mLayoutInflater;
+    private final HttpProxyCacheServer proxyCacheServer;
 
     public FriendRequestAdapter(ArrayList<FriendRequestModel.FriendRequestsBean> friendRequests, Context context) {
         this.friendRequests = friendRequests;
@@ -49,31 +50,35 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.friend_request_item, null, false);
+        @SuppressLint("InflateParams") View view = mLayoutInflater.inflate(R.layout.friend_request_item, null, false);
         return new FriendRequestViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        FriendRequestModel.FriendRequestsBean friendRequest = friendRequests.get(position);
-        FriendRequestModel.FriendRequestsBean.RqUserBean userBean = friendRequest.getRqUser();
-        ((FriendRequestViewHolder) holder).sure_btn.setOnClickListener(v -> listener.onItemClick(v, position));
-        ((FriendRequestViewHolder) holder).itemView.setOnClickListener(v -> listener.onItemClick(v, position));
-        ((FriendRequestViewHolder) holder).un_sure_btn.setOnClickListener(v -> listener.onItemClick(v, position));
-        Glide.with(context).load(proxyCacheServer.getProxyUrl(userBean.getU_head_img()))
-                .into(((FriendRequestViewHolder) holder).head);
-        if (userBean.getU_sex() == null) {
-            ((FriendRequestViewHolder) holder).sex.setVisibility(View.GONE);
-        } else {
-            ((FriendRequestViewHolder) holder).sex.setVisibility(View.GONE);
-            if (userBean.getU_sex().equals("男")) {
-                ((FriendRequestViewHolder) holder).sex.setImageDrawable(AppCompatResources.getDrawable(context, R.mipmap.man));
+        try {
+            FriendRequestModel.FriendRequestsBean friendRequest = friendRequests.get(position);
+            FriendRequestModel.FriendRequestsBean.RqUserBean userBean = friendRequest.getRqUser();
+            ((FriendRequestViewHolder) holder).sure_btn.setOnClickListener(v -> listener.onItemClick(v, position));
+            ((FriendRequestViewHolder) holder).itemView.setOnClickListener(v -> listener.onItemClick(v, position));
+            ((FriendRequestViewHolder) holder).un_sure_btn.setOnClickListener(v -> listener.onItemClick(v, position));
+            Glide.with(context).load(proxyCacheServer.getProxyUrl(userBean.getU_head_img()))
+                    .into(((FriendRequestViewHolder) holder).head);
+            if (userBean.getU_sex() == null) {
+                ((FriendRequestViewHolder) holder).sex.setVisibility(View.GONE);
             } else {
-                ((FriendRequestViewHolder) holder).sex.setImageDrawable(AppCompatResources.getDrawable(context, R.mipmap.women));
+                ((FriendRequestViewHolder) holder).sex.setVisibility(View.GONE);
+                if (userBean.getU_sex().equals("男")) {
+                    ((FriendRequestViewHolder) holder).sex.setImageDrawable(AppCompatResources.getDrawable(context, R.mipmap.man));
+                } else {
+                    ((FriendRequestViewHolder) holder).sex.setImageDrawable(AppCompatResources.getDrawable(context, R.mipmap.women));
+                }
             }
+            ((FriendRequestViewHolder) holder).content.setText(friendRequest.getRq_content());
+            ((FriendRequestViewHolder) holder).name.setText(userBean.getU_nick_name());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        ((FriendRequestViewHolder) holder).content.setText(friendRequest.getRq_content());
-        ((FriendRequestViewHolder) holder).name.setText(userBean.getU_nick_name());
     }
 
     @Override
@@ -81,7 +86,9 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
         return friendRequests.size();
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class FriendRequestViewHolder extends RecyclerView.ViewHolder {
+
         @BindView(R.id.head_img)
         CircleImageView head;
         @BindView(R.id.name)

@@ -15,14 +15,15 @@ import com.example.flymessagedome.utils.Constant;
 import com.example.flymessagedome.utils.SharedPreferencesUtil;
 
 import javax.inject.Inject;
+
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class LoginPresenter extends RxPresenter<LoginContract.View> implements LoginContract.Presenter<LoginContract.View>{
+public class LoginPresenter extends RxPresenter<LoginContract.View> implements LoginContract.Presenter<LoginContract.View> {
 
-    private FlyMessageApi flyMessageApi;
+    private final FlyMessageApi flyMessageApi;
 
     @Inject
     public LoginPresenter(FlyMessageApi flyMessageApi) {
@@ -32,7 +33,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
     @Override
     public void login(String userName, String password) {
-        Subscription rxSubscription = flyMessageApi.getLogin(userName,password).subscribeOn(Schedulers.io())
+        Subscription rxSubscription = flyMessageApi.getLogin(userName, password).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Login>() {
                     @Override
@@ -50,13 +51,13 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
                     public void onNext(Login login) {
                         if (login != null && mView != null && login.code == Constant.SUCCESS) {
                             mView.loginSuccess(login);
-                            SharedPreferencesUtil.getInstance().putString(Constant.U_NAME,userName);
-                            SharedPreferencesUtil.getInstance().putString(Constant.U_PASS,password);
-                            SharedPreferencesUtil.getInstance().putString(Constant.LOGIN_TOKEN,login.getToken());
-                        }else {
-                            if (login != null&&login.code == Constant.FAILED && !TextUtils.isEmpty(login.msg)){
+                            SharedPreferencesUtil.getInstance().putString(Constant.U_NAME, userName);
+                            SharedPreferencesUtil.getInstance().putString(Constant.U_PASS, password);
+                            SharedPreferencesUtil.getInstance().putString(Constant.LOGIN_TOKEN, login.getToken());
+                        } else {
+                            if (login != null && login.code == Constant.FAILED && !TextUtils.isEmpty(login.msg)) {
                                 mView.showError(login.msg);
-                            }else {
+                            } else {
                                 mView.showError();
                             }
                         }
@@ -67,7 +68,7 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
 
     @Override
     public void codeLogin(String phone, String code) {
-        Subscription rxSubscription = flyMessageApi.noPassLogin(phone,code).subscribeOn(Schedulers.io())
+        Subscription rxSubscription = flyMessageApi.noPassLogin(phone, code).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Login>() {
                     @Override
@@ -86,13 +87,13 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
                     public void onNext(Login login) {
                         if (login != null && mView != null && login.code == Constant.SUCCESS) {
                             mView.loginSuccess(login);
-                            SharedPreferencesUtil.getInstance().putString(Constant.U_NAME,login.loginUser.getU_name());
+                            SharedPreferencesUtil.getInstance().putString(Constant.U_NAME, login.loginUser.getU_name());
                             SharedPreferencesUtil.getInstance().putString(Constant.U_PASS, Base64Util.decode(login.loginUser.getU_pass()));
-                            SharedPreferencesUtil.getInstance().putString(Constant.LOGIN_TOKEN,login.getToken());
-                        }else {
-                            if (login != null&& !TextUtils.isEmpty(login.msg)){
+                            SharedPreferencesUtil.getInstance().putString(Constant.LOGIN_TOKEN, login.getToken());
+                        } else {
+                            if (login != null && !TextUtils.isEmpty(login.msg)) {
                                 mView.showError(login.msg);
-                            }else {
+                            } else {
                                 mView.showError();
                             }
                         }
@@ -123,10 +124,10 @@ public class LoginPresenter extends RxPresenter<LoginContract.View> implements L
                         if (base != null && mView != null && base.code == Constant.SUCCESS) {
                             mView.showError(Constant.CODE_SEND_SUCCESS);//这里是发送成功了的
                             mView.sendLoginCodeSuccess();
-                        }else {
-                            if (base != null&& !TextUtils.isEmpty(base.msg)){
+                        } else {
+                            if (base != null && !TextUtils.isEmpty(base.msg)) {
                                 mView.showError(base.msg);
-                            }else {
+                            } else {
                                 mView.showError();
                             }
                             mView.sendLoginCodeFailed();

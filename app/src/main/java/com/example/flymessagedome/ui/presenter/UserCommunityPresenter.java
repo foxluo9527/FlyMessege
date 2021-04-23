@@ -2,11 +2,8 @@ package com.example.flymessagedome.ui.presenter;
 
 import com.example.flymessagedome.api.FlyMessageApi;
 import com.example.flymessagedome.base.RxPresenter;
-import com.example.flymessagedome.model.AddPostResult;
 import com.example.flymessagedome.model.Base;
 import com.example.flymessagedome.model.PostListResult;
-import com.example.flymessagedome.model.Weather;
-import com.example.flymessagedome.ui.contract.CommunityContract;
 import com.example.flymessagedome.ui.contract.UserCommunityContract;
 import com.example.flymessagedome.utils.Constant;
 
@@ -18,7 +15,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class UserCommunityPresenter extends RxPresenter<UserCommunityContract.View> implements UserCommunityContract.Presenter<UserCommunityContract.View> {
-    private FlyMessageApi flyMessageApi;
+    private final FlyMessageApi flyMessageApi;
 
     @Inject
     public UserCommunityPresenter(FlyMessageApi flyMessageApi) {
@@ -26,8 +23,8 @@ public class UserCommunityPresenter extends RxPresenter<UserCommunityContract.Vi
     }
 
     @Override
-    public void getPosts(int userId,int pageIndex) {
-        Subscription rxSubscription = flyMessageApi.getUserPosts(userId,10, pageIndex).subscribeOn(Schedulers.io())
+    public void getPosts(int userId, int pageIndex) {
+        Subscription rxSubscription = flyMessageApi.getUserPosts(userId, 10, pageIndex).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<PostListResult>() {
                     @Override
@@ -49,11 +46,11 @@ public class UserCommunityPresenter extends RxPresenter<UserCommunityContract.Vi
                                     if (pageIndex == 1) {
                                         mView.initPostList(result.getPosts());
                                         if (result.getPosts().size() == 10)
-                                            getPosts(userId,pageIndex + 1);
+                                            getPosts(userId, pageIndex + 1);
                                     } else {
                                         mView.addPostList(result.getPosts());
                                     }
-                                }else
+                                } else
                                     mView.showError(result.msg);
                             } else {
                                 mView.showError("获取社区帖子失败");
@@ -86,7 +83,7 @@ public class UserCommunityPresenter extends RxPresenter<UserCommunityContract.Vi
                             if (result != null) {
                                 if (result.code == Constant.SUCCESS) {
                                     mView.zanPostSuccess(postId);
-                                }else
+                                } else
                                     mView.showError(result.msg);
                             } else {
                                 mView.showError("点赞帖子失败");
@@ -119,7 +116,7 @@ public class UserCommunityPresenter extends RxPresenter<UserCommunityContract.Vi
                             if (result != null) {
                                 if (result.code == Constant.SUCCESS) {
                                     mView.cancelZanPostSuccess(postId);
-                                }else
+                                } else
                                     mView.showError(result.msg);
                             } else {
                                 mView.showError("取消点赞帖子失败");

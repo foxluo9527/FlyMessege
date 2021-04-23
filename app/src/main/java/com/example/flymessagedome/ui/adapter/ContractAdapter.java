@@ -1,5 +1,6 @@
 package com.example.flymessagedome.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +23,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ContractAdapter extends RecyclerView.Adapter {
-    private ArrayList<SearchUserModel.ResultBean> resultBeans;
+    private final ArrayList<SearchUserModel.ResultBean> resultBeans;
     Context context;
     private OnRecyclerViewItemClickListener listener;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
     public ContractAdapter(ArrayList<SearchUserModel.ResultBean> resultBeans, Context context) {
         this.resultBeans = resultBeans;
@@ -42,32 +43,38 @@ public class ContractAdapter extends RecyclerView.Adapter {
         listener = onRecyclerViewItemClickListener;
     }
 
+    @SuppressLint("InflateParams")
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ContractViewHolder(mLayoutInflater.inflate(R.layout.contract_item, null, false));
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ContractViewHolder viewHolder = (ContractViewHolder) holder;
-        SearchUserModel.ResultBean resultBean = resultBeans.get(position);
-        if (listener != null) {
-            viewHolder.add_btn.setOnClickListener(v -> listener.onItemClick(v, position));
-            viewHolder.itemView.setOnClickListener(v -> listener.onItemClick(v, position));
+        try {
+            ContractViewHolder viewHolder = (ContractViewHolder) holder;
+            SearchUserModel.ResultBean resultBean = resultBeans.get(position);
+            if (listener != null) {
+                viewHolder.add_btn.setOnClickListener(v -> listener.onItemClick(v, position));
+                viewHolder.itemView.setOnClickListener(v -> listener.onItemClick(v, position));
+            }
+            Glide.with(context)
+                    .load(resultBean.getU_head_img())
+                    .into(viewHolder.head);
+            if (resultBean.isFriend()) {
+                viewHolder.add_btn.setVisibility(View.GONE);
+                viewHolder.add_text.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.add_btn.setVisibility(View.VISIBLE);
+                viewHolder.add_text.setVisibility(View.GONE);
+            }
+            viewHolder.contract_name.setText("" + resultBean.getU_sign());
+            viewHolder.fly_name.setText("飞讯:" + resultBean.getU_nick_name());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        Glide.with(context)
-                .load(resultBean.getU_head_img())
-                .into(viewHolder.head);
-        if (resultBean.isFriend()) {
-            viewHolder.add_btn.setVisibility(View.GONE);
-            viewHolder.add_text.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.add_btn.setVisibility(View.VISIBLE);
-            viewHolder.add_text.setVisibility(View.GONE);
-        }
-        viewHolder.contract_name.setText("" + resultBean.getU_sign());
-        viewHolder.fly_name.setText("飞讯:" + resultBean.getU_nick_name());
     }
 
     @Override
@@ -75,7 +82,9 @@ public class ContractAdapter extends RecyclerView.Adapter {
         return resultBeans.size();
     }
 
+    @SuppressLint("NonConstantResourceId")
     static class ContractViewHolder extends RecyclerView.ViewHolder {
+
         @BindView(R.id.head_img)
         CircleImageView head;
         @BindView(R.id.contract_name)
