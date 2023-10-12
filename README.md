@@ -1,6 +1,5 @@
 # FlyMessegeDemo
 飞讯聊天是一款通过网络快速发送语音、短信、视频、图片和文字，支持多人群聊的手机聊天软件。
-<br/> 项目demo下载地址:https://wwa.lanzous.com/iWj4Toev8pc
 <br/> 项目接口文档地址:https://www.showdoc.cc/FlyMessage?page_id=0
 <br/>后端服务器地址:https://github.com/foxluo9527/FlyMessageServer
 <br/> 进入登录界面后可选择注册以获取飞讯账号。
